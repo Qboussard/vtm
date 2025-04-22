@@ -1,0 +1,43 @@
+{
+  "Factions" : {
+    "Camarilla": {
+      "description": "La Camarilla est l'une des plus anciennes et puissantes sectes vampiriques du monde. Elle repose sur une doctrine de mascarade absolue, une loi sacrée qui interdit aux vampires de révéler leur existence aux mortels. Pour ses membres, maintenir l'ordre, la discrétion et les traditions est vital à la survie de leur espèce.\n\nDirigée par un réseau complexe de princes, primogens et justicars, la Camarilla est une société hiérarchisée où chaque vampire connaît sa place — ou en paie le prix. Elle valorise la stabilité, le contrôle et l'étiquette, souvent au détriment de la liberté individuelle. Certains la voient comme un bastion contre le chaos. D'autres, comme une prison dorée pour les anciens.\n\nMais derrière les masques de courtoisie et les serments, la politique de la Camarilla est un jeu dangereux où les poignards sont souvent cachés dans les sourires."
+    },
+    "Anarchs": {
+      "description": "Les Anarchs sont les enfants de la révolte, les parias qui ont dit non à la tyrannie des anciens. Nés du rejet de la hiérarchie oppressante de la Camarilla, ils luttent pour l'égalité, l'autonomie et la liberté dans la non-vie.\n\nContrairement aux idées reçues, tous les Anarchs ne sont pas des vandales ou des brutes enragées. Beaucoup sont des penseurs, des activistes ou simplement des vampires qui refusent de se plier à des lois qu'ils n'ont pas choisies. Ils prônent l’autogestion et l'entraide, bien que leur organisation soit souvent chaotique et sujette à conflits internes.\n\nIls vivent et meurent (à nouveau) pour un idéal : celui d’un monde vampirique sans chaînes. Mais dans cette lutte permanente, certains finissent par devenir ce qu’ils haïssaient."
+    },
+    "Sabbat": {
+      "description": "Le Sabbat est la secte de la nuit absolue. Sauvage, fanatique et impitoyable, elle rejette toute illusion d’humanité. Pour ses membres, les mortels ne sont que du bétail, et la seule loi qui compte est celle du plus fort.\n\nDissimulé derrière un vernis ritueliste et mystique, le Sabbat vénère les Antédiluviens… pour mieux les traquer et les détruire. Ses membres se lient par des liens de meute et des rituels sanglants, embrassant la Bête qui sommeille en eux au lieu de la fuir.\n\nIls voient la Camarilla comme une mascarade hypocrite, et les Anarchs comme des enfants perdus. Pour eux, seule la guerre compte — une guerre contre les anciens dieux vampiriques, contre l’ordre établi, et parfois, contre eux-mêmes."
+    },
+    "Seconde inquisition": {
+      "description": "La Seconde Inquisition représente un tournant dans l'histoire des vampires. Après le cataclysme de la Première Inquisition, qui a failli exterminer les Kindred, l'humanité a pendant un temps ignoré l'existence des vampires. Cependant, les événements modernes ont mené à la résurgence de l'Inquisition sous une forme nouvelle et plus discrète. Au lieu de se concentrer sur des persécutions religieuses ouvertes, la Seconde Inquisition se distingue par son approche scientifique et technologique. Les gouvernements, les agences de renseignement et les forces de l'ordre ont formé une coalition secrète pour traquer les vampires, souvent avec l'aide de nouvelles technologies de surveillance et de renseignement. Ils utilisent des méthodes de guerre psychologique, des opérations secrètes, et parfois même des armes spécialisées pour éradiquer les créatures de la nuit.\n\nLa Seconde Inquisition a bouleversé l'équilibre des pouvoirs dans le monde des vampires. Les Kindred doivent désormais se cacher plus profondément dans l'ombre, éviter les grandes villes et être constamment sur leurs gardes contre les chasseurs. La Seconde Inquisition a également amené des alliés inattendus, avec certains humains qui découvrent la vérité sur les vampires et s'en servent pour leurs propres fins. Bien que de nombreux vampires croient que l'Inquisition finira par échouer, il est clair qu'elle représente une menace existentielle pour la société des Kindred."
+    }
+  },
+  "Lieux": {
+	  "Elysium": {
+	     "description": "L’Elysium est un lieu sacré pour les vampires, un sanctuaire où la violence est strictement interdite. Instauré par la Camarilla, ce concept vise à préserver un espace neutre où les Kindred peuvent se réunir, discuter de politique, échanger des informations ou simplement se montrer. Qu’il s’agisse d’un musée, d’un théâtre, d’un club privé ou d’un ancien temple, l’Elysium est souvent situé dans un lieu culturellement important ou prestigieux, à l’écart des regards indiscrets des mortels.\n\nLes Elysia sont gouvernés par des règles strictes : aucun affrontement physique n’y est toléré, les pouvoirs surnaturels doivent y être utilisés avec discrétion, et le respect de la Mascarade y est absolu. Le non-respect de ces lois peut entraîner des sanctions sévères, voire la mort finale, selon la sévérité de l’offense.\n\nC’est également à l’Elysium que les Princes tiennent parfois leurs cours, que les Anciens manipulent les intrigues, et que les nouveaux venus peuvent espérer se faire un nom. C’est un lieu de manigances subtiles, de mascarades sociales, où chaque mot peut cacher une intention plus sombre. Même les Anarchs ou les membres indépendants respectent souvent les lois de l’Elysium, car y transgresser les règles reviendrait à s’exclure de toute forme de diplomatie vampirique.\n\n Dans la ville d'Atlanta c'est dans un grand Theatre que ce lieu est situé"
+	  }
+  },
+  "Personnages": {
+    "Malcolm Voss": {
+      "description": "Ventru - Camarilla\n\nPrince en charge de la ville, son aspect semble souvent enjoué, mais c'est une main de fer dans un gant de velour",
+      "image": "https://i.postimg.cc/MTmzZZLg/CABD21-E8-5-B61-44-C6-9-E35-2044-D1-CC1586.png"
+    },
+    "Cassandra Blackwood": {
+      "description": "Ventru - Camarilla\n\nSénéchal d'Atlanta, elle s'occupe de la ville en l'absence du prince",
+      "image": "https://i.postimg.cc/V6cqt4k2/542-BB7-B6-8723-4530-9783-7-DAA4964-A244.png"
+    },
+    "Shane Rivera": {
+      "description": "Nosferatu - Camarilla\n\nConseiller du Prince, maître en renseignements, dont la laideur tranche avec une étonnante prestance.",
+      "image": "https://i.postimg.cc/x1GkNQBy/6558acc701dfbd16b6ccd3029da66c12.jpg"
+    },
+    "Rust": {
+      "description": "Gangrel - Anarch\n\nChef des Anarchs de la ville D’Atlanta\nIl as un accord avec la Camarilla pour une treve, mais l’accord est récent et reste encore fragile pour les puristes d’un cote comme de l’autre\nLes nombreuses marque sur son visage font preuve des combats qu’il as du mener pour arriver a se faire respecter des siens.\n\nIl paraît qu’une d’entre elle lui à été laissé dans un combat contre un lycan",
+      "image": "https://i.postimg.cc/WbPmbTgM/image.jpg"
+    },
+    "Kern Theron": {
+      "description": "Hecata - Neutre.\n\nHomme reclus dans une vielle église\nIl était anciennement un membre du Sabbat et c’est séparer d’eux pour vivre seul. Depuis il aide ceux qui le souhaitent sans distinctions de clans, mais pour cela il faut d’abords passer son excentricité.\n\nIl as pour habitude de confectionner des poupées et de leur donner vie avec ses pouvoirs",
+      "image": "https://i.postimg.cc/FFSg47dr/bcc48fcfbd9c4972509a8976a5ced75c.jpgg"
+    }
+  }
+}
