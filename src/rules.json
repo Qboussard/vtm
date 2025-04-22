@@ -1,0 +1,131 @@
+{
+  "Jets": {
+    "Jet": "Un test standard = Attribut + Compétence. Lance autant de dés à 10 faces. Chaque 6+ est une réussite. 10 = réussite critique. Deux 10 = critique renforcée.",
+    "Échec_bestial": "1 sur un dé de Soif + test raté = Échec Bestial. La Bête prend le dessus temporairement.",
+    "Succès_messianique": "Double 10 sur les dés de Soif = Réussite Messianique. Réussite puissante mais surnaturelle.",
+    "Échec_critique": "Échec total + 1 sur un dé de Soif = Échec Critique. Conséquences graves.",
+    "Jet volonté": "Tu peux dépenser 1 Volonté pour relancer jusqu'à 3 dés non-Soif.",
+    "Jet blood_surge": "Tu peux booster un jet en utilisant le sang : fais un test de Soif. Sur un succès, bonus au prochain jet.",
+    "Jet roulement": "Tu peux relancer un test si la narration le permet. À la discrétion du Conteur."
+  },
+  "Combat": {
+    "Jet combat": "Corps à corps : Force + Mêlée. À distance : Dextérité + Armes à feu.",
+    "Initiative": "Initiative : Astuce + Composure. Résolution des actions du plus lent au plus rapide.",
+    "Distance": "À distance : Dextérité + Armes à feu. Tenu compte de la portée, de la couverture, etc.",
+    "Corps_a_corps": "Combat rapproché : Force + Mêlée. Parade ou esquive possible par le défenseur.",
+    "Esquive": "Esquive : Dextérité + Athlétisme. Jet opposé à l’attaque.",
+    "Parade": "Parade : Dextérité + Mêlée. Utilisable gratuitement une fois par tour.",
+    "Dommages": "Chaque succès au-dessus de la difficulté inflige 1 dégât. Certaines armes ajoutent des dégâts.",
+    "Types de degats": "Dégâts Superficiels (/) et Aggravés (X). 2 Superficiels = 1 Aggravé.",
+    "Gestion des degats": "Les vampires divisent les dégâts physiques superficiels par 2. Les dégâts aggravés ne sont pas réduits."
+  },
+  "Social": {
+    "Jet social": "Interaction sociale : Charisme / Manipulation / Sang-froid + compétence sociale.",
+    "Résistance sociale": "Contre une manipulation : Sang-froid + Résolution ou Astuce + Vigilance.",
+    "Jet résister a la peur": "Contre la peur surnaturelle : Résolution + Sang-froid.",
+    "Jet conscience": "Après un acte inhumain, jet de Remords pour éviter de perdre de l'Humanité."
+  },
+  "Volonte": {
+    "Volonté": "Utilisée pour relancer des dés ou résister à des effets mentaux.",
+    "Utilisation de la volonte": "Dépense 1 point pour relancer jusqu’à 3 dés (hors Soif) ou résister à la coercition.",
+    "Regain de volonte": "Repose ou scènes émotionnelles = récupération. 1 point possible via Ambition/Nature."
+  },
+  "Soif et faim": {
+    "Soif": "Va de 0 à 5. À 5, tu risques de perdre le contrôle. Affecte les dés jetés (dé de Soif).",
+    "Jet soif": "Réveil ou usage surnaturel = test de Soif (1d10). Échec = +1 Soif.",
+    "Faim": "Réduis la Soif en te nourrissant. Chasser est vital.",
+    "Jet chasse": "Test dépendant du style de chasse : Subterfuge, Intimidation, Furtivité, etc."
+  },
+  "Psychologie et etat": {
+    "Jet frenesie": "Sous stress, test de Résolution + Sang-froid. Échec = Frénésie (attaque, fuite, etc.).",
+    "Conditions": "Blessé, Dominé, Terrorisé... peuvent affecter tes jets et nécessitent un test ou roleplay pour s’en débarrasser.",
+    "Humanité": "Indique ton attachement à l’humanité. Plus elle baisse, plus tu deviens une créature monstrueuse.",
+    "Jet résister lien de sang": "Pour résister à un lien de sang : Sang-froid + Résolution.",
+    "Jet résistance": "Pour résister à un effet mental ou physique : Résolution + Sang-froid ou Force + Endurance."
+  },
+  "Univers": {
+    "Masquerade": "La Mascarade protège le secret des vampires. La briser peut entraîner la mort.",
+    "Clans": "Chaque clan a ses Disciplines, faiblesses et culture. Ex : Toreador (esthètes), Brujah (colériques), Nosferatu (discrets).",
+    "Camarilla": "Ancienne secte dominante, hiérarchique et secrète. Elle impose la Mascarade et régule les vampires par des lois strictes. Dirigée par des Princes et des Primogènes.",
+    "Anarchs": "Mouvement rebelle. Refusent la rigidité de la Camarilla. Veulent plus de liberté, mais respectent souvent la Mascarade. Souvent jeunes, dynamiques et radicaux.",
+    "Sabbat": "Secte extrémiste et violente. Rejette totalement l’humanité et la Mascarade. Croient que les vampires doivent dominer le monde. Connus pour les Liens de Meute et la Frénésie contrôlée.",
+    "Seconde inquisition": "Coalition secrète d’agences humaines (CIA, Interpol, Vatican...) traquant les vampires. Utilise technologie, foi et renseignements pour traquer, interroger et éradiquer les Caïnites. Cause de nombreuses purges récentes. Extrêmement dangereuse."
+  },
+  "Compétences": {
+    "Académiques": "Connaissances générales dans les domaines universitaires tels que l'histoire, la littérature, le droit ou les sciences humaines. Utile pour impressionner les érudits ou comprendre des textes anciens.",
+    "Informatique": "Compétence en informatique, hacking, électronique ou traitement de données numériques. Idéale pour infiltrer des systèmes de sécurité ou trouver des infos sensibles.",
+    "Investigation": "Permet de trouver des indices, repérer des détails cachés ou résoudre des énigmes. Très utile lors d’enquêtes ou d’analyses de scènes de crime.",
+    "Médecine": "Soins médicaux, diagnostic, premiers secours. Peut aussi servir à disséquer ou comprendre des blessures surnaturelles.",
+    "Occulte": "Connaissances sur le surnaturel, les traditions vampiriques, les rituels et les forces paranormales. Essentiel pour comprendre le monde des Ténèbres.",
+    "Politique": "Compréhension des structures de pouvoir, des alliances et des intrigues sociales. Indispensable dans les sphères de la Camarilla ou pour manipuler les institutions.",
+    "Sciences": "Compétences en biologie, chimie, physique ou ingénierie. Peut servir pour analyser des substances ou créer des dispositifs utiles.",
+    
+    "Athlétisme": "Capacité physique à courir, grimper, nager ou esquiver. Sert aussi bien pour les poursuites que pour éviter des attaques.",
+    "Bagarre": "Compétence en combat à mains nues. Sert pour neutraliser ou se défendre sans arme.",
+    "Conduite": "Maîtrise des véhicules. Très utile pour s’échapper ou poursuivre rapidement.",
+    "Armes à feu": "Utilisation d’armes à projectiles. Sert à tirer avec précision ou entretenir ses armes.",
+    "Mêlée": "Combat rapproché avec armes blanches : épées, battes, couteaux, etc.",
+    "Larcin": "Crochetage, vol à la tire, sabotage. Idéal pour les missions discrètes ou illégales.",
+    "Survie": "Orientation, pistage, chasse, vivre dans la nature. Aussi utile pour repérer des abris sûrs.",
+    
+    "Animalisme": "Interaction avec les animaux, les calmer, les dresser ou les utiliser comme espions ou défenseurs.",
+    "Intimidation": "Faire peur, imposer le respect ou la soumission, que ce soit verbalement ou physiquement.",
+    "Leadership": "Capacité à inspirer, motiver ou donner des ordres efficaces. Parfait pour gérer un groupe ou une meute.",
+    "Persuasion": "Convaincre par la logique, la négociation ou les émotions. Très utile pour obtenir ce qu’on veut pacifiquement.",
+    "Représentation": "Jouer un rôle, mentir par la performance, captiver un public. Idéal pour les infiltrations sociales.",
+    "Subterfuge": "Tromper, mentir, manipuler subtilement. L’art du mensonge discret.",
+    "Etiquette": "Connaissance des règles sociales et des usages de la haute société ou d’un clan. Utile pour ne pas commettre de faux-pas politiques."
+  },
+  "Disciplines": {
+    "Animalism": {
+      "Sens de la Bête": "Coût : Aucun | Jet : Résolution + Animalisme contre Sang-Froid + Intuition",
+      "Domination animale": "Coût : 1 point de Volonté | Jet : Manipulation + Animalisme",
+      "Lien bestial": "Coût : 1 point de Sang | Jet : Charisme + Animalisme"
+    },
+    "Auspex": {
+      "Sens aiguisés": "Coût : Aucun | Jet : Astuce + Auspex",
+      "Lecture de l'âme": "Coût : Aucun | Jet : Sang-Froid + Auspex",
+      "Pré-science": "Coût : 1 point de Volonté | Jet : Résolution + Auspex"
+    },
+    "Célérité": {
+      "Vitesse surnaturelle": "Coût : 1 point de Sang | Jet : Astuce + Célérité",
+      "Évitement rapide": "Coût : 1 point de Volonté | Jet : Dextérité + Célérité",
+      "Frappe fulgurante": "Coût : 1 point de Sang | Jet : Force + Célérité"
+    },
+    "Domination": {
+      "Regard hypnotique": "Coût : Aucun | Jet : Manipulation + Domination",
+      "Commande": "Coût : 1 point de Volonté | Jet : Charisme + Domination",
+      "Contrôle total": "Coût : 1 point de Sang | Jet : Résolution + Domination"
+    },
+    "Fortitude": {
+      "Résistance surnaturelle": "Coût : Aucun | Jet : Vigueur + Fortitude",
+      "Ignorer la douleur": "Coût : 1 point de Volonté | Jet : Résolution + Fortitude",
+      "Mur de chair": "Coût : 1 point de Sang | Jet : Vigueur + Fortitude"
+    },
+    "Obfuscate": {
+      "Masque des ombres": "Coût : Aucun | Jet : Sang-Froid + Obfuscate",
+      "Invisibilité": "Coût : 1 point de Volonté | Jet : Astuce + Obfuscate",
+      "Passage inaperçu": "Coût : 1 point de Sang | Jet : Dextérité + Obfuscate"
+    },
+    "Potence": {
+      "Force surnaturelle": "Coût : Aucun | Jet : Force + Potence",
+      "Poing fracassant": "Coût : 1 point de Volonté | Jet : Force + Potence",
+      "Bond prodigieux": "Coût : 1 point de Sang | Jet : Dextérité + Potence"
+    },
+    "Présence": {
+      "Charisme magnétique": "Coût : Aucun | Jet : Charisme + Présence",
+      "Effroi": "Coût : 1 point de Volonté | Jet : Manipulation + Présence",
+      "Ralliement": "Coût : 1 point de Sang | Jet : Charisme + Présence"
+    },
+    "Sang": {
+      "Sangsue": "Coût : Aucun | Jet : Vigueur + Sang",
+      "Réserve surnaturelle": "Coût : 1 point de Sang | Jet : Résolution + Sang",
+      "Sang bouillant": "Coût : 1 point de Sang | Jet : Force + Sang"
+    },
+    "Thaumaturgie": {
+      "Voie du sang": "Coût : 1 point de Sang | Jet : Intelligence + Thaumaturgie",
+      "Purification": "Coût : 1 point de Volonté | Jet : Résolution + Thaumaturgie",
+      "Lien brisé": "Coût : 1 point de Sang | Jet : Sang-Froid + Thaumaturgie"
+    }
+  }
+}
