@@ -259,4 +259,6 @@ client.once('ready', () => {
     console.log(`🤖 Connecté en tant que ${client.user?.tag}`);
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN).catch((err) => {
+    console.error("❌ Erreur lors du login :", err);
+});
