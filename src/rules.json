@@ -77,55 +77,80 @@
     "Etiquette": "Connaissance des règles sociales et des usages de la haute société ou d’un clan. Utile pour ne pas commettre de faux-pas politiques."
   },
   "Disciplines": {
-    "Animalism": {
-      "Sens de la Bête": "Coût : Aucun | Jet : Résolution + Animalisme contre Sang-Froid + Intuition",
-      "Domination animale": "Coût : 1 point de Volonté | Jet : Manipulation + Animalisme",
-      "Lien bestial": "Coût : 1 point de Sang | Jet : Charisme + Animalisme"
+    "Animalisme": {
+      "coût": "Variable (souvent 1 point d'Exaltation)",
+      "jet": "Résolution + Dressage (variable selon le pouvoir)",
+      "résistance": "Résolution + Sang-Froid"
     },
     "Auspex": {
-      "Sens aiguisés": "Coût : Aucun | Jet : Astuce + Auspex",
-      "Lecture de l'âme": "Coût : Aucun | Jet : Sang-Froid + Auspex",
-      "Pré-science": "Coût : 1 point de Volonté | Jet : Résolution + Auspex"
+      "coût": "Gratuit ou 1 point d'Exaltation",
+      "jet": "Astuce + Occultisme",
+      "résistance": "Résolution + Occultisme"
     },
     "Célérité": {
-      "Vitesse surnaturelle": "Coût : 1 point de Sang | Jet : Astuce + Célérité",
-      "Évitement rapide": "Coût : 1 point de Volonté | Jet : Dextérité + Célérité",
-      "Frappe fulgurante": "Coût : 1 point de Sang | Jet : Force + Célérité"
+      "coût": "1 point d'Exaltation",
+      "jet": "Dextérité + Athlétisme (ou autre selon le pouvoir)",
+      "résistance": "Variable selon le pouvoir"
     },
-    "Domination": {
-      "Regard hypnotique": "Coût : Aucun | Jet : Manipulation + Domination",
-      "Commande": "Coût : 1 point de Volonté | Jet : Charisme + Domination",
-      "Contrôle total": "Coût : 1 point de Sang | Jet : Résolution + Domination"
+    "Dompteur": {
+      "coût": "1 point d'Exaltation",
+      "jet": "Manipulation + Intimidation",
+      "résistance": "Résolution + Sang-Froid"
     },
-    "Fortitude": {
-      "Résistance surnaturelle": "Coût : Aucun | Jet : Vigueur + Fortitude",
-      "Ignorer la douleur": "Coût : 1 point de Volonté | Jet : Résolution + Fortitude",
-      "Mur de chair": "Coût : 1 point de Sang | Jet : Vigueur + Fortitude"
+    "Force d'âme": {
+      "coût": "1 point d'Exaltation",
+      "jet": "Résolution + Sang-Froid",
+      "résistance": "Force + Athlétisme"
     },
-    "Obfuscate": {
-      "Masque des ombres": "Coût : Aucun | Jet : Sang-Froid + Obfuscate",
-      "Invisibilité": "Coût : 1 point de Volonté | Jet : Astuce + Obfuscate",
-      "Passage inaperçu": "Coût : 1 point de Sang | Jet : Dextérité + Obfuscate"
-    },
-    "Potence": {
-      "Force surnaturelle": "Coût : Aucun | Jet : Force + Potence",
-      "Poing fracassant": "Coût : 1 point de Volonté | Jet : Force + Potence",
-      "Bond prodigieux": "Coût : 1 point de Sang | Jet : Dextérité + Potence"
+    "Occultation": {
+      "coût": "Souvent gratuit",
+      "jet": "Dextérité + Furtivité",
+      "résistance": "Astuce + Vigilance"
     },
     "Présence": {
-      "Charisme magnétique": "Coût : Aucun | Jet : Charisme + Présence",
-      "Effroi": "Coût : 1 point de Volonté | Jet : Manipulation + Présence",
-      "Ralliement": "Coût : 1 point de Sang | Jet : Charisme + Présence"
+      "coût": "1 point d'Exaltation",
+      "jet": "Charisme + Expression",
+      "résistance": "Résolution + Sang-Froid"
     },
-    "Sang": {
-      "Sangsue": "Coût : Aucun | Jet : Vigueur + Sang",
-      "Réserve surnaturelle": "Coût : 1 point de Sang | Jet : Résolution + Sang",
-      "Sang bouillant": "Coût : 1 point de Sang | Jet : Force + Sang"
+    "Puissance": {
+      "coût": "1 point d'Exaltation (par activation)",
+      "jet": "Force + Combat",
+      "résistance": "Variable (selon opposition physique)"
+    },
+    "Sorcellerie du Sang": {
+      "coût": "1 point d'Exaltation (souvent requis), rituels spécifiques",
+      "jet": "Résolution + Occultisme",
+      "résistance": "Variable selon le rituel"
     },
     "Thaumaturgie": {
-      "Voie du sang": "Coût : 1 point de Sang | Jet : Intelligence + Thaumaturgie",
-      "Purification": "Coût : 1 point de Volonté | Jet : Résolution + Thaumaturgie",
-      "Lien brisé": "Coût : 1 point de Sang | Jet : Sang-Froid + Thaumaturgie"
+      "coût": "Comme la Sorcellerie du Sang",
+      "jet": "Résolution + Occultisme",
+      "résistance": "Variable selon le pouvoir"
+    },
+    "Nécromancie": {
+      "coût": "Variable selon les pouvoirs",
+      "jet": "Résolution + Occultisme",
+      "résistance": "Résolution + Sang-Froid ou Astuce + Vigilance"
+    },
+    "Obfuscate": {
+      "coût": "Souvent gratuit ou 1 point d'Exaltation",
+      "jet": "Dextérité + Furtivité",
+      "résistance": "Astuce + Vigilance"
+    },
+    "Daimonion": {
+      "coût": "1 point d'Exaltation",
+      "jet": "Manipulation + Intimidation ou Occultisme",
+      "résistance": "Résolution + Sang-Froid"
+    },
+    "Serpentis": {
+      "coût": "1 point d'Exaltation",
+      "jet": "Manipulation + Occultisme ou Subterfuge",
+      "résistance": "Résolution + Vigilance"
+    },
+    "Vicissitude": {
+      "coût": "1 point d'Exaltation",
+      "jet": "Force + Médecine",
+      "résistance": "Résolution + Sang-Froid"
     }
   }
 }

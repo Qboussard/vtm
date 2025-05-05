@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder, Events } from 'discord.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
@@ -46,7 +46,14 @@ const listCommands = (rulesObj: any): string => {
 };
 
 // Initialisation du client Discord
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessageReactions
+  ],
+});
 
 // Déclaration des commandes slash
 const commands = [
@@ -106,6 +113,29 @@ const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN as strin
 })();
 
 // Gestion des interactions
+client.on(Events.MessageReactionAdd, async (reaction, user, _details) => {
+    try {
+        // Ignore les réactions du bot lui-même
+        if (user.bot) return;
+
+        if (reaction.partial) await reaction.fetch();
+        if (reaction.message.partial) await reaction.message.fetch();
+
+        if (reaction.emoji.name === '❌') {
+            const message = reaction.message;
+
+            // Vérifie que c’est bien le bot qui a envoyé le message
+            // if (message.author?.id === client.user?.id) {
+            //     await message.delete();
+            // }
+            await message.delete();
+
+        }
+    } catch (error) {
+        console.error('Erreur lors du traitement de la réaction :', error);
+    }
+});
+
 client.on('interactionCreate', async (interaction) => {
     if (interaction.isAutocomplete()) {
         const focusedOption = interaction.options.getFocused(true);
@@ -151,6 +181,8 @@ client.on('interactionCreate', async (interaction) => {
     if (commandName === 'commands') {
         const commandList = listCommands(rules);
         await interaction.reply(commandList);
+        const replyMessage = await interaction.fetchReply();
+        await replyMessage.react('❌');
     }
 
     if (commandName === 'regle') {
@@ -163,6 +195,8 @@ client.on('interactionCreate', async (interaction) => {
 
         const rule = getRule(category, subcategory, rules);
         await interaction.reply(rule);
+        const replyMessage = await interaction.fetchReply();
+        await replyMessage.react('❌');
     }
 
     if (commandName === 'lore') {
@@ -190,6 +224,8 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         await interaction.reply({ embeds: [embed] });
+        const replyMessage = await interaction.fetchReply();
+        await replyMessage.react('❌');
     }
 
     if (commandName === 'disciplines') {
@@ -212,6 +248,8 @@ client.on('interactionCreate', async (interaction) => {
             embed.setDescription(description);
 
             await interaction.reply({ embeds: [embed] });
+            const replyMessage = await interaction.fetchReply();
+            await replyMessage.react('❌');
         }
     }
 });
