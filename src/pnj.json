@@ -1,0 +1,72 @@
+{
+  "Malcolm Voss": {
+    "clan": "Ventru",
+    "faction": "Camarilla",
+    "rang": "Prince d'Atlanta",
+    "statut": "actif",
+    "description": "Son aspect semble souvent enjoué, mais c'est une main de fer dans un gant de velours.",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/MTmzZZLg/CABD21-E8-5-B61-44-C6-9-E35-2044-D1-CC1586.png",
+    "relations": ["Cassandra Blackwood", "Shane Rivera"]
+  },
+  "Cassandra Blackwood": {
+    "clan": "Ventru",
+    "faction": "Camarilla",
+    "rang": "Sénéchal d'Atlanta",
+    "statut": "Morte",
+    "description": "Elle s'occupe de la ville en l'absence du prince.",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/V6cqt4k2/542-BB7-B6-8723-4530-9783-7-DAA4964-A244.png",
+    "relations": ["Malcolm Voss"]
+  },
+  "Shane Rivera": {
+    "clan": "Nosferatu",
+    "faction": "Camarilla",
+    "rang": "Conseiller du Prince",
+    "statut": "actif",
+    "description": "Maître en renseignements, dont la laideur tranche avec une étonnante prestance.",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/x1GkNQBy/6558acc701dfbd16b6ccd3029da66c12.jpg",
+    "relations": ["Malcolm Voss"]
+  },
+  "Rust": {
+    "clan": "Gangrel",
+    "faction": "Anarchs",
+    "rang": "Chef des Anarchs d'Atlanta",
+    "statut": "actif",
+    "description": "Il a un accord avec la Camarilla pour une trêve, mais l'accord est récent et reste encore fragile. Les nombreuses marques sur son visage font preuve des combats qu'il a dû mener pour se faire respecter. Il paraît qu'une d'entre elles lui a été laissée dans un combat contre un lycan.",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/WbPmbTgM/image.jpg",
+    "relations": []
+  },
+  "Kern Theron": {
+    "clan": "Hecata",
+    "faction": "Neutre",
+    "rang": "Reclus",
+    "statut": "Disparu",
+    "description": "Homme reclus dans une vieille église. Anciennement membre du Sabbat, il s'en est séparé pour vivre seul. Il aide ceux qui le souhaitent sans distinction de clans, mais il faut d'abord passer son excentricité. Il a pour habitude de confectionner des poupées et de leur donner vie avec ses pouvoirs.",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/FFSg47dr/bcc48fcfbd9c4972509a8976a5ced75c.jpgg",
+    "relations": []
+  },
+  "Caleb Thorin": {
+    "clan": "Nosferatu",
+    "faction": "Camarilla",
+    "rang": "",
+    "statut": "actif",
+    "description": "",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/d3Bc0jP7/IMG-5074.jpg",
+    "relations": []
+  },
+  "Silvère Darven": {
+    "clan": "Nosferatu",
+    "faction": "Camarilla",
+    "rang": "",
+    "statut": "actif",
+    "description": "",
+    "description_mj": "",
+    "image": "https://i.postimg.cc/gkS1BJYP/IMG-5073.jpg",
+    "relations": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "Elysium": {
+    "type": "Lieu neutre",
+    "quartier": "Centre-ville",
+    "description": "L'Elysium est un lieu sacré pour les vampires, un sanctuaire où la violence est strictement interdite. Instauré par la Camarilla, ce concept vise à préserver un espace neutre où les Kindred peuvent se réunir, discuter de politique, échanger des informations ou simplement se montrer.\n\nLes Elysia sont gouvernés par des règles strictes : aucun affrontement physique n'y est toléré, les pouvoirs surnaturels doivent y être utilisés avec discrétion, et le respect de la Mascarade y est absolu.\n\nDans la ville d'Atlanta, c'est dans un grand théâtre que ce lieu est situé.",
+    "description_mj": "",
+    "image": "",
+    "pnj_lies": []
+  }
+}
