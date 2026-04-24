@@ -12,12 +12,13 @@ if (!process.env.BOT_TOKEN || !process.env.CLIENT_ID || !process.env.GUILD_ID ||
 const SUPER_MJ_ID = process.env.SUPER_MJ_ID as string;
 
 // Chargement des fichiers JSON
-const rulesPath = path.join(__dirname, 'rules.json');
-const lorePath = path.join(__dirname, 'lore.json');
-const pnjPath = path.join(__dirname, 'pnj.json');
-const lieuxPath = path.join(__dirname, 'lieux.json');
-const sessionsPath = path.join(__dirname, 'sessions.json');
-const configPath = path.join(__dirname, 'config.json');
+const dataDir = path.join(__dirname, '..', 'src');
+const rulesPath = path.join(dataDir, 'rules.json');
+const lorePath = path.join(dataDir, 'lore.json');
+const pnjPath = path.join(dataDir, 'pnj.json');
+const lieuxPath = path.join(dataDir, 'lieux.json');
+const sessionsPath = path.join(dataDir, 'sessions.json');
+const configPath = path.join(dataDir, 'config.json');
 
 interface Session {
     numero: number;
