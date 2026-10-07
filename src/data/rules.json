@@ -1,0 +1,204 @@
+{
+  "Jets": {
+    "Test standard": "Lancez autant de d10 que **Attribut + Compétence**.\n\n- **6 à 10** → 1 réussite\n- **Chaque paire de 10** → 4 réussites au lieu de 2 (réussite critique)\n\nLa **difficulté** est le nombre de réussites à obtenir. La **marge** est le nombre de réussites au-delà de la difficulté.\n\nAutant de dés que votre **Soif** actuelle sont remplacés par des **dés de Soif** : ils comptent comme des dés normaux, mais leurs 10 et leurs 1 ont des effets spéciaux.",
+    "Réussite critique": "Chaque **paire de 10** compte pour **4 réussites** (deux 10 = 4, trois 10 = 5, quatre 10 = 8…).\n\nUn test réussi qui contient au moins une paire de 10 est une **réussite critique** : le personnage réussit avec brio, au-delà de ses attentes.",
+    "Réussite messianique": "Une **réussite critique** dont **au moins un des 10 est sur un dé de Soif** (*Messy Critical*).\n\nLe personnage réussit, mais la Bête prend la main : la réussite est brutale, excessive ou bestiale. Le Conteur impose une complication (violence, menace pour la Mascarade, compulsion…).",
+    "Échec bestial": "Un test **raté** avec **au moins un 1 sur un dé de Soif** (*Bestial Failure*).\n\nLa Bête se manifeste : réaction instinctive (rage, fuite, prédation) ou conséquence fâcheuse au choix du Conteur. Il peut aussi imposer une **compulsion** : −2 dés à toute action qui ne la satisfait pas, jusqu'à ce qu'elle soit assouvie ou que la scène se termine.",
+    "Échec total": "**Aucune réussite** au jet.\n\nC'est pire qu'un simple échec : le personnage échoue de façon spectaculaire et le Conteur décrit des conséquences sérieuses (blessure, couverture grillée, objet brisé…).",
+    "Relance de Volonté": "Dépensez **1 point de Volonté** (1 dégât superficiel sur la piste de Volonté) pour **relancer jusqu'à 3 dés normaux**.\n\nLes **dés de Soif ne peuvent jamais être relancés**.",
+    "Test d'Exaltation": "Le *Rouse Check* : le sang est sollicité.\n\nLancez **1 dé** :\n- **6 ou plus** → rien ne se passe\n- **1 à 5** → la **Soif augmente de 1**\n\nOn le fait au réveil chaque nuit, pour activer la plupart des Disciplines, l'Afflux de sang, la guérison ou le Teint de vie.\n\nÀ **Soif 5**, impossible de faire un test d'Exaltation : la Bête exige du sang et le Conteur peut demander un test de Frénésie de faim.",
+    "Afflux de sang": "Le *Blood Surge* : faites un **test d'Exaltation** pour ajouter des dés à un jet.\n\nLe bonus dépend de la **Puissance du sang** (+1 dé à Puissance 0, +2 dés à Puissance 1–2, davantage au-delà).\n\nIl ne s'ajoute **pas aux jets de Discipline**.",
+    "Jets opposés et étendus": "**Jet opposé** : chaque camp lance sa réserve, le plus grand nombre de réussites l'emporte. La marge mesure l'ampleur de la victoire.\n\n**Jet étendu** : on lance plusieurs fois en accumulant les réussites jusqu'à un total fixé (crochetage long, recherche en bibliothèque…). Chaque jet représente un laps de temps ; un échec total peut tout faire échouer."
+  },
+  "Combat": {
+    "Déroulement d'un tour": "La V5 n'a **pas de jet d'initiative**. Le Conteur fait agir les personnages dans l'ordre qui sert la scène, généralement **la mêlée, puis le tir, puis le reste**.\n\nChaque personnage fait **une action** par tour. Célérité permet d'agir plus vite ou plus souvent.",
+    "Attaque": "Une attaque est un **jet opposé** à la défense de la cible.\n\n- **Mêlée** : Force + Mêlée\n- **Bagarre** : Force + Bagarre\n- **Tir** : Dextérité + Armes à feu (tir posé : Sang-froid + Armes à feu)\n\nEn corps à corps, les deux combattants s'attaquent : celui qui a le plus de réussites inflige des dégâts égaux à sa marge.",
+    "Défense": "- **Esquive** : Dextérité + Athlétisme. On évite le coup sans infliger de dégâts.\n- **Riposter** au corps à corps : on utilise sa propre réserve d'attaque (Mêlée ou Bagarre) ; si on gagne, c'est l'attaquant qui encaisse.\n\nContre le tir, esquiver suppose un abri à portée.\n\n**Plusieurs adversaires** : −1 dé de défense par attaquant au-delà du premier.",
+    "Dégâts": "Dégâts infligés = **marge de l'attaque + bonus de l'arme**.\n\nLe bonus va de +0 (poing) à +4 (arme lourde) selon l'arme ; le Conteur tranche pour les armes improvisées.\n\nPuissance ajoute directement des dégâts aux attaques à mains nues et en mêlée.",
+    "Types de dégâts": "**Superficiels (/)** : coups, balles, chutes.\n**Aggravés (X)** : feu, soleil, crocs et griffes surnaturels, certaines armes sacrées.\n\nPour un **vampire**, les dégâts superficiels sont **divisés par 2 (arrondi au supérieur)**, sauf ceux du feu ou du soleil qui sont aggravés. Les mortels ne divisent pas.",
+    "Santé": "Piste de **Santé = Vigueur + 3**.\n\nLes dégâts remplissent la piste. Quand elle est **pleine**, chaque nouveau dégât superficiel transforme une case superficielle en **aggravée**.\n\nPiste pleine (toutes cases cochées) → **Affaibli** : −2 dés aux jets physiques.\nPiste entièrement **aggravée** → **torpeur** pour un vampire, mort pour un mortel."
+  },
+  "Social": {
+    "Jet social": "Selon l'approche :\n- **Charisme** : séduire, inspirer, imposer\n- **Manipulation** : tromper, orienter, contraindre\n- **Sang-froid** : garder la face, négocier sous pression\n\nCompétences sociales : Animaux, Étiquette, Perspicacité, Intimidation, Commandement, Représentation, Persuasion, Expérience de la rue, Subterfuge.",
+    "Résister et démasquer": "Le Conteur oppose généralement :\n- **Sang-froid + Résolution** pour résister à la pression ou à l'intimidation\n- **Astuce + Perspicacité** pour démasquer un mensonge (contre Manipulation + Subterfuge)\n\nDomination et Présence imposent leurs propres réserves de résistance (voir les Disciplines).",
+    "Conflit social": "Un débat ou une joute verbale importante peut se jouer comme un combat : jets opposés, et la marge inflige des **dégâts de Volonté** à l'adversaire.\n\nCelui dont la Volonté est épuisée cède, ou ne peut plus argumenter sérieusement."
+  },
+  "Volonté": {
+    "Volonté": "Piste de **Volonté = Sang-froid + Résolution**.\n\nElle encaisse des dégâts superficiels et aggravés comme la Santé. Dépenser 1 Volonté = **1 dégât superficiel** de Volonté.\n\nElle sert à :\n- **Relancer jusqu'à 3 dés normaux** sur un jet\n- Encaisser la pression des conflits sociaux\n- Alimenter le test de Frénésie (dés = Volonté restante)",
+    "Volonté épuisée": "Quand la piste de Volonté est **pleine** de dégâts, le personnage est **Affaibli** : **−2 dés aux jets mentaux et sociaux**.\n\nIl ne peut plus dépenser de Volonté et ses tests de Frénésie deviennent dangereux.",
+    "Regain de Volonté": "À chaque nouvelle session (ou nuit de repos), le personnage récupère des dégâts **superficiels** de Volonté égaux à la plus haute valeur entre **Sang-froid** et **Résolution**.\n\nLes dégâts **aggravés** de Volonté ne se soignent que par des scènes fortes liées aux Convictions ou aux Pierres de touche, à la discrétion du Conteur."
+  },
+  "Soif": {
+    "Soif": "La **Soif** va de **0 à 5**. Elle donne le nombre de **dés de Soif** dans chaque réserve.\n\n- **0** : rassasié. N'arrive qu'en vidant (tuant) un mortel.\n- **1–2** : la Bête est sous contrôle.\n- **3** : le besoin se fait sentir, les pensées tournent vers le sang.\n- **4** : difficile de résister à une source de sang à portée.\n- **5** : affamé. Plus de test d'Exaltation possible, risque permanent de Frénésie.",
+    "Se nourrir": "- **Mortel** : réduit la Soif de **1 à 3** sans le tuer, selon la quantité bue. Seule la **mort** de la victime ramène la Soif à **0**.\n- **Animal ou poche de sang** : −1 Soif au mieux. Les vampires à forte Puissance du sang n'en tirent plus rien.\n- **Vampire** : très nourrissant, mais chaque gorgée fait progresser un **Lien de sang**.\n\nTuer en se nourrissant ou se nourrir de force peut valoir une **Tache** d'Humanité.",
+    "Chasse": "Le **type de prédateur** donne la réserve de chasse :\n- **Chat de gouttière** (*Alleycat*) : Force + Bagarre\n- **Marchand de sable** (*Sandman*) : Dextérité + Furtivité\n- **Sirène** (*Siren*) : Charisme + Subterfuge\n- **Consensuel** (*Consensualist*) : Manipulation + Médecine\n- **Rôdeur des poches** (*Bagger*) : Intelligence + Expérience de la rue\n- **Fermier** (*Farmer*) : Sang-froid + Animaux\n- **Osiris** : Manipulation + Subterfuge\n- **Reine de la nuit** (*Scene Queen*) : Manipulation + Persuasion\n\nLe Conteur fixe la difficulté selon le terrain de chasse. Un échec bestial laisse des traces ou des témoins."
+  },
+  "Frénésie et Humanité": {
+    "Frénésie": "Test de Frénésie : lancez des dés égaux à votre **Volonté restante + 1/3 de votre Humanité** (arrondi inférieur). Difficulté fixée par le Conteur.\n\nTrois déclencheurs :\n- **Rage** : provocation, humiliation, douleur\n- **Terreur** (*Rötschreck*) : feu, soleil, foi véritable\n- **Faim** : sang à portée quand la Soif est haute\n\nÉchec : la Bête prend le contrôle (attaque, fuite ou festin) jusqu'à la fin de la menace ou de la scène.",
+    "Humanité": "L'**Humanité** va de **0 à 10** et mesure ce qu'il reste d'humain chez le vampire.\n\n- **8–10** : semble presque vivant, ressent de l'empathie\n- **5–7** : équilibre fragile ; la plupart des vampires sont ici\n- **3–4** : monstre qui se souvient d'avoir été humain\n- **1–2** : presque entièrement Bête\n- **0** : le personnage est perdu et devient un PNJ\n\nElle donne aussi un tiers des dés du test de Frénésie et règle la durée de la torpeur.",
+    "Taches": "Agir contre les **Principes de la chronique** ou contre ses **Convictions** inflige une ou plusieurs **Taches**, cochées sur les cases vides de la piste d'Humanité, de droite à gauche.\n\nSi les Taches recouvrent une case d'Humanité, le personnage la perd immédiatement et est Affaibli jusqu'à la fin de la session.",
+    "Remords": "En **fin de session**, si le personnage a des Taches, il fait un **jet de Remords**.\n\nDés = **cases d'Humanité vides et non tachées** (10 − Humanité − Taches), **minimum 1**.\n\n- **Au moins une réussite** → l'Humanité est conservée\n- **Aucune réussite** → **−1 Humanité**\n\nDans tous les cas, les Taches sont effacées ensuite.",
+    "Affaibli": "État *Impaired* :\n- **Santé pleine** → −2 dés aux jets **physiques**\n- **Volonté pleine** → −2 dés aux jets **mentaux et sociaux**\n- **Taches qui débordent sur l'Humanité** → −2 dés à tous les jets jusqu'à la fin de la session",
+    "Résister": "Quand un effet doit être encaissé, le Conteur choisit la réserve :\n- **Mental** : Sang-froid + Résolution\n- **Physique** : Vigueur + Résolution\n\nLes Disciplines (Domination, Présence…) indiquent leur propre réserve de résistance."
+  },
+  "Univers": {
+    "Mascarade": "La **Mascarade** est la loi suprême : cacher l'existence des vampires aux mortels à tout prix.\n\nSe dévoiler, laisser des témoins ou agir de façon surnaturelle en public est une faute grave, punie de l'amende à la mise à mort. La Seconde Inquisition traque activement les brèches.",
+    "Clans": "Chaque clan a ses **Disciplines** et sa **faiblesse** (*bane*).\n\n- **Brujah** : Célérité, Puissance, Présence\n- **Gangrel** : Animalisme, Force d'âme, Protéisme\n- **Malkavien** : Auspex, Domination, Occultation\n- **Nosferatu** : Animalisme, Occultation, Puissance\n- **Toréador** : Auspex, Célérité, Présence\n- **Tremere** : Auspex, Domination, Sorcellerie du sang\n- **Ventrue** : Domination, Force d'âme, Présence\n- **Banu Haqim** : Célérité, Occultation, Sorcellerie du sang\n- **Hecata** : Auspex, Force d'âme, Oblivion\n- **Lasombra** : Domination, Oblivion, Puissance\n- **Ministère** : Occultation, Présence, Protéisme\n- **Ravnos** : Animalisme, Occultation, Présence\n- **Salubri** : Auspex, Domination, Force d'âme\n- **Tzimisce** : Animalisme, Domination, Protéisme\n- **Caïtiff** : sans clan, aucune Discipline attitrée\n- **Sang-clair** : trop faibles pour un clan, Alchimie du sang-clair",
+    "Camarilla": "La **Camarilla** est la secte dominante, fondée sur la hiérarchie et la Mascarade absolue.\n\nStructure :\n- **Prince** : dirige la ville et fait appliquer les lois\n- **Sénéchal** : second du Prince\n- **Primogènes** : représentants des clans\n- **Shérif** : force exécutive\n- **Harpie** : arbitre du statut social\n\nElle valorise l'ordre, la tradition et la discrétion, au prix de la liberté individuelle.",
+    "Anarchs": "Le **Mouvement Anarch** refuse la tyrannie de la Camarilla et des anciens.\n\nOrganisés en **Baronnies** locales dirigées par des Barons, les Anarchs prônent l'autonomie et l'égalité. Leur structure décentralisée les rend vulnérables aux conflits internes et aux manipulations des anciens.",
+    "Sabbat": "Le **Sabbat** est une secte fanatique qui rejette l'humanité et la Mascarade.\n\nSes membres veulent que les vampires dominent ouvertement les mortels et se préparent à la Géhenne. Organisés en **meutes** liées par des rituels de sang, ils sont considérés comme extrêmement dangereux, même par les autres vampires.",
+    "Seconde Inquisition": "Coalition secrète d'agences gouvernementales et religieuses (CIA, MI6, Vatican…) qui traque les vampires avec des méthodes modernes :\n- surveillance numérique et métadonnées\n- agents infiltrés\n- armes et tactiques spécialisées\n\nResponsable de nombreuses purges. Les vampires qui laissent des traces numériques s'exposent à être repérés."
+  },
+  "Compétences physiques": {
+    "Athlétisme": "Course, escalade, saut, natation, acrobaties, **esquive** (Dextérité + Athlétisme).\n\nUtile pour les poursuites, les fuites et pour éviter les coups.",
+    "Bagarre": "Combat à mains nues : coups, prises, étranglements, morsure.\n\nForce + Bagarre pour attaquer. Toujours disponible, même désarmé.",
+    "Artisanat": "Fabriquer, réparer, bricoler, créer : menuiserie, mécanique, couture, art…\n\nUtile pour improviser un outil, saboter un objet ou produire une œuvre.",
+    "Conduite": "Piloter un véhicule dans des conditions difficiles : poursuites, fuites, cascades.\n\nUn trajet ordinaire ne demande pas de jet.",
+    "Armes à feu": "Tirer, entretenir et reconnaître les armes à projectiles.\n\nDextérité + Armes à feu pour tirer. Efficace contre les mortels ; contre un vampire, les balles ne font que des dégâts superficiels (divisés par 2).",
+    "Larcin": "Crochetage, vol à la tire, désactivation d'alarmes, falsification.\n\nIdéal pour les infiltrations discrètes.",
+    "Mêlée": "Combat avec armes blanches ou contondantes : couteaux, épées, battes, pieux.\n\nForce + Mêlée pour attaquer.",
+    "Furtivité": "Se cacher, se déplacer sans bruit, filer quelqu'un sans se faire voir.\n\nDextérité + Furtivité, opposé à la Vigilance des gardes.",
+    "Survie": "Orientation, pistage, abris de fortune, chasse hors des villes.\n\nPermet de trouver un refuge sûr avant l'aube en terrain inconnu."
+  },
+  "Compétences sociales": {
+    "Animaux": "*Animal Ken* : comprendre, calmer et dresser les animaux.\n\nÀ ne pas confondre avec la Discipline **Animalisme**. Utile pour les vampires qui se nourrissent d'animaux.",
+    "Étiquette": "Règles sociales de la haute société, vampirique comme humaine.\n\nUn faux pas à l'Élysium peut coûter très cher.",
+    "Perspicacité": "*Insight* : lire les émotions, sentir le mensonge, deviner les motivations.\n\nAstuce + Perspicacité contre Manipulation + Subterfuge pour démasquer un menteur.",
+    "Intimidation": "Imposer la peur ou la soumission par la menace, la présence physique ou la réputation.",
+    "Commandement": "*Leadership* : inspirer, motiver, coordonner un groupe sous pression.\n\nParfait pour diriger une coterie ou des serviteurs.",
+    "Représentation": "*Performance* : jouer, chanter, danser, captiver un public.\n\nIdéal pour attirer l'attention ou faire diversion.",
+    "Persuasion": "Convaincre par l'argumentation, la négociation ou l'émotion.\n\nL'outil diplomatique par excellence.",
+    "Expérience de la rue": "*Streetwise* : connaître les gangs, les trafics, l'argot, savoir où trouver quoi.\n\nIndispensable pour chasser dans les bas quartiers.",
+    "Subterfuge": "Mentir, dissimuler ses intentions, tenir une fausse identité.\n\nManipulation + Subterfuge pour mentir de façon convaincante."
+  },
+  "Compétences mentales": {
+    "Érudition": "*Academics* : histoire, littérature, droit, philosophie, langues anciennes.\n\nUtile pour déchiffrer des textes anciens ou impressionner des érudits.",
+    "Vigilance": "*Awareness* : remarquer un danger, une embuscade, un détail anormal.\n\nAstuce + Vigilance pour repérer un vampire occulté ou une filature.",
+    "Finances": "Argent, investissements, blanchiment, lecture de comptes.\n\nPermet de suivre la piste de l'argent ou de financer ses projets.",
+    "Investigation": "Trouver des indices, reconstituer une scène, suivre une piste.\n\nFondamentale pour les enquêtes.",
+    "Médecine": "Premiers secours, diagnostic, chirurgie, pharmacologie.\n\nUtile aussi pour maquiller une morsure ou une mort suspecte.",
+    "Occultisme": "Savoir sur le surnaturel, les rites, les légendes, les autres créatures de la nuit.\n\nEssentiel pour comprendre les rituels et les phénomènes étranges.",
+    "Politique": "Structures de pouvoir, alliances, intrigues, administrations humaines.\n\nIndispensable à la cour de la Camarilla.",
+    "Sciences": "Biologie, chimie, physique, ingénierie.\n\nPour analyser une substance ou comprendre un phénomène de façon rationnelle.",
+    "Technologie": "Informatique, piratage, électronique, réseaux.\n\nIndispensable pour effacer ses traces numériques face à la Seconde Inquisition."
+  },
+  "Disciplines": {
+    "Animalisme": {
+      "Description": "Lien avec les animaux et maîtrise de la Bête. Coût : souvent un test d'Exaltation.",
+      "Niveau 1": "**Famulus** (*Bond Famulus*) : lier un animal comme compagnon.\n**Sens de la Bête** (*Sense the Beast*) : Résolution + Animalisme contre Sang-froid + Subterfuge pour sentir la Bête ou l'hostilité d'une créature.",
+      "Niveau 2": "**Murmures sauvages** (*Feral Whispers*) : Manipulation ou Charisme + Animalisme pour parler aux animaux et les appeler.",
+      "Niveau 3": "**Apaiser la Bête** (*Quell the Beast*) : Charisme + Animalisme contre Vigueur + Résolution pour calmer une créature ou un vampire.",
+      "Niveau 4": "**Subsumer l'esprit** (*Subsume the Spirit*) : projeter son esprit dans un animal.",
+      "Niveau 5": "**Domination animale** (*Animal Dominion*) : commander des groupes entiers d'animaux."
+    },
+    "Auspex": {
+      "Description": "Perceptions surnaturelles. La plupart des pouvoirs sont gratuits.",
+      "Niveau 1": "**Sens aiguisés** (*Heightened Senses*) : sens surnaturels, ajoute l'Auspex aux jets de perception.\n**Percevoir l'invisible** (*Sense the Unseen*) : Astuce ou Résolution + Auspex pour détecter le surnaturel caché (Occultation, fantômes…).",
+      "Niveau 2": "**Prémonition** (*Premonition*) : visions et pressentiments, sur demande ou spontanés.",
+      "Niveau 3": "**Sonder l'âme** (*Scry the Soul*) : Intelligence + Auspex contre Sang-froid + Subterfuge pour lire l'aura (émotions, nature surnaturelle, diablerie).\n**Partager les sens** (*Share the Senses*) : voir à travers les sens d'un autre.",
+      "Niveau 4": "**Toucher de l'esprit** (*Spirit's Touch*) : Intelligence + Auspex pour lire l'histoire émotionnelle d'un objet ou d'un lieu.",
+      "Niveau 5": "**Clairvoyance** : observer un lieu familier à distance.\n**Télépathie** : Résolution + Auspex contre Astuce + Subterfuge pour lire ou projeter des pensées."
+    },
+    "Célérité": {
+      "Description": "Vitesse et réflexes surnaturels.",
+      "Niveau 1": "**Grâce féline** (*Cat's Grace*) : équilibre parfait, réussite automatique aux tests d'équilibre.\n**Réflexes éclairs** (*Rapid Reflexes*) : petites actions gratuites, pas de malus pour se défendre sans abri.",
+      "Niveau 2": "**Rapidité** (*Fleetness*) : test d'Exaltation, ajoute la Célérité aux jets de Dextérité hors attaque (dont la défense).",
+      "Niveau 3": "**Clignement** (*Blink*) : test d'Exaltation, franchir une distance en un instant et agir à l'arrivée.\n**Traversée** (*Traversal*) : courir sur les murs ou l'eau.",
+      "Niveau 4": "**Visée infaillible** (*Unerring Aim*) : tout ralentit, l'attaque à distance est quasi impossible à esquiver.\n**Breuvage d'élégance** (*Draught of Elegance*) : partager sa Célérité par le sang.",
+      "Niveau 5": "**Frappe éclair** (*Lightning Strike*) : attaque impossible à esquiver normalement.\n**Fraction de seconde** (*Split Second*) : réagir avant n'importe quelle action."
+    },
+    "Domination": {
+      "Description": "Contrôle mental. Exige un **contact visuel** et une **voix intelligible**. Coût : souvent un test d'Exaltation (gratuit sur un mortel pour les premiers niveaux).\n\nRésistance habituelle : **Intelligence + Résolution**.",
+      "Niveau 1": "**Brouiller la mémoire** (*Cloud Memory*) : faire oublier l'instant présent.\n**Contraindre** (*Compel*) : Charisme + Domination contre Intelligence + Résolution pour un ordre d'un seul mot ou d'une phrase courte, exécuté immédiatement.",
+      "Niveau 2": "**Hypnotiser** (*Mesmerize*) : Manipulation + Domination contre Intelligence + Résolution pour un ordre plus complexe.\n**Démence** (*Dementation*, Malkaviens) : aggraver les troubles mentaux.",
+      "Niveau 3": "**Esprit oublieux** (*The Forgetful Mind*) : Manipulation + Domination contre Intelligence + Résolution pour réécrire des souvenirs.\n**Directive enfouie** (*Submerged Directive*) : ordre déclenché plus tard.",
+      "Niveau 4": "**Rationaliser** (*Rationalize*) : la cible croit avoir agi de son propre chef.",
+      "Niveau 5": "**Manipulation de masse** (*Mass Manipulation*) : dominer un groupe.\n**Décret ultime** (*Terminal Decree*) : les ordres peuvent pousser la cible à se nuire."
+    },
+    "Force d'âme": {
+      "Description": "*Fortitude* : résistance surnaturelle.",
+      "Niveau 1": "**Résilience** (*Resilience*) : ajoute la Force d'âme à la piste de Santé.\n**Esprit inébranlable** (*Unswayable Mind*) : ajoute la Force d'âme pour résister à la coercition.",
+      "Niveau 2": "**Robustesse** (*Toughness*) : test d'Exaltation, soustrait la Force d'âme de chaque dégât superficiel reçu.\n**Bêtes endurantes** (*Enduring Beasts*) : partager sa résistance avec ses animaux.",
+      "Niveau 3": "**Défier la faiblesse** (*Defy Bane*) : convertir des dégâts aggravés en superficiels.\n**Façade intérieure** (*Fortify the Inner Façade*) : se protéger d'Auspex et des lectures mentales.",
+      "Niveau 4": "**Breuvage d'endurance** (*Draught of Endurance*) : partager sa Force d'âme par le sang.",
+      "Niveau 5": "**Chair de marbre** (*Flesh of Marble*) : ignorer une attaque par tour.\n**Prouesse de la douleur** (*Prowess from Pain*) : la douleur renforce les Attributs."
+    },
+    "Occultation": {
+      "Description": "*Obfuscate* : disparaître des perceptions. Ne fonctionne pas sur les caméras sans **Fantôme dans la machine**.\n\nPour repérer un vampire occulté : Astuce + Auspex (ou Vigilance) contre Astuce + Occultation.",
+      "Niveau 1": "**Manteau d'ombres** (*Cloak of Shadows*) : invisible tant qu'on reste immobile.\n**Silence de mort** (*Silence of Death*) : ne produire aucun son.",
+      "Niveau 2": "**Passage invisible** (*Unseen Passage*) : rester invisible en se déplaçant.",
+      "Niveau 3": "**Fantôme dans la machine** (*Ghost in the Machine*) : l'Occultation s'étend aux caméras et enregistrements.\n**Masque aux mille visages** (*Mask of a Thousand Faces*) : être perçu comme une personne quelconque.",
+      "Niveau 4": "**Dissimuler** (*Conceal*) : cacher un objet ou un lieu.\n**Disparaître** (*Vanish*) : s'évanouir même sous les yeux de quelqu'un.",
+      "Niveau 5": "**Manteau collectif** (*Cloak the Gathering*) : occulter tout un groupe.\n**Visage d'imposteur** (*Impostor's Guise*) : prendre l'apparence d'une personne précise."
+    },
+    "Oblivion": {
+      "Description": "Discipline des **Lasombra** et des **Hecata** : maîtrise des ombres, des morts et de l'Abysse.\n\nSes pouvoirs et ses Cérémonies sont décrits dans le *Players Guide* et *Cults of the Blood Gods*. Chaque usage risque de laisser des **Taches**.",
+      "Remarque": "Discipline dangereuse et rare : le Conteur décide de ses effets précis à la table."
+    },
+    "Présence": {
+      "Description": "Charme et terreur surnaturels. Résistance habituelle : **Sang-froid + Résolution**.",
+      "Niveau 1": "**Fascination** (*Awe*) : test d'Exaltation, ajoute la Présence aux jets de Persuasion, Représentation et Charisme.\n**Intimider** (*Daunt*) : ajoute la Présence aux jets d'Intimidation.",
+      "Niveau 2": "**Baiser persistant** (*Lingering Kiss*) : la morsure crée une addiction.",
+      "Niveau 3": "**Regard terrifiant** (*Dread Gaze*) : Charisme + Présence contre Sang-froid + Résolution pour faire fuir une cible.\n**Envoûtement** (*Entrancement*) : Charisme + Présence contre Sang-froid + Astuce pour obtenir une dévotion temporaire.",
+      "Niveau 4": "**Voix irrésistible** (*Irresistible Voice*) : la Domination n'a plus besoin du contact visuel.\n**Convocation** (*Summon*) : Manipulation + Présence contre Sang-froid + Intelligence pour faire venir une personne connue.",
+      "Niveau 5": "**Majesté** (*Majesty*) : personne n'ose agir contre vous.\n**Magnétisme stellaire** (*Star Magnetism*) : la Présence fonctionne à travers les écrans et les médias."
+    },
+    "Protéisme": {
+      "Description": "*Protean* : transformation du corps.",
+      "Niveau 1": "**Yeux de la Bête** (*Eyes of the Beast*) : voir dans l'obscurité totale.\n**Poids de la plume** (*Weight of the Feather*) : ignorer les chutes.",
+      "Niveau 2": "**Armes bestiales** (*Feral Weapons*) : test d'Exaltation, griffes ou crocs qui ajoutent des dégâts aux attaques à mains nues.",
+      "Niveau 3": "**Fusion avec la terre** (*Earth Meld*) : se fondre dans le sol pour la journée.\n**Changement de forme** (*Shapechange*) : prendre la forme d'un animal de taille comparable.",
+      "Niveau 4": "**Métamorphose** (*Metamorphosis*) : forme animale plus grande ou plus petite.",
+      "Niveau 5": "**Forme de brume** (*Mist Form*) : devenir brume.\n**Cœur sans entraves** (*The Unfettered Heart*) : le cœur se déplace dans le corps, échappant aux pieux."
+    },
+    "Puissance": {
+      "Description": "*Potence* : force surnaturelle.",
+      "Niveau 1": "**Corps létal** (*Lethal Body*) : les coups à mains nues infligent des dégâts aggravés aux mortels.\n**Bond prodigieux** (*Soaring Leap*) : sauts surhumains.",
+      "Niveau 2": "**Prouesse** (*Prowess*) : test d'Exaltation, ajoute la Puissance aux dégâts à mains nues et en mêlée, et aux tests de Force.",
+      "Niveau 3": "**Festin brutal** (*Brutal Feed*) : se nourrir en quelques secondes.\n**Étincelle de rage** (*Spark of Rage*) : déclencher la colère des autres.\n**Poigne surnaturelle** (*Uncanny Grip*) : s'agripper à n'importe quelle surface.",
+      "Niveau 4": "**Breuvage de puissance** (*Draught of Might*) : partager sa Puissance par le sang.",
+      "Niveau 5": "**Séisme** (*Earthshock*) : frapper le sol pour renverser ceux qui sont autour.\n**Poing de Caïn** (*Fist of Caine*) : dégâts aggravés contre tous."
+    },
+    "Sorcellerie du sang": {
+      "Description": "*Blood Sorcery* : magie de la vitae (Tremere, Banu Haqim). Les **rituels** s'apprennent à part et prennent du temps à lancer.",
+      "Niveau 1": "**Vitae corrosive** (*Corrosive Vitae*) : le sang ronge les objets inertes.\n**Goût du sang** (*A Taste for Blood*) : Résolution + Sorcellerie du sang pour connaître Soif, génération et Puissance du sang d'un vampire en goûtant son sang.",
+      "Niveau 2": "**Extinction de vitae** (*Extinguish Vitae*) : Intelligence + Sorcellerie du sang contre Vigueur + Sang-froid pour augmenter la Soif d'un vampire.",
+      "Niveau 3": "**Sang de puissance** (*Blood of Potency*) : augmenter temporairement sa Puissance du sang.\n**Toucher du scorpion** (*Scorpion's Touch*) : transformer son sang en poison paralysant.",
+      "Niveau 4": "**Vol de vitae** (*Theft of Vitae*) : aspirer le sang d'une cible à distance.",
+      "Niveau 5": "**Caresse de Baal** (*Baal's Caress*) : le sang empoisonne les armes, dégâts aggravés.\n**Chaudron de sang** (*Cauldron of Blood*) : faire bouillir le sang d'une cible."
+    }
+  },
+  "Torpeur": {
+    "Entrer en torpeur": "Un vampire tombe en **torpeur** quand sa piste de Santé est **entièrement remplie de dégâts aggravés**.\n\nIl peut aussi y entrer volontairement. En torpeur, il est inconscient et sans défense : la mort ultime est alors facile à donner.",
+    "Durée de torpeur": "La durée minimale dépend de l'**Humanité** :\n\n- **10** : 1 jour\n- **9** : 3 jours\n- **8** : 1 semaine\n- **7** : 2 semaines\n- **6** : 1 mois\n- **5** : 1 an\n- **4** : 10 ans\n- **3** : 50 ans\n- **2** : 100 ans\n- **1** : 500 ans",
+    "Sortir de torpeur": "À la fin de la durée, le vampire se réveille en faisant un test d'Exaltation, souvent affamé.\n\nLui faire boire de la **vitae vampirique** peut le réveiller plus tôt, au jugement du Conteur. Attention : chaque gorgée fait progresser un **Lien de sang** envers le donneur.",
+    "Rêves de torpeur": "En torpeur profonde, certains vampires vivent des **visions** ou des **rêves** liés à leur passé ou à la Géhenne.\n\nÀ la discrétion du Conteur : ils peuvent révéler des informations sur la campagne."
+  },
+  "Lien de sang": {
+    "Création": "Un **Lien de sang** se crée en buvant la vitae d'un **même vampire**, lors de **nuits différentes** :\n\n- **1re gorgée** : fascination, pensées fréquentes envers le donneur (le *régnant*)\n- **2e gorgée** : affection profonde, difficile d'agir contre lui\n- **3e gorgée** : **Lien complet**, amour obsessionnel et inconditionnel",
+    "Effets du Lien": "Le lié (*thrall*) ressent un amour sincère, pas une servitude, ce qui rend le Lien encore plus insidieux.\n\nAgir contre son régnant demande un effort de volonté : le Conteur peut exiger un test, d'autant plus difficile que le Lien est fort. Un vampire lié ne peut l'être qu'envers un seul régnant à la fois.",
+    "Dissipation": "Le Lien **s'affaiblit avec le temps** si le lié ne boit plus le sang de son régnant, et se renforce dès qu'il en boit à nouveau.\n\nCertains rituels de Sorcellerie du sang peuvent l'accélérer ou le briser.",
+    "Lien mutuel": "Deux vampires qui boivent trois fois le sang l'un de l'autre se lient **mutuellement** (*vinculum*).\n\nC'est une co-dépendance dangereuse. Certaines coteries le font délibérément pour garantir leur loyauté."
+  },
+  "Génération et Puissance du sang": {
+    "Génération": "La **génération** mesure la distance avec Caïn.\n\n- **3e** : les Antédiluviens, quasi mythiques\n- **4e–6e** : les Mathusalems et anciens, pouvoir immense\n- **7e–9e** : anciens et ancillae établis\n- **10e–13e** : la plupart des vampires récents\n- **14e–16e** : les **sang-clair**, à peine vampires\n\nPlus la génération est basse, plus la **Puissance du sang** peut monter haut.",
+    "Puissance du sang": "La **Puissance du sang** (*Blood Potency*) va de 0 à 10.\n\nElle augmente :\n- le bonus de l'**Afflux de sang**\n- la quantité de dégâts soignés par test d'Exaltation\n- certains bonus de Disciplines\n\nEn contrepartie, plus elle est haute, plus il est difficile de se nourrir : le sang animal puis le sang humain ordinaire nourrissent moins.",
+    "Diablerie et génération": "Diabler un vampire de génération **plus basse** permet de **descendre d'une génération**.\n\nBoire le sang d'un vampire puissant est tentant, et c'est un crime capital dans la Camarilla."
+  },
+  "Expérience": {
+    "Gain d'XP": "Les personnages gagnent de l'expérience en fin de session, généralement **1 à 5 XP** selon :\n- les objectifs narratifs atteints\n- l'interprétation des Convictions et de l'Humanité\n- les actions mémorables ou risquées",
+    "Coûts": "- **Attribut** : nouveau niveau × 5\n- **Compétence** : nouveau niveau × 3 (première fois : 3)\n- **Spécialité** : 3\n- **Discipline de clan** : nouveau niveau × 5\n- **Discipline hors clan** : nouveau niveau × 7\n- **Discipline de Caïtiff** : nouveau niveau × 6\n- **Rituel / Cérémonie** : niveau × 3\n- **Atout** (*Advantage*) : 3 par point\n- **Puissance du sang** : nouveau niveau × 10\n\nUne Discipline hors clan demande d'avoir bu le sang d'un vampire qui la possède.",
+    "Volonté et Humanité": "La **Volonté** ne s'achète pas : elle découle de Sang-froid + Résolution.\n\nL'**Humanité** ne s'achète pas non plus : elle remonte par le roleplay, au jugement du Conteur, après des actes de rédemption."
+  },
+  "Situations": {
+    "Poursuite": "Méthode simple (règle maison) en **jets opposés** sur plusieurs tours :\n\n- **À pied** : Dextérité + Athlétisme\n- **En véhicule** : Dextérité + Conduite\n- **En milieu naturel** : Dextérité + Survie\n\nLe poursuivant rattrape sa cible s'il accumule **3 réussites d'avance** ; le fuyard s'échappe s'il en accumule **3 de son côté**.\n\nCélérité et Protéisme changent tout.",
+    "Infiltration": "Une infiltration se joue en **jet étendu** ou en une série de jets, un par obstacle :\n\n- **Discrétion** : Dextérité + Furtivité contre la Vigilance des gardes\n- **Déguisement** : Manipulation + Représentation\n- **Piratage** : Intelligence + Technologie\n\nUn échec total déclenche l'alerte.\n\nL'Occultation ne trompe pas les caméras sans **Fantôme dans la machine** (niveau 3).",
+    "Guérison": "**Dégâts superficiels** : un test d'Exaltation soigne 1 à 2 points selon la Puissance du sang (1 point à Puissance 0–1). Possible une fois par tour en combat, à la place d'une action.\n\n**Dégâts aggravés** : **3 tests d'Exaltation** par point, guéris pendant une nuit de repos.\n\nChaque guérison fait monter la Soif : se soigner complètement peut laisser un vampire affamé et dangereux.",
+    "Teint de vie": "*Blush of Life* : un **test d'Exaltation** pour paraître vivant le temps d'une scène (chaleur, rougeur, pouls, manger ou boire sans vomir aussitôt).\n\nIndispensable pour certaines relations avec les mortels. Plus l'Humanité est basse, plus c'est difficile."
+  },
+  "Politique vampirique": {
+    "Règles de l'Élysium": "À l'Élysium, les lois sont strictes :\n\n- **Aucune violence** : même en légitime défense, c'est une faute grave\n- **Pas de Disciplines offensives** : utiliser Domination ou Présence sur un autre vampire est une insulte\n- **Mascarade absolue** : comportement humain exigé\n- **Déférence envers l'hôte** : le Prince ou l'organisateur a autorité totale\n\nSanctions : avertissement public, perte de statut, bannissement, voire mise à mort.",
+    "L'Étreinte": "Créer un nouveau vampire exige **l'autorisation du Prince** en territoire Camarilla.\n\n1. Le sire vide le mortel de son sang\n2. Il lui fait boire sa propre vitae\n3. Le mortel meurt et se réveille vampire\n\nÉtreindre sans permission peut coûter la vie au sire **et** à l'infant. Le sire répond des actes de son infant.",
+    "Diablerie": "La **Diablerie** consiste à boire tout le sang d'un vampire jusqu'à dévorer son âme.\n\n**Effets** :\n- possibilité de **descendre d'une génération** si la victime était de génération plus basse\n- fragments de mémoire ou de personnalité de la victime\n- **veines noires** dans l'aura, visibles avec Auspex pendant des années\n\n**Risques** : crime capital dans la Camarilla, perte d'Humanité, et l'âme de la victime peut tenter de prendre le dessus."
+  }
+}

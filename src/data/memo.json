@@ -1,0 +1,18 @@
+[
+  {
+    "titre": "🎲 Jets",
+    "contenu": "**Réserve** = Attribut + Compétence, en d10\n**6+** = 1 réussite · **paire de 10** = 4 réussites\n**Dés de Soif** = autant que la Soif actuelle\n\n**Réussite critique** : test réussi avec une paire de 10\n**Réussite messianique** : critique avec un 10 sur un dé de Soif → la Bête complique la scène\n**Échec bestial** : test raté avec un 1 sur un dé de Soif → compulsion ou conséquence\n**Échec total** : 0 réussite\n\n**Volonté** : 1 point → relancer jusqu'à 3 dés normaux (jamais les dés de Soif)\n**Test d'Exaltation** : 1 dé, 1–5 → Soif +1\n**Afflux de sang** : test d'Exaltation → +1/+2 dés (pas sur les Disciplines)"
+  },
+  {
+    "titre": "⚔️ Combat",
+    "contenu": "**Mêlée** : Force + Mêlée\n**Bagarre** : Force + Bagarre\n**Tir** : Dextérité + Armes à feu\n**Esquive** : Dextérité + Athlétisme (contre le tir : il faut un abri)\n**Plusieurs adversaires** : −1 dé de défense par attaquant en plus\n\n**Dégâts** = marge + bonus d'arme (+0 à +4)\n**Vampire** : superficiels ÷ 2 (arrondi au sup.)\n**Aggravés** : feu, soleil, crocs, griffes\n\n**Santé** = Vigueur + 3\nPiste pleine → Affaibli (−2 dés physiques), les superficiels deviennent aggravés\nTout en aggravé → torpeur\n\n**Soin** : test d'Exaltation → 1 superficiel (jeune vampire)\nAggravé : 3 tests d'Exaltation par point, une nuit"
+  },
+  {
+    "titre": "🩸 Soif & Frénésie",
+    "contenu": "**Soif 0–5** = nombre de dés de Soif\n**0** : seulement en tuant · **3** : le sang obsède · **4** : dur de résister · **5** : plus de test d'Exaltation\n\n**Se nourrir** : mortel −1 à −3 · animal / poche −1 · tuer → 0\n\n**Test de Frénésie** = Volonté restante + Humanité ÷ 3\nDéclencheurs : **Rage**, **Terreur** (feu, soleil), **Faim**\nÉchec → la Bête agit jusqu'à la fin de la menace\n\n**Remords** (fin de session, si Taches) :\ndés = 10 − Humanité − Taches (min. 1)\n0 réussite → −1 Humanité · Taches effacées"
+  },
+  {
+    "titre": "🧠 Volonté & social",
+    "contenu": "**Volonté** = Sang-froid + Résolution\nDépenser 1 Volonté = 1 dégât superficiel de Volonté\nPiste pleine → Affaibli (−2 dés mentaux et sociaux)\nRegain par session : max(Sang-froid, Résolution) superficiels\n\n**Social** : Charisme / Manipulation / Sang-froid + compétence\n**Démasquer un mensonge** : Astuce + Perspicacité vs Manipulation + Subterfuge\n**Résister** : Sang-froid + Résolution\n\n**Domination** : regard + voix, résistance Intelligence + Résolution\n**Présence** : résistance Sang-froid + Résolution\n**Repérer un occulté** : Astuce + Auspex vs Astuce + Occultation"
+  }
+]

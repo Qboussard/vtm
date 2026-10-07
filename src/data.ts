@@ -1,0 +1,84 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Données livrées avec le code (règles, lore, mémos) et valeurs initiales des données de campagne.
+// Depuis src/ (ts-node) comme depuis dist/ (build), ce chemin pointe sur src/data.
+const BUNDLED_DIR = path.join(__dirname, '..', 'src', 'data');
+
+// Données de campagne modifiées par le bot. En production, pointer DATA_DIR vers un volume persistant.
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : BUNDLED_DIR;
+
+export interface Pnj {
+    clan: string;
+    faction: string;
+    rang: string;
+    statut: string;
+    description: string;
+    description_mj: string;
+    image: string;
+    relations: string[];
+    /** Absent = connu (PNJ créés avant l'option). */
+    connu?: boolean;
+}
+
+export interface Lieu {
+    type: string;
+    quartier: string;
+    description: string;
+    description_mj: string;
+    image: string;
+    pnj_lies: string[];
+}
+
+export interface Session {
+    numero: number;
+    titre: string;
+    date: string;
+    resume: string;
+    notes_mj: string;
+}
+
+export interface Memo {
+    titre: string;
+    contenu: string;
+}
+
+export type Rules = Record<string, Record<string, string | Record<string, string>>>;
+export type Lore = Record<string, Record<string, { description: string; image?: string }>>;
+
+const readBundled = <T>(file: string): T =>
+    JSON.parse(fs.readFileSync(path.join(BUNDLED_DIR, file), 'utf-8'));
+
+const readMutable = <T>(file: string): T => {
+    const target = path.join(DATA_DIR, file);
+    if (!fs.existsSync(target)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+        fs.copyFileSync(path.join(BUNDLED_DIR, file), target);
+        console.log(`📁 ${file} initialisé dans ${DATA_DIR}`);
+    }
+    return JSON.parse(fs.readFileSync(target, 'utf-8'));
+};
+
+// Écriture atomique : un crash en cours d'écriture ne corrompt pas le fichier.
+const write = (file: string, value: unknown) => {
+    const target = path.join(DATA_DIR, file);
+    const tmp = `${target}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(value, null, 2), 'utf-8');
+    fs.renameSync(tmp, target);
+};
+
+export const rules = readBundled<Rules>('rules.json');
+export const lores = readBundled<Lore>('lore.json');
+export const memos = readBundled<Memo[]>('memo.json');
+
+export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
+export const lieux = readMutable<Record<string, Lieu>>('lieux.json');
+export const sessions = readMutable<Session[]>('sessions.json');
+export const config = readMutable<{ mj_ids: string[] }>('config.json');
+
+export const savePnjs = () => write('pnj.json', pnjs);
+export const saveLieux = () => write('lieux.json', lieux);
+export const saveSessions = () => write('sessions.json', sessions);
+export const saveConfig = () => write('config.json', config);
+
+console.log(`✅ Données chargées (campagne : ${DATA_DIR})`);

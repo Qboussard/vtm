@@ -36,3 +36,6 @@ coverage/
 *.local
 *.swp
 
+
+# Écritures atomiques interrompues
+*.tmp

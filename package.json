@@ -1,7 +1,7 @@
 {
   "name": "vtm",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Bot Discord compagnon pour une campagne de Vampire : la Mascarade V5",
   "dependencies": {
     "discord.js": "^14.18.0",
     "dotenv": "^16.5.0"
@@ -20,5 +20,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
+  "engines": {
+    "node": ">=18"
+  }
 }
