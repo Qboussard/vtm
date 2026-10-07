@@ -1,18 +1,18 @@
+import * as fs from 'fs';
 import {
     ActionRowBuilder,
+    AttachmentBuilder,
     ButtonBuilder,
     ButtonStyle,
-    ChatInputCommandInteraction,
     EmbedBuilder,
     SlashCommandBuilder,
+    SlashCommandStringOption,
     StringSelectMenuBuilder,
 } from 'discord.js';
-import { lieux, Pnj, pnjs, saveLieux, savePnjs } from '../data';
+import { Pnj, pnjs, savePnjs } from '../data';
+import { markKnownInNotion, notionEnabled, portraitPath, syncPnjs } from '../notion';
 import { Command, isMJ } from '../types';
 import { buttonRows, EPHEMERAL, isUrl, LIMITS, matches, normalize, shareButton, truncate } from '../util';
-
-const STATUTS = ['Actif', 'Disparu', 'Torpeur', 'Mort', 'Inconnu'];
-const NAME_MAX = 80; // garde de la place dans les customId (« pnj:delok: » + nom ≤ 100)
 
 const isKnown = (p: Pnj) => p.connu !== false;
 const canSee = (p: Pnj, userId: string) => isKnown(p) || isMJ(userId);
@@ -40,7 +40,15 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const findName = (nom: string): string | undefined =>
     pnjs[nom] ? nom : Object.keys(pnjs).find(n => normalize(n) === normalize(nom));
 
-const publicEmbed = (nom: string, p: Pnj) => {
+/** Portrait : fichier téléchargé depuis Notion (joint au message) ou lien externe. */
+const portrait = (p: Pnj): { url?: string; files: AttachmentBuilder[] } => {
+    if (p.portrait && fs.existsSync(portraitPath(p.portrait))) {
+        return { url: `attachment://${p.portrait}`, files: [new AttachmentBuilder(portraitPath(p.portrait), { name: p.portrait })] };
+    }
+    return { url: isUrl(p.image) ? p.image : undefined, files: [] };
+};
+
+const buildEmbed = (nom: string, p: Pnj, imageUrl?: string) => {
     const embed = new EmbedBuilder()
         .setTitle(`${statusEmoji(p.statut)} ${nom}`)
         .setColor(statusColor(p.statut));
@@ -53,7 +61,7 @@ const publicEmbed = (nom: string, p: Pnj) => {
     const fields = infos.filter(([, v]) => v).map(([name, value]) => ({ name, value: truncate(value, LIMITS.embedField), inline: true }));
     if (fields.length > 0) embed.addFields(fields);
     if (p.description) embed.setDescription(truncate(p.description, LIMITS.embedDescription));
-    if (isUrl(p.image)) embed.setImage(p.image);
+    if (imageUrl) embed.setImage(imageUrl);
     return embed;
 };
 
@@ -64,72 +72,54 @@ const mjEmbed = (p: Pnj) =>
         .setDescription(truncate(p.description_mj || '*Aucune note.*', LIMITS.embedDescription))
         .setFooter({ text: isKnown(p) ? 'Connu des joueurs' : 'Inconnu des joueurs : /pnj montrer pour le révéler' });
 
-/** Un bouton par relation visible ; un clic ouvre la fiche du PNJ lié. */
-const relationButtons = (p: Pnj, viewerIsMJ: boolean) =>
+/** Un bouton par PNJ lié (mentionné dans les notes) : réservé aux MJ, ces liens sont des secrets. */
+const relationButtons = (p: Pnj) =>
     p.relations
-        .filter(r => pnjs[r] && (viewerIsMJ || isKnown(pnjs[r])))
-        .filter(r => `pnj:open:${r}`.length <= LIMITS.customId)
+        .filter(r => pnjs[r] && `pnj:open:${r}`.length <= LIMITS.customId)
         .map(r => new ButtonBuilder()
             .setCustomId(`pnj:open:${r}`)
             .setLabel(truncate(r, LIMITS.label))
             .setEmoji('🔗')
             .setStyle(ButtonStyle.Secondary));
 
-/** Fiche privée : notes MJ si besoin, relations et bouton de partage. */
+/** Fiche privée : notes et liens pour les MJ, bouton de partage pour tous. */
 const privateSheet = (nom: string, userId: string) => {
     const p = pnjs[nom];
     const mj = isMJ(userId);
-    const embeds = [publicEmbed(nom, p)];
-    if (mj) embeds.push(mjEmbed(p));
+    const { url, files } = portrait(p);
     return {
-        embeds,
+        embeds: mj ? [buildEmbed(nom, p, url), mjEmbed(p)] : [buildEmbed(nom, p, url)],
+        files,
         components: [
-            ...buttonRows(relationButtons(p, mj), 4),
+            ...(mj ? buttonRows(relationButtons(p), 4) : []),
             new ActionRowBuilder<ButtonBuilder>().addComponents(shareButton(`pnj:share:${nom}`)),
         ],
         flags: EPHEMERAL,
     } as const;
 };
 
-/** Fiche publique : seules les relations connues des joueurs apparaissent. */
-const publicSheet = (nom: string) => ({
-    embeds: [publicEmbed(nom, pnjs[nom])],
-    components: buttonRows(relationButtons(pnjs[nom], false), 5),
-});
+/** Fiche publique : uniquement ce que les joueurs peuvent savoir. */
+const publicSheet = (nom: string, photoOnly = false) => {
+    const p = pnjs[nom];
+    const { url, files } = portrait(p);
+    const embed = photoOnly && url
+        ? new EmbedBuilder().setTitle(nom).setColor(statusColor(p.statut)).setImage(url)
+        : buildEmbed(nom, p, url);
+    return { embeds: [embed], files };
+};
 
 const reveal = (nom: string) => {
-    if (!isKnown(pnjs[nom])) {
-        pnjs[nom].connu = true;
-        savePnjs();
+    const p = pnjs[nom];
+    if (isKnown(p)) return;
+    p.connu = true;
+    savePnjs();
+    if (p.notion_id) {
+        markKnownInNotion(p.notion_id).catch(error => console.error(`❌ Impossible de cocher « Connu » pour ${nom} dans Notion :`, error));
     }
 };
 
-/** Renomme (ou supprime si `to` est null) un PNJ dans les relations et les lieux. */
-const updateReferences = (from: string, to: string | null) => {
-    for (const p of Object.values(pnjs)) {
-        p.relations = p.relations
-            .map(r => (r === from ? to : r))
-            .filter((r, i, arr): r is string => r !== null && arr.indexOf(r) === i);
-    }
-    let lieuxChanged = false;
-    for (const l of Object.values(lieux)) {
-        if (!l.pnj_lies?.includes(from)) continue;
-        l.pnj_lies = l.pnj_lies.map(n => (n === from ? to : n)).filter((n): n is string => n !== null);
-        lieuxChanged = true;
-    }
-    if (lieuxChanged) saveLieux();
-};
-
-const denyIfNotMJ = async (interaction: ChatInputCommandInteraction): Promise<boolean> => {
-    if (isMJ(interaction.user.id)) return false;
-    await interaction.reply({ content: '❌ Réservé aux MJ.', flags: EPHEMERAL });
-    return true;
-};
-
-const nameOption = (o: import('discord.js').SlashCommandStringOption) =>
+const nameOption = (o: SlashCommandStringOption) =>
     o.setName('nom').setDescription('Nom du PNJ').setRequired(true).setAutocomplete(true);
-
-const statutChoices = STATUTS.map(s => ({ name: s, value: s }));
 
 export const pnj: Command = {
     data: new SlashCommandBuilder()
@@ -152,60 +142,19 @@ export const pnj: Command = {
                 .addStringOption(o => o.setName('clan').setDescription('Filtrer par clan'))
                 .addBooleanOption(o => o.setName('public').setDescription('Afficher pour toute la table')))
         .addSubcommand(sub =>
-            sub.setName('ajouter')
-                .setDescription('Ajoute un PNJ (MJ)')
-                .addStringOption(o => o.setName('nom').setDescription('Nom du PNJ').setRequired(true).setMaxLength(NAME_MAX))
-                .addStringOption(o => o.setName('clan').setDescription('Clan'))
-                .addStringOption(o => o.setName('faction').setDescription('Faction'))
-                .addStringOption(o => o.setName('rang').setDescription('Rang ou titre'))
-                .addStringOption(o => o.setName('statut').setDescription('Statut (Actif par défaut)').addChoices(...statutChoices))
-                .addStringOption(o => o.setName('description').setDescription('Description publique'))
-                .addStringOption(o => o.setName('image').setDescription("URL de l'image (https://…)"))
-                .addBooleanOption(o => o.setName('connu').setDescription('Déjà connu des joueurs (non par défaut)')))
-        .addSubcommand(sub =>
-            sub.setName('modifier')
-                .setDescription('Modifie un PNJ (MJ)')
-                .addStringOption(nameOption)
-                .addStringOption(o => o.setName('nouveau_nom').setDescription('Renommer le PNJ').setMaxLength(NAME_MAX))
-                .addStringOption(o => o.setName('clan').setDescription('Clan'))
-                .addStringOption(o => o.setName('faction').setDescription('Faction'))
-                .addStringOption(o => o.setName('rang').setDescription('Rang ou titre'))
-                .addStringOption(o => o.setName('statut').setDescription('Statut').addChoices(...statutChoices))
-                .addStringOption(o => o.setName('description').setDescription('Description publique'))
-                .addStringOption(o => o.setName('image').setDescription("URL de l'image (https://…)"))
-                .addBooleanOption(o => o.setName('connu').setDescription('Connu des joueurs'))
-                .addStringOption(o => o.setName('relation_ajouter').setDescription('Ajouter une relation').setAutocomplete(true))
-                .addStringOption(o => o.setName('relation_retirer').setDescription('Retirer une relation').setAutocomplete(true)))
-        .addSubcommand(sub =>
-            sub.setName('secret')
-                .setDescription("Remplace les notes secrètes d'un PNJ (MJ)")
-                .addStringOption(nameOption)
-                .addStringOption(o => o.setName('texte').setDescription('Notes secrètes MJ').setRequired(true)))
-        .addSubcommand(sub =>
-            sub.setName('supprimer')
-                .setDescription('Supprime un PNJ (MJ)')
-                .addStringOption(nameOption)),
+            sub.setName('sync')
+                .setDescription('Recharge les PNJ depuis Notion (MJ)')),
 
     async autocomplete(interaction) {
-        const focused = interaction.options.getFocused(true);
+        const value = interaction.options.getFocused();
         const userId = interaction.user.id;
         const mj = isMJ(userId);
-        let names: string[];
-
-        if (focused.name === 'relation_retirer') {
-            const current = findName(interaction.options.getString('nom') ?? '');
-            names = current ? pnjs[current].relations : [];
-        } else if (focused.name === 'relation_ajouter') {
-            const current = findName(interaction.options.getString('nom') ?? '');
-            names = Object.keys(pnjs).filter(n => n !== current && !(current && pnjs[current].relations.includes(n)));
-        } else {
-            names = Object.keys(pnjs).filter(n => canSee(pnjs[n], userId));
-        }
-
-        const filtered = names.filter(n => matches(n, focused.value)).slice(0, LIMITS.choices);
-        await interaction.respond(filtered.map(n => {
-            const p = pnjs[n];
-            const details = p ? [p.clan, mj && !isKnown(p) ? '🔒 inconnu' : ''].filter(Boolean).join(' · ') : '';
+        const names = Object.keys(pnjs)
+            .filter(n => canSee(pnjs[n], userId) && matches(n, value))
+            .sort((a, b) => a.localeCompare(b, 'fr'))
+            .slice(0, LIMITS.choices);
+        await interaction.respond(names.map(n => {
+            const details = [pnjs[n].clan, mj && !isKnown(pnjs[n]) ? '🔒 inconnu' : ''].filter(Boolean).join(' · ');
             return { name: truncate(details ? `${n} · ${details}` : n, LIMITS.choiceName), value: n };
         }));
     },
@@ -213,12 +162,22 @@ export const pnj: Command = {
     async execute(interaction) {
         const sub = interaction.options.getSubcommand();
         const userId = interaction.user.id;
-        const opt = (name: string) => interaction.options.getString(name)?.trim() ?? null;
+
+        if (sub === 'sync') {
+            if (!isMJ(userId)) return interaction.reply({ content: '❌ Réservé aux MJ.', flags: EPHEMERAL });
+            if (!notionEnabled) {
+                return interaction.reply({ content: '❌ Notion n\'est pas configuré (NOTION_TOKEN / NOTION_DATABASE_ID).', flags: EPHEMERAL });
+            }
+            await interaction.deferReply({ flags: EPHEMERAL });
+            const r = await syncPnjs();
+            const errors = r.errors.length ? `\n⚠️ ${r.errors.join('\n⚠️ ')}` : '';
+            return interaction.editReply(truncate(`🔄 ${r.total} PNJ synchronisés depuis Notion, ${r.updated} mis à jour.${errors}`, LIMITS.message));
+        }
 
         if (sub === 'liste') {
             const isPublic = interaction.options.getBoolean('public') ?? false;
-            const faction = opt('faction');
-            const clan = opt('clan');
+            const faction = interaction.options.getString('faction');
+            const clan = interaction.options.getString('clan');
             // En public, on ne montre jamais les PNJ inconnus, même si c'est un MJ qui liste.
             const names = Object.keys(pnjs)
                 .filter(n => (isPublic ? isKnown(pnjs[n]) : canSee(pnjs[n], userId)))
@@ -261,39 +220,11 @@ export const pnj: Command = {
             return interaction.reply({ embeds: [embed], components: [menu], ...(isPublic ? {} : { flags: EPHEMERAL }) });
         }
 
-        if (sub === 'ajouter') {
-            if (await denyIfNotMJ(interaction)) return;
-            const nom = opt('nom')!;
-            const existing = findName(nom);
-            if (existing) {
-                return interaction.reply({ content: `❌ Un PNJ nommé « ${existing} » existe déjà.`, flags: EPHEMERAL });
-            }
-            const image = opt('image') ?? '';
-            if (image && !isUrl(image)) {
-                return interaction.reply({ content: "❌ L'image doit être une URL commençant par http:// ou https://.", flags: EPHEMERAL });
-            }
-            pnjs[nom] = {
-                clan: opt('clan') ?? '',
-                faction: opt('faction') ?? '',
-                rang: opt('rang') ?? '',
-                statut: opt('statut') ?? 'Actif',
-                description: opt('description') ?? '',
-                description_mj: '',
-                image,
-                relations: [],
-                connu: interaction.options.getBoolean('connu') ?? false,
-            };
-            savePnjs();
-            const sheet = privateSheet(nom, userId);
-            return interaction.reply({ ...sheet, content: `✅ PNJ **${nom}** ajouté.` });
-        }
-
-        // Toutes les autres sous-commandes portent sur un PNJ existant
-        const nom = findName(opt('nom') ?? '');
+        const input = interaction.options.getString('nom', true);
+        const nom = findName(input);
         if (!nom || !canSee(pnjs[nom], userId)) {
-            return interaction.reply({ content: `❌ PNJ « ${opt('nom')} » introuvable.`, flags: EPHEMERAL });
+            return interaction.reply({ content: `❌ PNJ « ${input} » introuvable.`, flags: EPHEMERAL });
         }
-        const p = pnjs[nom];
 
         if (sub === 'voir') {
             if (!interaction.options.getBoolean('public')) {
@@ -301,133 +232,33 @@ export const pnj: Command = {
             }
             reveal(nom);
             await interaction.reply(publicSheet(nom));
-            if (isMJ(userId) && p.description_mj) {
-                await interaction.followUp({ embeds: [mjEmbed(p)], flags: EPHEMERAL });
+            if (isMJ(userId) && pnjs[nom].description_mj) {
+                await interaction.followUp({ embeds: [mjEmbed(pnjs[nom])], flags: EPHEMERAL });
             }
             return;
         }
 
         if (sub === 'montrer') {
-            if (await denyIfNotMJ(interaction)) return;
+            if (!isMJ(userId)) return interaction.reply({ content: '❌ Réservé aux MJ.', flags: EPHEMERAL });
             reveal(nom);
-            if (interaction.options.getBoolean('photo_seule') && isUrl(p.image)) {
-                const embed = new EmbedBuilder().setTitle(nom).setColor(statusColor(p.statut)).setImage(p.image);
-                return interaction.reply({ embeds: [embed] });
-            }
-            return interaction.reply(publicSheet(nom));
-        }
-
-        if (sub === 'secret') {
-            if (await denyIfNotMJ(interaction)) return;
-            p.description_mj = opt('texte') ?? '';
-            savePnjs();
-            return interaction.reply({ content: `✅ Notes secrètes de **${nom}** mises à jour.`, flags: EPHEMERAL });
-        }
-
-        if (sub === 'supprimer') {
-            if (await denyIfNotMJ(interaction)) return;
-            const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-                new ButtonBuilder().setCustomId(`pnj:delok:${nom}`).setLabel('Supprimer').setStyle(ButtonStyle.Danger),
-                new ButtonBuilder().setCustomId('pnj:delno').setLabel('Annuler').setStyle(ButtonStyle.Secondary),
-            );
-            return interaction.reply({
-                content: `⚠️ Supprimer définitivement **${nom}** ? Il sera aussi retiré des relations et des lieux.`,
-                components: [row],
-                flags: EPHEMERAL,
-            });
-        }
-
-        if (sub === 'modifier') {
-            if (await denyIfNotMJ(interaction)) return;
-            const changes: string[] = [];
-            const errors: string[] = [];
-
-            for (const field of ['clan', 'faction', 'rang', 'statut', 'description'] as const) {
-                const value = opt(field);
-                if (value !== null) {
-                    p[field] = value;
-                    changes.push(field);
-                }
-            }
-
-            const image = opt('image');
-            if (image !== null) {
-                if (image && !isUrl(image)) errors.push("l'image doit être une URL http(s)");
-                else { p.image = image; changes.push('image'); }
-            }
-
-            const connu = interaction.options.getBoolean('connu');
-            if (connu !== null) { p.connu = connu; changes.push(connu ? 'connu' : 'inconnu'); }
-
-            const toAdd = opt('relation_ajouter');
-            if (toAdd !== null) {
-                const target = findName(toAdd);
-                if (!target) errors.push(`PNJ « ${toAdd} » introuvable`);
-                else if (target === nom) errors.push('un PNJ ne peut pas être en relation avec lui-même');
-                else if (!p.relations.includes(target)) { p.relations.push(target); changes.push(`+ relation ${target}`); }
-            }
-
-            const toRemove = opt('relation_retirer');
-            if (toRemove !== null) {
-                const before = p.relations.length;
-                p.relations = p.relations.filter(r => normalize(r) !== normalize(toRemove));
-                if (p.relations.length < before) changes.push(`− relation ${toRemove}`);
-                else errors.push(`« ${toRemove} » n'est pas dans les relations`);
-            }
-
-            let finalName = nom;
-            const newName = opt('nouveau_nom');
-            if (newName !== null && newName !== nom) {
-                const clash = findName(newName);
-                if (clash && clash !== nom) errors.push(`un PNJ nommé « ${clash} » existe déjà`);
-                else {
-                    delete pnjs[nom];
-                    pnjs[newName] = p;
-                    updateReferences(nom, newName);
-                    finalName = newName;
-                    changes.push(`renommé en ${newName}`);
-                }
-            }
-
-            if (changes.length > 0) savePnjs();
-            const summary = [
-                changes.length > 0 ? `✅ **${finalName}** modifié : ${changes.join(', ')}.` : 'ℹ️ Aucune modification.',
-                ...errors.map(e => `⚠️ ${e}`),
-            ].join('\n');
-            return interaction.reply({ ...privateSheet(finalName, userId), content: truncate(summary, LIMITS.message) });
+            return interaction.reply(publicSheet(nom, interaction.options.getBoolean('photo_seule') ?? false));
         }
     },
 
     async component(interaction, action, arg) {
         const userId = interaction.user.id;
+        const nom = action === 'pick' && interaction.isStringSelectMenu() ? interaction.values[0] : arg;
+        if (!pnjs[nom] || !canSee(pnjs[nom], userId)) {
+            return interaction.reply({ content: '❌ PNJ introuvable.', flags: EPHEMERAL });
+        }
 
         if (action === 'open' || action === 'pick') {
-            const nom = action === 'pick' && interaction.isStringSelectMenu() ? interaction.values[0] : arg;
-            if (!pnjs[nom] || !canSee(pnjs[nom], userId)) {
-                return interaction.reply({ content: '❌ PNJ introuvable.', flags: EPHEMERAL });
-            }
             return interaction.reply(privateSheet(nom, userId));
         }
 
         if (action === 'share') {
-            if (!pnjs[arg] || !canSee(pnjs[arg], userId)) {
-                return interaction.reply({ content: '❌ PNJ introuvable.', flags: EPHEMERAL });
-            }
-            reveal(arg);
-            return interaction.reply({ ...publicSheet(arg), content: `📣 Partagé par **${interaction.user.displayName}**` });
-        }
-
-        if (action === 'delok') {
-            if (!isMJ(userId)) return interaction.reply({ content: '❌ Réservé aux MJ.', flags: EPHEMERAL });
-            if (!pnjs[arg]) return interaction.update({ content: '❌ Ce PNJ a déjà été supprimé.', components: [] });
-            delete pnjs[arg];
-            updateReferences(arg, null);
-            savePnjs();
-            return interaction.update({ content: `🗑️ **${arg}** supprimé.`, components: [] });
-        }
-
-        if (action === 'delno') {
-            return interaction.update({ content: 'Suppression annulée.', components: [] });
+            reveal(nom);
+            return interaction.reply({ ...publicSheet(nom), content: `📣 Partagé par **${interaction.user.displayName}**` });
         }
     },
 };

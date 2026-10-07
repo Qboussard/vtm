@@ -7,6 +7,7 @@ import { mj } from './commands/mj';
 import { pnj } from './commands/pnj';
 import { regle } from './commands/regle';
 import { session } from './commands/session';
+import { startNotionSync } from './notion';
 import { Command } from './types';
 import { EPHEMERAL } from './util';
 
@@ -69,6 +70,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.once(Events.ClientReady, c => {
     console.log(`🤖 Connecté en tant que ${c.user.tag}`);
+    startNotionSync();
 });
 
 process.on('unhandledRejection', error => {

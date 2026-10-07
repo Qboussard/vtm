@@ -6,7 +6,7 @@ import * as path from 'path';
 const BUNDLED_DIR = path.join(__dirname, '..', 'src', 'data');
 
 // Données de campagne modifiées par le bot. En production, pointer DATA_DIR vers un volume persistant.
-const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : BUNDLED_DIR;
+export const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : BUNDLED_DIR;
 
 export interface Pnj {
     clan: string;
@@ -17,8 +17,15 @@ export interface Pnj {
     description_mj: string;
     image: string;
     relations: string[];
-    /** Absent = connu (PNJ créés avant l'option). */
+    /** Absent = connu. */
     connu?: boolean;
+    /** Champs renseignés par la synchronisation Notion */
+    notion_id?: string;
+    edited?: string;
+    /** Pages Notion mentionnées dans les notes MJ */
+    mentions?: string[];
+    /** Fichier du portrait téléchargé dans DATA_DIR/portraits */
+    portrait?: string;
 }
 
 export interface Lieu {
@@ -80,5 +87,12 @@ export const savePnjs = () => write('pnj.json', pnjs);
 export const saveLieux = () => write('lieux.json', lieux);
 export const saveSessions = () => write('sessions.json', sessions);
 export const saveConfig = () => write('config.json', config);
+
+/** Remplace le contenu de `pnjs` en gardant la même référence (importée par les commandes). */
+export const replacePnjs = (next: Record<string, Pnj>) => {
+    for (const key of Object.keys(pnjs)) delete pnjs[key];
+    Object.assign(pnjs, next);
+    savePnjs();
+};
 
 console.log(`✅ Données chargées (campagne : ${DATA_DIR})`);

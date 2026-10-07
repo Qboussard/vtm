@@ -39,3 +39,6 @@ coverage/
 
 # Écritures atomiques interrompues
 *.tmp
+
+# Portraits téléchargés depuis Notion
+src/data/portraits/
