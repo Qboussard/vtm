@@ -11,7 +11,6 @@ Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à port
 | `/pnj voir` · `liste` | Fiche avec portrait ; galerie filtrable par faction ou clan. Les MJ voient en plus les notes et les PNJ liés. |
 | `/pnj montrer` (MJ) | Affiche un PNJ à la table et monte sa Visibilité dans Notion (`photo_seule` : nom et portrait uniquement). |
 | `/pnj sync` (MJ) | Recharge immédiatement les PNJ et les séances depuis Notion. |
-| `/lore` | Lore par catégorie. |
 | `/session derniere` · `voir` · `liste` | Résumés des séances (base Notion « Séances (Vampire) »). Les MJ reçoivent en plus les notes 🔒. |
 | `/mj` (Super MJ) | Donner ou retirer les droits MJ. |
 
@@ -44,7 +43,7 @@ Le haut de la page est le résumé lu par les joueurs ; la section `## 🔒 MJ` 
 
 ## Données
 
-- `src/data/rules.json`, `lore.json`, `memo.json` : contenu de référence, versionné. Modifier puis redémarrer le bot.
+- `src/data/rules.json`, `memo.json` : contenu de référence, versionné. Modifier puis redémarrer le bot.
 - `pnj.json` : copie locale des PNJ Notion (réécrite à chaque synchronisation), portraits dans `portraits/`.
 - `sessions.json` : copie locale des séances Notion.
 - `config.json` : données de campagne, modifiées par le bot.
