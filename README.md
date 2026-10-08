@@ -64,14 +64,10 @@ Les commandes slash sont redéployées sur le serveur (`GUILD_ID`) à chaque dé
 
 Le bot garde une connexion ouverte avec Discord : il lui faut un processus qui tourne en continu (pas de serverless).
 
-**Railway**
-1. Créer un service depuis le dépôt GitHub. Railway lance `yarn build` puis `yarn start`.
-2. Ajouter les variables `BOT_TOKEN`, `CLIENT_ID`, `GUILD_ID`, `SUPER_MJ_ID`.
-3. Ajouter un **volume** monté sur `/data` et définir `DATA_DIR=/data`, sinon les PNJ ajoutés en jeu sont perdus à chaque redéploiement.
-
-**VPS**
+Il tourne sur le VPS, avec pm2 :
 ```sh
 yarn install && yarn build
 DATA_DIR=/var/lib/vtm pm2 start dist/index.js --name vtm
 ```
+Mettre à jour : `git pull && yarn install && yarn build && pm2 restart vtm`. Logs : `pm2 logs vtm`.
 Garder `DATA_DIR` hors du dépôt évite les conflits avec `git pull`.
