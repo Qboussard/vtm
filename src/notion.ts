@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { DATA_DIR, Pnj, pnjs, replacePnjs } from './data';
+import { DATA_DIR, Pnj, pnjs, replacePnjs, replaceSessions, Session, sessions, Visibilite } from './data';
 
 // Synchronisation des PNJ depuis la base Notion « Personnages ».
 // Notion est la source de vérité ; pnj.json n'est qu'une copie locale qui permet de démarrer hors ligne.
@@ -40,6 +40,16 @@ const request = async (method: string, endpoint: string, body?: unknown, attempt
     return res.json();
 };
 
+const VISIBILITY_LABELS: Record<Visibilite, string> = { cache: 'Caché', photo: 'Photo seule', complet: 'Complet' };
+
+/** Colonne « Visibilité » ; à défaut l'ancienne case « Connu ». Vide = caché, par prudence. */
+const readVisibility = (props: Json): Visibilite => {
+    const label = props['Visibilité']?.select?.name;
+    const found = (Object.keys(VISIBILITY_LABELS) as Visibilite[]).find(v => VISIBILITY_LABELS[v] === label);
+    if (found) return found;
+    return props.Connu?.checkbox ? 'complet' : 'cache';
+};
+
 const plain = (richText: Json[] = []) => richText.map(t => t.plain_text).join('');
 
 /** « 💀 **Cassandra Blackwood** » → « Cassandra Blackwood » */
@@ -73,19 +83,37 @@ const listChildren = async (blockId: string): Promise<Json[]> => {
 };
 
 interface PageContent {
+    /** Notes réservées au MJ : les sections 🔒, ou toute la page si elle n'en a aucune. */
     notes: string;
+    /** Ce que les joueurs peuvent lire : la page hors sections 🔒 (vide si la page n'en a aucune). */
+    joueurs: string;
     image?: { url: string; hosted: boolean };
     mentions: string[];
 }
 
-/** Convertit le contenu d'une page en texte Discord, et repère la première image et les pages mentionnées. */
-const readContent = async (pageId: string): Promise<PageContent> => {
-    const content: PageContent = { notes: '', mentions: [] };
-    const lines: string[] = [];
+const HEADING_LEVEL: Record<string, number> = { heading_1: 1, heading_2: 2, heading_3: 3 };
 
-    const walk = async (blockId: string, depth: number) => {
+/**
+ * Convertit le contenu d'une page en texte Discord, et repère la première image et les pages mentionnées.
+ * Un bloc qui commence par 🔒 est réservé au MJ : un titre jusqu'au prochain titre de même niveau ou plus haut,
+ * un bloc dépliable avec son contenu, sinon le bloc seul.
+ */
+const readContent = async (pageId: string): Promise<PageContent> => {
+    const content: PageContent = { notes: '', joueurs: '', mentions: [] };
+    const lines: { text: string; secret: boolean }[] = [];
+    let split = false;
+    let secretLevel: number | null = null;
+
+    const walk = async (blockId: string, depth: number, inSecret: boolean) => {
         for (const block of await listChildren(blockId)) {
             const value = block[block.type] ?? {};
+            const level = HEADING_LEVEL[block.type];
+            const locked = /^\s*🔒/u.test(plain(value.rich_text));
+            if (level && secretLevel !== null && level <= secretLevel) secretLevel = null;
+            if (level && locked && secretLevel === null) secretLevel = level;
+            if (locked) split = true;
+            const secret = inSecret || secretLevel !== null || locked;
+            const push = (text: string) => lines.push({ text, secret });
             if (block.type === 'image') {
                 const url = value.type === 'external' ? value.external?.url : value.file?.url;
                 if (url) content.image ??= { url, hosted: value.type === 'file' };
@@ -100,35 +128,37 @@ const readContent = async (pageId: string): Promise<PageContent> => {
                 case 'heading_1':
                 case 'heading_2':
                 case 'heading_3':
-                    lines.push(`${indent}**${text}**`);
+                    push(`${indent}**${text}**`);
                     break;
                 case 'bulleted_list_item':
                 case 'numbered_list_item':
-                    lines.push(`${indent}• ${text}`);
+                    push(`${indent}• ${text}`);
                     break;
                 case 'to_do':
-                    lines.push(`${indent}${value.checked ? '☑' : '☐'} ${text}`);
+                    push(`${indent}${value.checked ? '☑' : '☐'} ${text}`);
                     break;
                 case 'toggle':
-                    lines.push(`${indent}▸ ${text}`);
+                    push(`${indent}▸ ${text}`);
                     break;
                 case 'quote':
-                    lines.push(`${indent}> ${text}`);
+                    push(`${indent}> ${text}`);
                     break;
                 case 'divider':
-                    lines.push('───');
+                    push('───');
                     break;
                 default:
-                    if (text) lines.push(`${indent}${text}`);
+                    if (text) push(`${indent}${text}`);
             }
             // Le contenu des titres dépliables n'ajoute pas d'indentation
             const childDepth = block.type.startsWith('heading') ? depth : depth + 1;
-            if (block.has_children && depth < 3) await walk(block.id, childDepth);
+            if (block.has_children && depth < 3) await walk(block.id, childDepth, inSecret || (locked && !level));
         }
     };
 
-    await walk(pageId, 0);
-    content.notes = lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    await walk(pageId, 0, false);
+    const text = (xs: typeof lines) => xs.map(l => l.text).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    content.notes = text(split ? lines.filter(l => l.secret) : lines);
+    content.joueurs = split ? text(lines.filter(l => !l.secret)) : '';
     return content;
 };
 
@@ -178,9 +208,10 @@ const runSync = async (): Promise<SyncResult> => {
             statut: props.Statut?.select?.name ?? 'Actif',
             description: plain(props['Description publique']?.rich_text),
             description_mj: old?.description_mj ?? '',
+            description_joueurs: old?.description_joueurs ?? '',
             image: old?.image ?? '',
             relations: [],
-            connu: props.Connu?.checkbox ?? false,
+            visibilite: readVisibility(props),
             notion_id: page.id,
             edited: page.last_edited_time,
             portrait: old?.portrait,
@@ -188,10 +219,12 @@ const runSync = async (): Promise<SyncResult> => {
 
         // Le contenu de la page n'est relu que s'il a changé depuis la dernière synchronisation
         const portraitMissing = pnj.portrait && !fs.existsSync(portraitPath(pnj.portrait));
-        if (!old || old.edited !== page.last_edited_time || portraitMissing) {
+        // (description_joueurs absent : copie d'avant le découpage joueurs / MJ, à relire une fois)
+        if (!old || old.edited !== page.last_edited_time || portraitMissing || old.description_joueurs === undefined) {
             try {
                 const content = await readContent(page.id);
                 pnj.description_mj = content.notes;
+                pnj.description_joueurs = content.joueurs;
                 pnj.mentions = content.mentions;
                 pnj.portrait = undefined;
                 pnj.image = '';
@@ -220,16 +253,74 @@ const runSync = async (): Promise<SyncResult> => {
     return result;
 };
 
+// Séances : base Notion « Séances (Vampire) », remplie depuis le Bilan du Codex (« Clore la séance »).
+// Son id vient de NOTION_SESSIONS_DATABASE_ID, sinon d'une recherche par titre (même intégration Notion).
+const SESSIONS_TITLE = 'Séances (Vampire)';
+let sessionsDb: string | undefined = process.env.NOTION_SESSIONS_DATABASE_ID;
+
+const findSessionsDb = async (): Promise<string | undefined> => {
+    if (sessionsDb) return sessionsDb;
+    const found = await request('POST', '/search', { query: SESSIONS_TITLE, filter: { property: 'object', value: 'database' } });
+    sessionsDb = found.results.find((d: Json) => plain(d.title) === SESSIONS_TITLE)?.id;
+    return sessionsDb;
+};
+
+const frDate = (iso?: string) => iso ? new Date(`${iso.slice(0, 10)}T12:00:00`).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+
+/** Relit les séances ; le contenu d'une page n'est relu que s'il a changé. Sans base trouvée, garde la copie locale. */
+const runSessionsSync = async (): Promise<number | null> => {
+    const db = await findSessionsDb();
+    if (!db) return null;
+    const pages: Json[] = [];
+    let cursor: string | undefined;
+    do {
+        const data = await request('POST', `/databases/${db}/query`, { sorts: [{ property: 'Numéro', direction: 'ascending' }], start_cursor: cursor, page_size: 100 });
+        pages.push(...data.results);
+        cursor = data.has_more ? data.next_cursor : undefined;
+    } while (cursor);
+    const previous = new Map(sessions.filter(s => s.notion_id).map(s => [s.notion_id!, s]));
+    const next: Session[] = [];
+    for (const page of pages) {
+        const props = page.properties;
+        const old = previous.get(page.id);
+        const s: Session = {
+            numero: props['Numéro']?.number ?? next.length + 1,
+            titre: plain(props['Séance']?.title),
+            date: frDate(props['Date']?.date?.start ?? page.created_time),
+            resume: old?.resume ?? '',
+            notes_mj: old?.notes_mj ?? '',
+            notion_id: page.id,
+            edited: page.last_edited_time,
+        };
+        if (!old || old.edited !== page.last_edited_time) {
+            const content = await readContent(page.id);
+            s.resume = content.joueurs;
+            s.notes_mj = content.notes;
+        }
+        next.push(s);
+    }
+    replaceSessions(next);
+    return next.length;
+};
+
 /** Lance une synchronisation (une seule à la fois). */
 export const syncPnjs = (): Promise<SyncResult> => {
     running ??= runSync().finally(() => { running = null; });
     return running;
 };
 
-/** Coche « Connu » dans Notion quand un PNJ est montré à la table. */
-export const markKnownInNotion = async (pageId: string) => {
+let sessionsRunning: Promise<number | null> | null = null;
+
+/** Synchronise les séances (une seule à la fois). */
+export const syncSessions = (): Promise<number | null> => {
+    sessionsRunning ??= runSessionsSync().finally(() => { sessionsRunning = null; });
+    return sessionsRunning;
+};
+
+/** Met à jour la colonne « Visibilité » quand un PNJ est montré à la table. */
+export const setVisibilityInNotion = async (pageId: string, visibility: Visibilite) => {
     if (!notionEnabled) return;
-    await request('PATCH', `/pages/${pageId}`, { properties: { Connu: { checkbox: true } } });
+    await request('PATCH', `/pages/${pageId}`, { properties: { 'Visibilité': { select: { name: VISIBILITY_LABELS[visibility] } } } });
 };
 
 export const startNotionSync = () => {
@@ -245,6 +336,12 @@ export const startNotionSync = () => {
             for (const e of r.errors) console.error(`   ⚠️ ${e}`);
         } catch (error) {
             console.error('❌ Synchronisation Notion impossible, on garde la copie locale :', error);
+        }
+        try {
+            const n = await syncSessions();
+            console.log(n === null ? `ℹ️ Base « ${SESSIONS_TITLE} » introuvable : séances lues depuis sessions.json.` : `🔄 Notion : ${n} séance(s)`);
+        } catch (error) {
+            console.error('❌ Synchronisation des séances impossible, on garde la copie locale :', error);
         }
     };
     void tick();

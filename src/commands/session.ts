@@ -1,5 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { saveSessions, Session, sessions } from '../data';
+import { Session, sessions } from '../data';
 import { Command, isMJ } from '../types';
 import { chunkLines, EPHEMERAL, LIMITS, truncate } from '../util';
 
@@ -15,13 +15,8 @@ const buildEmbed = (s: Session) => {
 export const session: Command = {
     data: new SlashCommandBuilder()
         .setName('session')
+        // Les séances s'écrivent dans Notion (Bilan du Codex → « Clore la séance ») : ici, on les lit seulement.
         .setDescription('Journal des sessions de campagne')
-        .addSubcommand(sub =>
-            sub.setName('ajouter')
-                .setDescription('Ajoute un résumé de session (MJ)')
-                .addStringOption(o => o.setName('titre').setDescription('Titre de la session').setRequired(true))
-                .addStringOption(o => o.setName('resume').setDescription('Résumé public de la session').setRequired(true))
-                .addStringOption(o => o.setName('notes_mj').setDescription('Notes privées MJ')))
         .addSubcommand(sub =>
             sub.setName('voir')
                 .setDescription('Affiche une session')
@@ -46,21 +41,6 @@ export const session: Command = {
                 });
             }
         };
-
-        if (sub === 'ajouter') {
-            if (!isMJ(userId)) return interaction.reply({ content: '❌ Seuls les MJ peuvent ajouter des sessions.', flags: EPHEMERAL });
-            const numero = sessions.reduce((max, s) => Math.max(max, s.numero), 0) + 1;
-            const newSession: Session = {
-                numero,
-                titre: interaction.options.getString('titre', true),
-                date: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-                resume: interaction.options.getString('resume', true),
-                notes_mj: interaction.options.getString('notes_mj') ?? '',
-            };
-            sessions.push(newSession);
-            saveSessions();
-            return interaction.reply({ content: `✅ Session ${numero} enregistrée !`, embeds: [buildEmbed(newSession)] });
-        }
 
         if (sub === 'voir') {
             const numero = interaction.options.getInteger('numero', true);

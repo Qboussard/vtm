@@ -1,6 +1,6 @@
 # VTM — compagnon de session
 
-Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à portée de main, mémos de table, fiches de PNJ avec portrait, lieux et journal de campagne.
+Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à portée de main, mémos de table, fiches de PNJ avec portrait et journal de campagne.
 
 ## Commandes
 
@@ -9,11 +9,10 @@ Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à port
 | `/regle [recherche] [public]` | Recherche une règle ou une Discipline (autocomplétion, insensible aux accents). Sans argument : sommaire navigable. Réponse privée avec bouton « Montrer à la table ». |
 | `/memo [fiche] [public]` | Fiches de synthèse : jets, combat, Soif & Frénésie, Volonté & social. |
 | `/pnj voir` · `liste` | Fiche avec portrait ; galerie filtrable par faction ou clan. Les MJ voient en plus les notes et les PNJ liés. |
-| `/pnj montrer` (MJ) | Affiche un PNJ à la table (option `photo_seule`) et coche « Connu » dans Notion. |
-| `/pnj sync` (MJ) | Recharge immédiatement les PNJ depuis Notion. |
+| `/pnj montrer` (MJ) | Affiche un PNJ à la table et monte sa Visibilité dans Notion (`photo_seule` : nom et portrait uniquement). |
+| `/pnj sync` (MJ) | Recharge immédiatement les PNJ et les séances depuis Notion. |
 | `/lore` | Lore par catégorie. |
-| `/lieu` | Lieux de la campagne. |
-| `/session` | Journal des sessions. |
+| `/session derniere` · `voir` · `liste` | Résumés des séances (base Notion « Séances (Vampire) »). Les MJ reçoivent en plus les notes 🔒. |
 | `/mj` (Super MJ) | Donner ou retirer les droits MJ. |
 
 ## PNJ depuis Notion
@@ -25,7 +24,7 @@ Les PNJ viennent de la base Notion **Personnages** (lignes dont `Type` = PNJ), s
 | `Nom` | Nom (emoji et gras retirés : « 💀 **Cassandra** » → « Cassandra ») |
 | `Clan`, `Affiliation`, `Rang`, `Statut` | Infos de la fiche |
 | `Description publique` | Texte montré aux joueurs |
-| `Connu` | Décoché = invisible pour les joueurs |
+| `Visibilité` | **Caché** : invisible pour les joueurs · **Photo seule** : nom et portrait · **Complet** : toute la fiche publique (vide = Caché) |
 | Première image de la page | Portrait (téléchargé par le bot, les liens Notion expirent) |
 | Contenu de la page | **Notes MJ**, visibles uniquement des MJ ; les PNJ mentionnés deviennent des boutons de lien |
 
@@ -36,11 +35,19 @@ Mise en place :
 
 Sans ces variables, le bot utilise la dernière copie de `pnj.json`.
 
+
+## Séances depuis Notion
+
+Les séances viennent de la base Notion **Séances (Vampire)**, créée et remplie par le Codex : dans le mode Session, onglet Bilan, « Clore la séance » écrit une page par séance. Le bot la retrouve par son titre (ou via `NOTION_SESSIONS_DATABASE_ID`) et la synchronise avec les PNJ.
+
+Le haut de la page est le résumé lu par les joueurs ; la section `## 🔒 MJ` (et tout bloc qui commence par 🔒) n'est montrée qu'aux MJ, en privé.
+
 ## Données
 
 - `src/data/rules.json`, `lore.json`, `memo.json` : contenu de référence, versionné. Modifier puis redémarrer le bot.
 - `pnj.json` : copie locale des PNJ Notion (réécrite à chaque synchronisation), portraits dans `portraits/`.
-- `lieux.json`, `sessions.json`, `config.json` : données de campagne, modifiées par le bot.
+- `sessions.json` : copie locale des séances Notion.
+- `config.json` : données de campagne, modifiées par le bot.
   Elles sont lues et écrites dans `DATA_DIR` (par défaut `src/data`). Au premier lancement, si un fichier manque dans `DATA_DIR`, il est copié depuis `src/data`.
 
 ## Lancer en local

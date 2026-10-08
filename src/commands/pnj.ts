@@ -9,13 +9,19 @@ import {
     SlashCommandStringOption,
     StringSelectMenuBuilder,
 } from 'discord.js';
-import { Pnj, pnjs, savePnjs } from '../data';
-import { markKnownInNotion, notionEnabled, portraitPath, syncPnjs } from '../notion';
+import { Pnj, pnjs, savePnjs, Visibilite, visibilityOf } from '../data';
+import { notionEnabled, portraitPath, setVisibilityInNotion, syncPnjs, syncSessions } from '../notion';
 import { Command, isMJ } from '../types';
 import { buttonRows, EPHEMERAL, isUrl, LIMITS, matches, normalize, shareButton, truncate } from '../util';
 
-const isKnown = (p: Pnj) => p.connu !== false;
-const canSee = (p: Pnj, userId: string) => isKnown(p) || isMJ(userId);
+// Ce que les joueurs voient : rien, le nom et la photo, ou toute la fiche.
+const LEVELS: Visibilite[] = ['cache', 'photo', 'complet'];
+const LEVEL_LABELS: Record<Visibilite, string> = {
+    cache: '🔒 Caché aux joueurs',
+    photo: '📷 Photo seule pour les joueurs',
+    complet: '👁️ Fiche complète pour les joueurs',
+};
+const canSee = (p: Pnj, userId: string) => visibilityOf(p) !== 'cache' || isMJ(userId);
 
 const statusColor = (statut: string) => {
     const s = normalize(statut);
@@ -60,7 +66,9 @@ const buildEmbed = (nom: string, p: Pnj, imageUrl?: string) => {
     ];
     const fields = infos.filter(([, v]) => v).map(([name, value]) => ({ name, value: truncate(value, LIMITS.embedField), inline: true }));
     if (fields.length > 0) embed.addFields(fields);
-    if (p.description) embed.setDescription(truncate(p.description, LIMITS.embedDescription));
+    // La partie joueurs de la page (hors sections 🔒), à défaut la colonne « Description publique »
+    const text = p.description_joueurs || p.description;
+    if (text) embed.setDescription(truncate(text, LIMITS.embedDescription));
     if (imageUrl) embed.setImage(imageUrl);
     return embed;
 };
@@ -70,7 +78,19 @@ const mjEmbed = (p: Pnj) =>
         .setTitle('🔒 Notes MJ')
         .setColor(0x1A1A1A)
         .setDescription(truncate(p.description_mj || '*Aucune note.*', LIMITS.embedDescription))
-        .setFooter({ text: isKnown(p) ? 'Connu des joueurs' : 'Inconnu des joueurs : /pnj montrer pour le révéler' });
+        .setFooter({ text: `${LEVEL_LABELS[visibilityOf(p)]} · /pnj montrer pour révéler` });
+
+/** Nom et portrait seulement : pour un PNJ croisé mais pas encore joué. */
+const photoEmbed = (nom: string, imageUrl?: string) => {
+    const embed = new EmbedBuilder().setTitle(nom).setColor(0x2C2F33);
+    if (imageUrl) embed.setImage(imageUrl);
+    else embed.setDescription('*Vous n\'en savez pas plus.*');
+    return embed;
+};
+
+/** La fiche telle que les joueurs ont le droit de la voir. */
+const playerEmbed = (nom: string, p: Pnj, imageUrl?: string) =>
+    visibilityOf(p) === 'complet' ? buildEmbed(nom, p, imageUrl) : photoEmbed(nom, imageUrl);
 
 /** Un bouton par PNJ lié (mentionné dans les notes) : réservé aux MJ, ces liens sont des secrets. */
 const relationButtons = (p: Pnj) =>
@@ -88,7 +108,7 @@ const privateSheet = (nom: string, userId: string) => {
     const mj = isMJ(userId);
     const { url, files } = portrait(p);
     return {
-        embeds: mj ? [buildEmbed(nom, p, url), mjEmbed(p)] : [buildEmbed(nom, p, url)],
+        embeds: mj ? [buildEmbed(nom, p, url), mjEmbed(p)] : [playerEmbed(nom, p, url)],
         files,
         components: [
             ...(mj ? buttonRows(relationButtons(p), 4) : []),
@@ -99,22 +119,20 @@ const privateSheet = (nom: string, userId: string) => {
 };
 
 /** Fiche publique : uniquement ce que les joueurs peuvent savoir. */
-const publicSheet = (nom: string, photoOnly = false) => {
+const publicSheet = (nom: string) => {
     const p = pnjs[nom];
     const { url, files } = portrait(p);
-    const embed = photoOnly && url
-        ? new EmbedBuilder().setTitle(nom).setColor(statusColor(p.statut)).setImage(url)
-        : buildEmbed(nom, p, url);
-    return { embeds: [embed], files };
+    return { embeds: [playerEmbed(nom, p, url)], files };
 };
 
-const reveal = (nom: string) => {
+/** Monte la visibilité d'un PNJ (jamais vers le bas) et la reporte dans Notion. */
+const reveal = (nom: string, to: Visibilite) => {
     const p = pnjs[nom];
-    if (isKnown(p)) return;
-    p.connu = true;
+    if (LEVELS.indexOf(visibilityOf(p)) >= LEVELS.indexOf(to)) return;
+    p.visibilite = to;
     savePnjs();
     if (p.notion_id) {
-        markKnownInNotion(p.notion_id).catch(error => console.error(`❌ Impossible de cocher « Connu » pour ${nom} dans Notion :`, error));
+        setVisibilityInNotion(p.notion_id, to).catch(error => console.error(`❌ Impossible de mettre à jour la visibilité de ${nom} dans Notion :`, error));
     }
 };
 
@@ -132,9 +150,9 @@ export const pnj: Command = {
                 .addBooleanOption(o => o.setName('public').setDescription('Afficher pour toute la table')))
         .addSubcommand(sub =>
             sub.setName('montrer')
-                .setDescription('Montre un PNJ à la table et le rend connu des joueurs (MJ)')
+                .setDescription('Montre un PNJ à la table et le révèle aux joueurs (MJ)')
                 .addStringOption(nameOption)
-                .addBooleanOption(o => o.setName('photo_seule').setDescription('Uniquement le nom et le portrait')))
+                .addBooleanOption(o => o.setName('photo_seule').setDescription('Révéler seulement le nom et le portrait')))
         .addSubcommand(sub =>
             sub.setName('liste')
                 .setDescription('Galerie des PNJ')
@@ -143,7 +161,7 @@ export const pnj: Command = {
                 .addBooleanOption(o => o.setName('public').setDescription('Afficher pour toute la table')))
         .addSubcommand(sub =>
             sub.setName('sync')
-                .setDescription('Recharge les PNJ depuis Notion (MJ)')),
+                .setDescription('Recharge les PNJ et les séances depuis Notion (MJ)')),
 
     async autocomplete(interaction) {
         const value = interaction.options.getFocused();
@@ -154,7 +172,10 @@ export const pnj: Command = {
             .sort((a, b) => a.localeCompare(b, 'fr'))
             .slice(0, LIMITS.choices);
         await interaction.respond(names.map(n => {
-            const details = [pnjs[n].clan, mj && !isKnown(pnjs[n]) ? '🔒 inconnu' : ''].filter(Boolean).join(' · ');
+            const level = visibilityOf(pnjs[n]);
+            const details = mj
+                ? [pnjs[n].clan, level === 'cache' ? '🔒 caché' : level === 'photo' ? '📷 photo seule' : ''].filter(Boolean).join(' · ')
+                : level === 'complet' ? pnjs[n].clan : '';
             return { name: truncate(details ? `${n} · ${details}` : n, LIMITS.choiceName), value: n };
         }));
     },
@@ -170,19 +191,24 @@ export const pnj: Command = {
             }
             await interaction.deferReply({ flags: EPHEMERAL });
             const r = await syncPnjs();
+            const seances = await syncSessions().catch(() => null);
             const errors = r.errors.length ? `\n⚠️ ${r.errors.join('\n⚠️ ')}` : '';
-            return interaction.editReply(truncate(`🔄 ${r.total} PNJ synchronisés depuis Notion, ${r.updated} mis à jour.${errors}`, LIMITS.message));
+            const s = seances === null ? '' : ` ${seances} séance(s).`;
+            return interaction.editReply(truncate(`🔄 ${r.total} PNJ synchronisés depuis Notion, ${r.updated} mis à jour.${s}${errors}`, LIMITS.message));
         }
 
         if (sub === 'liste') {
             const isPublic = interaction.options.getBoolean('public') ?? false;
             const faction = interaction.options.getString('faction');
             const clan = interaction.options.getString('clan');
-            // En public, on ne montre jamais les PNJ inconnus, même si c'est un MJ qui liste.
+            // Vue MJ privée : tout. Sinon (joueur, ou liste publique) : seulement ce que les joueurs savent.
+            const fullView = isMJ(userId) && !isPublic;
+            const showsAll = (p: Pnj) => fullView || visibilityOf(p) === 'complet';
             const names = Object.keys(pnjs)
-                .filter(n => (isPublic ? isKnown(pnjs[n]) : canSee(pnjs[n], userId)))
-                .filter(n => !faction || matches(pnjs[n].faction, faction))
-                .filter(n => !clan || matches(pnjs[n].clan, clan))
+                .filter(n => fullView || visibilityOf(pnjs[n]) !== 'cache')
+                // Les filtres ne portent que sur des infos visibles, pour ne rien laisser deviner
+                .filter(n => !faction || (showsAll(pnjs[n]) && matches(pnjs[n].faction, faction)))
+                .filter(n => !clan || (showsAll(pnjs[n]) && matches(pnjs[n].clan, clan)))
                 .sort((a, b) => a.localeCompare(b, 'fr'));
 
             if (names.length === 0) {
@@ -192,8 +218,12 @@ export const pnj: Command = {
             const byFaction = new Map<string, string[]>();
             for (const n of names) {
                 const p = pnjs[n];
-                const line = `${statusEmoji(p.statut)} **${n}**${p.clan ? ` · ${p.clan}` : ''}${p.rang ? ` · ${p.rang}` : ''}${isKnown(p) ? '' : ' 🔒'}`;
-                const key = p.faction || 'Sans faction';
+                const level = visibilityOf(p);
+                const marker = fullView && level !== 'complet' ? (level === 'cache' ? ' 🔒' : ' 📷') : '';
+                const line = showsAll(p)
+                    ? `${statusEmoji(p.statut)} **${n}**${p.clan ? ` · ${p.clan}` : ''}${p.rang ? ` · ${p.rang}` : ''}${marker}`
+                    : `📷 **${n}**`;
+                const key = showsAll(p) ? p.faction || 'Sans faction' : 'Visages croisés';
                 byFaction.set(key, [...(byFaction.get(key) ?? []), line]);
             }
             const description = [...byFaction.entries()]
@@ -213,7 +243,7 @@ export const pnj: Command = {
                     .setPlaceholder('Ouvrir une fiche')
                     .addOptions(names.slice(0, LIMITS.choices).map(n => ({
                         label: truncate(n, 100),
-                        description: truncate([pnjs[n].clan, pnjs[n].faction].filter(Boolean).join(' · ') || '—', 100),
+                        description: truncate((showsAll(pnjs[n]) && [pnjs[n].clan, pnjs[n].faction].filter(Boolean).join(' · ')) || '—', 100),
                         value: n,
                     }))),
             );
@@ -230,7 +260,7 @@ export const pnj: Command = {
             if (!interaction.options.getBoolean('public')) {
                 return interaction.reply(privateSheet(nom, userId));
             }
-            reveal(nom);
+            reveal(nom, 'photo');
             await interaction.reply(publicSheet(nom));
             if (isMJ(userId) && pnjs[nom].description_mj) {
                 await interaction.followUp({ embeds: [mjEmbed(pnjs[nom])], flags: EPHEMERAL });
@@ -240,8 +270,8 @@ export const pnj: Command = {
 
         if (sub === 'montrer') {
             if (!isMJ(userId)) return interaction.reply({ content: '❌ Réservé aux MJ.', flags: EPHEMERAL });
-            reveal(nom);
-            return interaction.reply(publicSheet(nom, interaction.options.getBoolean('photo_seule') ?? false));
+            reveal(nom, interaction.options.getBoolean('photo_seule') ? 'photo' : 'complet');
+            return interaction.reply(publicSheet(nom));
         }
     },
 
@@ -257,7 +287,7 @@ export const pnj: Command = {
         }
 
         if (action === 'share') {
-            reveal(nom);
+            reveal(nom, 'photo');
             return interaction.reply({ ...publicSheet(nom), content: `📣 Partagé par **${interaction.user.displayName}**` });
         }
     },

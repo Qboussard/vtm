@@ -15,9 +15,13 @@ export interface Pnj {
     statut: string;
     description: string;
     description_mj: string;
+    /** Partie de la page Notion lisible par les joueurs (hors sections 🔒) */
+    description_joueurs?: string;
     image: string;
     relations: string[];
-    /** Absent = connu. */
+    /** Ce que les joueurs voient. Absent : déduit de l'ancien champ `connu`. */
+    visibilite?: Visibilite;
+    /** @deprecated remplacé par `visibilite` */
     connu?: boolean;
     /** Champs renseignés par la synchronisation Notion */
     notion_id?: string;
@@ -28,21 +32,21 @@ export interface Pnj {
     portrait?: string;
 }
 
-export interface Lieu {
-    type: string;
-    quartier: string;
-    description: string;
-    description_mj: string;
-    image: string;
-    pnj_lies: string[];
-}
+export type Visibilite = 'cache' | 'photo' | 'complet';
+
+export const visibilityOf = (p: Pnj): Visibilite => p.visibilite ?? (p.connu === false ? 'cache' : 'complet');
 
 export interface Session {
     numero: number;
     titre: string;
     date: string;
+    /** Ce que les joueurs lisent : la page Notion hors sections 🔒 */
     resume: string;
+    /** Les sections 🔒 de la page */
     notes_mj: string;
+    /** Champs renseignés par la synchronisation Notion */
+    notion_id?: string;
+    edited?: string;
 }
 
 export interface Memo {
@@ -79,14 +83,18 @@ export const lores = readBundled<Lore>('lore.json');
 export const memos = readBundled<Memo[]>('memo.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
-export const lieux = readMutable<Record<string, Lieu>>('lieux.json');
 export const sessions = readMutable<Session[]>('sessions.json');
 export const config = readMutable<{ mj_ids: string[] }>('config.json');
 
 export const savePnjs = () => write('pnj.json', pnjs);
-export const saveLieux = () => write('lieux.json', lieux);
 export const saveSessions = () => write('sessions.json', sessions);
 export const saveConfig = () => write('config.json', config);
+
+/** Remplace les séances en gardant la même référence (importée par les commandes). */
+export const replaceSessions = (next: Session[]) => {
+    sessions.splice(0, sessions.length, ...next);
+    saveSessions();
+};
 
 /** Remplace le contenu de `pnjs` en gardant la même référence (importée par les commandes). */
 export const replacePnjs = (next: Record<string, Pnj>) => {

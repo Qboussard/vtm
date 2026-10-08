@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import { Client, Events, GatewayIntentBits, Interaction, REST, Routes } from 'discord.js';
-import { lieu } from './commands/lieu';
 import { lore } from './commands/lore';
 import { memo } from './commands/memo';
 import { mj } from './commands/mj';
@@ -17,7 +16,7 @@ if (!BOT_TOKEN || !CLIENT_ID || !GUILD_ID || !SUPER_MJ_ID) {
 }
 
 const commands = new Map<string, Command>(
-    [regle, memo, lore, pnj, lieu, session, mj].map(c => [c.data.name, c]),
+    [regle, memo, lore, pnj, session, mj].map(c => [c.data.name, c]),
 );
 
 const deployCommands = async () => {
