@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Données livrées avec le code (règles, lore, mémos) et valeurs initiales des données de campagne.
+// Données livrées avec le code (règles, mémos) et valeurs initiales des données de campagne.
 // Depuis src/ (ts-node) comme depuis dist/ (build), ce chemin pointe sur src/data.
 const BUNDLED_DIR = path.join(__dirname, '..', 'src', 'data');
 
@@ -55,7 +55,6 @@ export interface Memo {
 }
 
 export type Rules = Record<string, Record<string, string | Record<string, string>>>;
-export type Lore = Record<string, Record<string, { description: string; image?: string }>>;
 
 const readBundled = <T>(file: string): T =>
     JSON.parse(fs.readFileSync(path.join(BUNDLED_DIR, file), 'utf-8'));
@@ -79,7 +78,6 @@ const write = (file: string, value: unknown) => {
 };
 
 export const rules = readBundled<Rules>('rules.json');
-export const lores = readBundled<Lore>('lore.json');
 export const memos = readBundled<Memo[]>('memo.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
