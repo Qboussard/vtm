@@ -76,6 +76,14 @@ export interface Discipline {
     pouvoirs: Pouvoir[];
 }
 
+export interface Clan {
+    vo: string;
+    /** Disciplines de clan, par leur nom dans disciplines.json */
+    disciplines: string[];
+    /** Clans sans Disciplines de clan (Caitiff, Sang-clair) */
+    note?: string;
+}
+
 const readBundled = <T>(file: string): T =>
     JSON.parse(fs.readFileSync(path.join(BUNDLED_DIR, file), 'utf-8'));
 
@@ -100,6 +108,7 @@ const write = (file: string, value: unknown) => {
 export const rules = readBundled<Rules>('rules.json');
 export const memos = readBundled<Memo[]>('memo.json');
 export const disciplines = readBundled<Record<string, Discipline>>('disciplines.json');
+export const clans = readBundled<Record<string, Clan>>('clans.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
 export const sessions = readMutable<Session[]>('sessions.json');

@@ -6,7 +6,7 @@ import {
     SlashCommandBuilder,
     StringSelectMenuBuilder,
 } from 'discord.js';
-import { disciplines, Pouvoir } from '../data';
+import { clans, disciplines, Pouvoir } from '../data';
 import { Command } from '../types';
 import { EPHEMERAL, LIMITS, normalize, shareButton, truncate } from '../util';
 
@@ -32,6 +32,7 @@ for (const [discipline, d] of Object.entries(disciplines)) {
     }
 }
 const names = Object.keys(disciplines);
+const clanNames = Object.keys(clans);
 
 const dots = (niveau: number) => '●'.repeat(niveau);
 
@@ -83,6 +84,31 @@ const buildListEmbed = (discipline: string | null, niveau: number | null) => {
         .setFooter({ text: '🎲 jet · 🛡️ jet contre' });
 };
 
+/** Ligne courte, quand la liste complète dépasse les limites d'un embed. */
+const shortLine = (e: PouvoirEntry) => `${dots(e.niveau)} **${e.nom}** — ${e.cout}`;
+
+const buildClanEmbed = (clan: string, niveau: number | null) => {
+    const c = clans[clan];
+    const embed = new EmbedBuilder()
+        .setTitle(`🧛 ${clan}${niveau ? ` · niveau ${niveau}` : ''}`)
+        .setColor(DISCIPLINE_COLOR)
+        .setDescription(c.note ?? `*${c.vo}* · Disciplines de clan : **${c.disciplines.join(', ')}**`)
+        .setFooter({ text: '🎲 jet · 🛡️ jet contre' });
+    if (c.disciplines.length === 0) return embed;
+
+    const groups = c.disciplines.map(name => ({ name, list: filter(name, niveau) }));
+    const full = groups.map(g => g.list.map(e => line(e, false)).join('\n\n'));
+    // Un embed : 1024 caractères par champ, 6000 en tout
+    const fits = full.every(v => v.length <= LIMITS.embedField) && full.join('').length <= 5000;
+    return embed.addFields(groups.map((g, i) => ({
+        name: `${g.name} · ${disciplines[g.name].type}`,
+        value: truncate((fits ? full[i] : g.list.map(shortLine).join('\n')) || '*Aucun pouvoir à ce niveau.*', LIMITS.embedField),
+    })));
+};
+
+const clanPowers = (clan: string, niveau: number | null) =>
+    clans[clan].disciplines.flatMap(name => filter(name, niveau));
+
 const homeButton = () =>
     new ButtonBuilder().setCustomId('discipline:home').setLabel('Toutes les Disciplines').setEmoji('🧛').setStyle(ButtonStyle.Secondary);
 
@@ -127,7 +153,7 @@ const summaryView = () => ({
             .setColor(DISCIPLINE_COLOR)
             .setDescription(
                 names.map(n => `**${n}** · ${disciplines[n].type} · ${disciplines[n].pouvoirs.length} pouvoirs`).join('\n') +
-                '\n\nAstuce : `/discipline pouvoir:` ouvre directement un pouvoir, `niveau:` filtre par niveau.',
+                '\n\nAstuce : `/discipline pouvoir:` ouvre directement un pouvoir, `clan:` liste les Disciplines d\'un clan, `niveau:` filtre par niveau.',
             ),
     ],
     components: [disciplineMenu()],
@@ -139,6 +165,23 @@ const listView = (discipline: string | null, niveau: number | null) => ({
         ...pickMenus(filter(discipline, niveau)),
         new ActionRowBuilder<ButtonBuilder>().addComponents(
             shareButton(`discipline:sharelist:${discipline ?? ''}:${niveau ?? ''}`),
+            homeButton(),
+        ),
+    ],
+});
+
+const clanView = (clan: string, niveau: number | null) => ({
+    embeds: [buildClanEmbed(clan, niveau)],
+    components: [
+        ...pickMenus(clanPowers(clan, niveau)),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+            shareButton(`discipline:shareclan:${clan}:${niveau ?? ''}`),
+            ...clans[clan].disciplines.map(name =>
+                new ButtonBuilder()
+                    .setCustomId(`discipline:list:${name}`)
+                    .setLabel(name)
+                    .setEmoji('📜')
+                    .setStyle(ButtonStyle.Secondary)),
             homeButton(),
         ),
     ],
@@ -171,6 +214,10 @@ export const discipline: Command = {
             o.setName('discipline')
                 .setDescription('Lister les pouvoirs d\'une Discipline')
                 .addChoices(...names.slice(0, LIMITS.choices).map(n => ({ name: n, value: n }))))
+        .addStringOption(o =>
+            o.setName('clan')
+                .setDescription('Lister les Disciplines de clan : Ventru, Brujah…')
+                .addChoices(...clanNames.slice(0, LIMITS.choices).map(n => ({ name: n, value: n }))))
         .addIntegerOption(o =>
             o.setName('niveau').setDescription('Filtrer par niveau').setMinValue(1).setMaxValue(5))
         .addBooleanOption(o =>
@@ -188,6 +235,7 @@ export const discipline: Command = {
     async execute(interaction) {
         const query = interaction.options.getString('pouvoir');
         const name = interaction.options.getString('discipline');
+        const clan = interaction.options.getString('clan');
         const niveau = interaction.options.getInteger('niveau');
         const isPublic = interaction.options.getBoolean('public') ?? false;
 
@@ -213,6 +261,12 @@ export const discipline: Command = {
                 : interaction.reply({ ...pouvoirView(results[0]), flags: EPHEMERAL });
         }
 
+        // Une Discipline précise l'emporte sur le clan
+        if (clan && !name && clans[clan]) {
+            return isPublic
+                ? interaction.reply({ embeds: [buildClanEmbed(clan, niveau)] })
+                : interaction.reply({ ...clanView(clan, niveau), flags: EPHEMERAL });
+        }
         if (!name && !niveau) {
             return interaction.reply({ ...summaryView(), flags: EPHEMERAL });
         }
@@ -240,6 +294,14 @@ export const discipline: Command = {
             const e = entries[Number(arg)];
             if (!e) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
             return interaction.reply({ content: `📣 Partagé par **${interaction.user.displayName}**`, embeds: [buildEmbed(e)] });
+        }
+        if (action === 'shareclan') {
+            const [clan, niveau] = arg.split(':');
+            if (!clans[clan]) return interaction.reply({ content: '❌ Clan introuvable.', flags: EPHEMERAL });
+            return interaction.reply({
+                content: `📣 Partagé par **${interaction.user.displayName}**`,
+                embeds: [buildClanEmbed(clan, Number(niveau) || null)],
+            });
         }
         if (action === 'sharelist') {
             const [name, niveau] = arg.split(':');

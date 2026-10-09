@@ -7,7 +7,7 @@ Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à port
 | Commande | Usage |
 |---|---|
 | `/regle [recherche] [public]` | Recherche une règle ou une Discipline (autocomplétion, insensible aux accents). Sans argument : sommaire navigable. Réponse privée avec bouton « Montrer à la table ». |
-| `/discipline [pouvoir] [discipline] [niveau] [public]` | Pouvoirs des Disciplines avec catégorie (Animalisme, Auspex, Oblivion…), coût, jet et jet contre. Sans argument : liste des Disciplines ; `discipline:` et `niveau:` filtrent la liste, `pouvoir:` ouvre une fiche (autocomplétion). |
+| `/discipline [pouvoir] [discipline] [clan] [niveau] [public]` | Pouvoirs des Disciplines avec catégorie (Animalisme, Auspex, Oblivion…), coût, jet et jet contre. Sans argument : liste des Disciplines ; `discipline:` et `niveau:` filtrent la liste, `clan:` liste les trois Disciplines du clan (Ventru → Domination, Force d'âme, Présence), `pouvoir:` ouvre une fiche (autocomplétion). |
 | `/memo [fiche] [public]` | Fiches de synthèse : jets, combat, Soif & Frénésie, Volonté & social. |
 | `/pnj voir` · `liste` | Fiche avec portrait ; galerie filtrable par faction ou clan. Les MJ voient en plus les notes et les PNJ liés. |
 | `/pnj montrer` (MJ) | Affiche un PNJ à la table et monte sa Visibilité dans Notion (`photo_seule` : nom et portrait uniquement). |
@@ -44,7 +44,7 @@ Le haut de la page est le résumé lu par les joueurs ; la section `## 🔒 MJ` 
 
 ## Données
 
-- `src/data/rules.json`, `memo.json`, `disciplines.json` (pouvoirs : niveau, nom, VO, coût, jet, jet contre, description, amalgame) : contenu de référence, versionné. Modifier puis redémarrer le bot.
+- `src/data/rules.json`, `memo.json`, `clans.json` (Disciplines de clan), `disciplines.json` (pouvoirs : niveau, nom, VO, coût, jet, jet contre, description, amalgame) : contenu de référence, versionné. Modifier puis redémarrer le bot.
 - `pnj.json` : copie locale des PNJ Notion (réécrite à chaque synchronisation), portraits dans `portraits/`.
 - `sessions.json` : copie locale des séances Notion.
 - `config.json` : données de campagne, modifiées par le bot.

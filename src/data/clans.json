@@ -1,0 +1,18 @@
+{
+  "Banu Haqim": { "vo": "Banu Haqim", "disciplines": ["Célérité", "Occultation", "Sorcellerie du sang"] },
+  "Brujah": { "vo": "Brujah", "disciplines": ["Célérité", "Présence", "Puissance"] },
+  "Caitiff": { "vo": "Caitiff", "disciplines": [], "note": "Sans clan : aucune Discipline de clan. Le personnage choisit librement les siennes, mais toutes lui coûtent le prix d'une Discipline hors clan." },
+  "Gangrel": { "vo": "Gangrel", "disciplines": ["Animalisme", "Force d'âme", "Protéisme"] },
+  "Hecata": { "vo": "Hecata", "disciplines": ["Auspex", "Force d'âme", "Oblivion"] },
+  "Lasombra": { "vo": "Lasombra", "disciplines": ["Domination", "Oblivion", "Puissance"] },
+  "Malkavien": { "vo": "Malkavian", "disciplines": ["Auspex", "Domination", "Occultation"] },
+  "Ministère": { "vo": "The Ministry", "disciplines": ["Occultation", "Présence", "Protéisme"] },
+  "Nosferatu": { "vo": "Nosferatu", "disciplines": ["Animalisme", "Occultation", "Puissance"] },
+  "Ravnos": { "vo": "Ravnos", "disciplines": ["Animalisme", "Occultation", "Présence"] },
+  "Salubri": { "vo": "Salubri", "disciplines": ["Auspex", "Domination", "Force d'âme"] },
+  "Sang-clair": { "vo": "Thin-blood", "disciplines": [], "note": "Sang trop dilué : pas de Discipline de clan, mais l'Alchimie du sang clair (non détaillée ici) et une Discipline au plus via la Résonance." },
+  "Toréador": { "vo": "Toreador", "disciplines": ["Auspex", "Célérité", "Présence"] },
+  "Tremere": { "vo": "Tremere", "disciplines": ["Auspex", "Domination", "Sorcellerie du sang"] },
+  "Tzimisce": { "vo": "Tzimisce", "disciplines": ["Animalisme", "Domination", "Protéisme"] },
+  "Ventru": { "vo": "Ventrue", "disciplines": ["Domination", "Force d'âme", "Présence"] }
+}
