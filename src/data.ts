@@ -56,6 +56,26 @@ export interface Memo {
 
 export type Rules = Record<string, Record<string, string | Record<string, string>>>;
 
+export interface Pouvoir {
+    niveau: number;
+    nom: string;
+    /** Nom anglais du livre de base */
+    vo: string;
+    cout: string;
+    jet: string;
+    contre: string;
+    description: string;
+    /** Amalgame : autre Discipline requise */
+    prerequis?: string;
+}
+
+export interface Discipline {
+    vo: string;
+    type: string;
+    description: string;
+    pouvoirs: Pouvoir[];
+}
+
 const readBundled = <T>(file: string): T =>
     JSON.parse(fs.readFileSync(path.join(BUNDLED_DIR, file), 'utf-8'));
 
@@ -79,6 +99,7 @@ const write = (file: string, value: unknown) => {
 
 export const rules = readBundled<Rules>('rules.json');
 export const memos = readBundled<Memo[]>('memo.json');
+export const disciplines = readBundled<Record<string, Discipline>>('disciplines.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
 export const sessions = readMutable<Session[]>('sessions.json');

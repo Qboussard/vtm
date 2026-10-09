@@ -1,0 +1,1034 @@
+{
+  "Animalisme": {
+    "vo": "Animalism",
+    "type": "Mentale",
+    "description": "Lien avec les animaux et maîtrise de la Bête.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Famulus",
+        "vo": "Bond Famulus",
+        "cout": "3 tests d'Exaltation (sur 3 nuits)",
+        "jet": "Charisme + Animaux (pour donner un ordre)",
+        "contre": "—",
+        "description": "Lier un animal en le nourrissant de son sang trois nuits de suite. Il devient un compagnon fidèle ; Murmures sauvages est gratuit avec lui."
+      },
+      {
+        "niveau": 1,
+        "nom": "Sens de la Bête",
+        "vo": "Sense the Beast",
+        "cout": "Gratuit",
+        "jet": "Résolution + Animalisme",
+        "contre": "Sang-froid + Subterfuge",
+        "description": "Sentir la Bête d'une créature : hostilité, faim, nature surnaturelle (vampire, goule…)."
+      },
+      {
+        "niveau": 2,
+        "nom": "Murmures sauvages",
+        "vo": "Feral Whispers",
+        "cout": "Test d'Exaltation (gratuit avec le famulus)",
+        "jet": "Manipulation ou Charisme + Animalisme",
+        "contre": "—",
+        "description": "Parler aux animaux et appeler ceux d'une espèce donnée dans les environs."
+      },
+      {
+        "niveau": 3,
+        "nom": "Succulence animale",
+        "vo": "Animal Succulence",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Le sang animal étanche davantage la Soif (+1) ; se nourrir d'animaux devient viable."
+      },
+      {
+        "niveau": 3,
+        "nom": "Apaiser la Bête",
+        "vo": "Quell the Beast",
+        "cout": "Test d'Exaltation",
+        "jet": "Charisme + Animalisme",
+        "contre": "Vigueur + Résolution",
+        "description": "Calmer une créature : un mortel devient apathique, un vampire voit sa Bête apaisée (fin de frénésie, compulsion annulée)."
+      },
+      {
+        "niveau": 3,
+        "nom": "Ruche morte-vivante",
+        "vo": "Unliving Hive",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Abriter un essaim d'insectes dans son corps et le lâcher sur une cible.",
+        "prerequis": "Occultation 2"
+      },
+      {
+        "niveau": 4,
+        "nom": "Subsumer l'esprit",
+        "vo": "Subsume the Spirit",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Animalisme",
+        "contre": "—",
+        "description": "Projeter son esprit dans un animal et contrôler son corps ; le sien reste inerte."
+      },
+      {
+        "niveau": 5,
+        "nom": "Domination animale",
+        "vo": "Animal Dominion",
+        "cout": "2 tests d'Exaltation",
+        "jet": "Charisme + Animalisme",
+        "contre": "—",
+        "description": "Commander un groupe entier d'animaux (meute, nuée de rats, volée d'oiseaux)."
+      },
+      {
+        "niveau": 5,
+        "nom": "Extraire la Bête",
+        "vo": "Drawing Out the Beast",
+        "cout": "Test d'Exaltation",
+        "jet": "Astuce + Animalisme",
+        "contre": "Sang-froid + Résolution",
+        "description": "Transférer sa propre frénésie à une cible proche, qui la subit à sa place."
+      }
+    ]
+  },
+  "Auspex": {
+    "vo": "Auspex",
+    "type": "Mentale",
+    "description": "Perceptions surnaturelles. La plupart des pouvoirs sont gratuits.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Sens aiguisés",
+        "vo": "Heightened Senses",
+        "cout": "Gratuit",
+        "jet": "Astuce ou Résolution + Auspex (perception)",
+        "contre": "—",
+        "description": "Sens surnaturels : ajoute l'Auspex aux jets de perception. Une lumière ou un bruit violents peuvent aveugler ou assourdir."
+      },
+      {
+        "niveau": 1,
+        "nom": "Percevoir l'invisible",
+        "vo": "Sense the Unseen",
+        "cout": "Gratuit",
+        "jet": "Astuce ou Résolution + Auspex",
+        "contre": "Astuce + Occultation (contre un vampire occulté)",
+        "description": "Détecter le surnaturel caché : Occultation, fantômes, magie, présence invisible."
+      },
+      {
+        "niveau": 2,
+        "nom": "Prémonition",
+        "vo": "Premonition",
+        "cout": "Gratuit (spontanée) · Test d'Exaltation (volontaire)",
+        "jet": "Résolution + Auspex",
+        "contre": "—",
+        "description": "Visions et pressentiments, spontanés ou recherchés, sur un sujet ou un danger."
+      },
+      {
+        "niveau": 3,
+        "nom": "Sonder l'âme",
+        "vo": "Scry the Soul",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Auspex",
+        "contre": "Sang-froid + Subterfuge",
+        "description": "Lire l'aura : émotions, nature surnaturelle, trace de diablerie, état mental."
+      },
+      {
+        "niveau": 3,
+        "nom": "Partager les sens",
+        "vo": "Share the Senses",
+        "cout": "Test d'Exaltation",
+        "jet": "Résolution + Auspex",
+        "contre": "—",
+        "description": "Voir et entendre à travers les sens d'une personne dont on a goûté le sang."
+      },
+      {
+        "niveau": 4,
+        "nom": "Toucher de l'esprit",
+        "vo": "Spirit's Touch",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Auspex",
+        "contre": "—",
+        "description": "Lire l'empreinte émotionnelle d'un objet ou d'un lieu : qui l'a manié, ce qui s'y est passé."
+      },
+      {
+        "niveau": 5,
+        "nom": "Clairvoyance",
+        "vo": "Clairvoyance",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Auspex",
+        "contre": "—",
+        "description": "Observer à distance un lieu familier et en tirer des informations (rumeurs, menaces, événements)."
+      },
+      {
+        "niveau": 5,
+        "nom": "Possession",
+        "vo": "Possession",
+        "cout": "2 tests d'Exaltation",
+        "jet": "Résolution + Auspex",
+        "contre": "Résolution + Intelligence",
+        "description": "Prendre le contrôle du corps d'un mortel, préalablement hypnotisé.",
+        "prerequis": "Domination 3"
+      },
+      {
+        "niveau": 5,
+        "nom": "Télépathie",
+        "vo": "Telepathy",
+        "cout": "Test d'Exaltation (+1 par minute sur un vampire)",
+        "jet": "Résolution + Auspex",
+        "contre": "Astuce + Subterfuge (si la cible résiste)",
+        "description": "Lire les pensées d'une cible ou lui projeter les siennes."
+      }
+    ]
+  },
+  "Célérité": {
+    "vo": "Celerity",
+    "type": "Physique",
+    "description": "Vitesse et réflexes surnaturels.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Grâce féline",
+        "vo": "Cat's Grace",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Équilibre parfait : réussite automatique aux tests d'équilibre (corniche, fil, branche)."
+      },
+      {
+        "niveau": 1,
+        "nom": "Réflexes éclairs",
+        "vo": "Rapid Reflexes",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Petites actions gratuites (dégainer, recharger) et aucun malus pour se défendre sans abri contre des tirs."
+      },
+      {
+        "niveau": 2,
+        "nom": "Rapidité",
+        "vo": "Fleetness",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Célérité aux jets de Dextérité hors attaque, dont la défense, pour la scène."
+      },
+      {
+        "niveau": 3,
+        "nom": "Clignement",
+        "vo": "Blink",
+        "cout": "Test d'Exaltation",
+        "jet": "Dextérité + Athlétisme (terrain difficile)",
+        "contre": "—",
+        "description": "Franchir une distance en un instant et agir à l'arrivée (attaque, désarmement…)."
+      },
+      {
+        "niveau": 3,
+        "nom": "Traversée",
+        "vo": "Traversal",
+        "cout": "Test d'Exaltation",
+        "jet": "Dextérité + Athlétisme",
+        "contre": "—",
+        "description": "Courir sur une paroi verticale ou à la surface de l'eau."
+      },
+      {
+        "niveau": 4,
+        "nom": "Breuvage d'élégance",
+        "vo": "Draught of Elegance",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Partager sa Célérité : qui boit le sang gagne les pouvoirs de Célérité pour une nuit."
+      },
+      {
+        "niveau": 4,
+        "nom": "Visée infaillible",
+        "vo": "Unerring Aim",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Le monde ralentit : une attaque à distance devient quasi impossible à esquiver (la cible n'a qu'une défense limitée)."
+      },
+      {
+        "niveau": 5,
+        "nom": "Frappe éclair",
+        "vo": "Lightning Strike",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Une attaque au contact si rapide qu'elle ne peut être esquivée que par Célérité 5."
+      },
+      {
+        "niveau": 5,
+        "nom": "Fraction de seconde",
+        "vo": "Split Second",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Réagir avant n'importe quelle action déclarée et en changer l'issue, dans la limite du raisonnable."
+      }
+    ]
+  },
+  "Domination": {
+    "vo": "Dominate",
+    "type": "Mentale",
+    "description": "Contrôle mental. Exige un contact visuel et une voix intelligible.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Brouiller la mémoire",
+        "vo": "Cloud Memory",
+        "cout": "Gratuit",
+        "jet": "Charisme + Domination",
+        "contre": "Astuce + Résolution",
+        "description": "Faire oublier à la cible les dernières minutes."
+      },
+      {
+        "niveau": 1,
+        "nom": "Contraindre",
+        "vo": "Compel",
+        "cout": "Gratuit",
+        "jet": "Charisme + Domination",
+        "contre": "Intelligence + Résolution",
+        "description": "Un ordre d'un mot ou d'une phrase courte, exécuté immédiatement (« Fuis ! », « Lâche ça »)."
+      },
+      {
+        "niveau": 2,
+        "nom": "Hypnotiser",
+        "vo": "Mesmerize",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Domination",
+        "contre": "Intelligence + Résolution",
+        "description": "Un ordre plus complexe, détaillé, que la cible exécute au mieux."
+      },
+      {
+        "niveau": 2,
+        "nom": "Démence",
+        "vo": "Dementation",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Domination",
+        "contre": "Sang-froid + Intelligence",
+        "description": "Aggraver les troubles mentaux de la cible : paranoïa, angoisse, délire.",
+        "prerequis": "Occultation 2 (Malkaviens)"
+      },
+      {
+        "niveau": 3,
+        "nom": "Esprit oublieux",
+        "vo": "The Forgetful Mind",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Domination",
+        "contre": "Intelligence + Résolution",
+        "description": "Réécrire ou effacer des souvenirs, avec plus de détails selon la marge."
+      },
+      {
+        "niveau": 3,
+        "nom": "Directive enfouie",
+        "vo": "Submerged Directive",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Un ordre d'Hypnotiser reste en sommeil et se déclenche plus tard, sur un signal choisi."
+      },
+      {
+        "niveau": 4,
+        "nom": "Rationaliser",
+        "vo": "Rationalize",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "La cible croit avoir agi de son propre chef et justifie ses actes."
+      },
+      {
+        "niveau": 5,
+        "nom": "Manipulation de masse",
+        "vo": "Mass Manipulation",
+        "cout": "Test d'Exaltation (en plus du pouvoir)",
+        "jet": "Comme le pouvoir utilisé",
+        "contre": "Comme le pouvoir utilisé (la plus forte du groupe)",
+        "description": "Appliquer un pouvoir de Domination à tout un groupe qui vous regarde."
+      },
+      {
+        "niveau": 5,
+        "nom": "Décret ultime",
+        "vo": "Terminal Decree",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Les ordres peuvent pousser la cible à se nuire ou à se tuer."
+      }
+    ]
+  },
+  "Force d'âme": {
+    "vo": "Fortitude",
+    "type": "Physique",
+    "description": "Résistance surnaturelle.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Résilience",
+        "vo": "Resilience",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Force d'âme à la piste de Santé."
+      },
+      {
+        "niveau": 1,
+        "nom": "Esprit inébranlable",
+        "vo": "Unswayable Mind",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Force d'âme pour résister à la coercition (Domination, Présence, persuasion)."
+      },
+      {
+        "niveau": 2,
+        "nom": "Robustesse",
+        "vo": "Toughness",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Soustrait la Force d'âme de chaque dégât superficiel reçu, pour la scène."
+      },
+      {
+        "niveau": 2,
+        "nom": "Bêtes endurantes",
+        "vo": "Enduring Beasts",
+        "cout": "Test d'Exaltation",
+        "jet": "Vigueur + Animalisme",
+        "contre": "—",
+        "description": "Partager sa résistance avec ses animaux.",
+        "prerequis": "Animalisme 1"
+      },
+      {
+        "niveau": 3,
+        "nom": "Défier la faiblesse",
+        "vo": "Defy Bane",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Convertir des dégâts aggravés (feu, soleil, crocs…) en superficiels, à hauteur de la Force d'âme."
+      },
+      {
+        "niveau": 3,
+        "nom": "Façade intérieure",
+        "vo": "Fortify the Inner Façade",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Force d'âme à la difficulté des lectures mentales (Auspex, sorcellerie)."
+      },
+      {
+        "niveau": 4,
+        "nom": "Breuvage d'endurance",
+        "vo": "Draught of Endurance",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Partager sa Force d'âme : qui boit le sang gagne ses pouvoirs pour une nuit."
+      },
+      {
+        "niveau": 5,
+        "nom": "Chair de marbre",
+        "vo": "Flesh of Marble",
+        "cout": "2 tests d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ignorer entièrement la première source de dégâts physiques de chaque tour."
+      },
+      {
+        "niveau": 5,
+        "nom": "Prouesse de la douleur",
+        "vo": "Prowess from Pain",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Chaque niveau de dégât reçu renforce les Attributs au lieu de les affaiblir."
+      }
+    ]
+  },
+  "Oblivion": {
+    "vo": "Oblivion",
+    "type": "Mentale",
+    "description": "Ombres, morts et Abysse (Lasombra, Hecata). Un échec bestial ou une réussite messianique peut laisser des Taches.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Manteau d'ombre",
+        "vo": "Shadow Cloak",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "S'envelopper d'ombres : +2 dés aux jets de Furtivité et d'Intimidation."
+      },
+      {
+        "niveau": 1,
+        "nom": "Regard de l'Oubli",
+        "vo": "Oblivion's Sight",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Voir dans l'obscurité totale et percevoir les fantômes."
+      },
+      {
+        "niveau": 2,
+        "nom": "Bras d'Ahriman",
+        "vo": "Arms of Ahriman",
+        "cout": "Test d'Exaltation",
+        "jet": "Astuce + Oblivion",
+        "contre": "Force + Bagarre ou Dextérité + Athlétisme",
+        "description": "Animer des tentacules d'ombre qui saisissent ou frappent.",
+        "prerequis": "Puissance 2"
+      },
+      {
+        "niveau": 2,
+        "nom": "Précognition fatale",
+        "vo": "Fatal Precognition",
+        "cout": "Test d'Exaltation",
+        "jet": "Résolution + Oblivion",
+        "contre": "—",
+        "description": "Une vision de la mort prochaine d'une personne, et de la façon de l'éviter.",
+        "prerequis": "Auspex 2"
+      },
+      {
+        "niveau": 2,
+        "nom": "Projection d'ombre",
+        "vo": "Shadow Cast",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Projeter une ombre qui s'étend autour de soi ; ceux qui la traversent sont pris d'angoisse."
+      },
+      {
+        "niveau": 2,
+        "nom": "Là où le Voile s'amincit",
+        "vo": "Where the Shroud Thins",
+        "cout": "Gratuit",
+        "jet": "Astuce + Oblivion",
+        "contre": "—",
+        "description": "Sentir la densité du Voile entre les mondes dans un lieu."
+      },
+      {
+        "niveau": 3,
+        "nom": "Aura de décrépitude",
+        "vo": "Aura of Decay",
+        "cout": "Test d'Exaltation",
+        "jet": "Vigueur + Oblivion",
+        "contre": "Vigueur + Médecine ou Force d'âme",
+        "description": "Faire pourrir ce qui entoure : plantes, nourriture, objets, et rendre les gens malades."
+      },
+      {
+        "niveau": 3,
+        "nom": "Festin de passion",
+        "vo": "Passion Feast",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Se nourrir des passions d'un fantôme plutôt que de sang."
+      },
+      {
+        "niveau": 3,
+        "nom": "Perspective d'ombre",
+        "vo": "Shadow Perspective",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Voir et entendre à travers une ombre éloignée."
+      },
+      {
+        "niveau": 3,
+        "nom": "Serviteur d'ombre",
+        "vo": "Shadow Servant",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Créer une ombre servile qui espionne ou effraie.",
+        "prerequis": "Auspex 1"
+      },
+      {
+        "niveau": 3,
+        "nom": "Toucher de l'Oubli",
+        "vo": "Touch of Oblivion",
+        "cout": "Test d'Exaltation",
+        "jet": "Force + Oblivion",
+        "contre": "Vigueur + Médecine ou Force d'âme",
+        "description": "Flétrir une partie du corps d'une cible au toucher."
+      },
+      {
+        "niveau": 4,
+        "nom": "Peste nécrotique",
+        "vo": "Necrotic Plague",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Oblivion",
+        "contre": "Vigueur + Médecine ou Force d'âme",
+        "description": "Infliger une maladie surnaturelle que la médecine ne soigne pas."
+      },
+      {
+        "niveau": 4,
+        "nom": "Pas d'ombre",
+        "vo": "Shadow Step",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Entrer dans une ombre et ressortir par une autre, à proximité."
+      },
+      {
+        "niveau": 4,
+        "nom": "Linceul stygien",
+        "vo": "Stygian Shroud",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Répandre une obscurité totale qui étouffe la lumière dans une zone."
+      },
+      {
+        "niveau": 5,
+        "nom": "Skuld accompli",
+        "vo": "Skuld Fulfilled",
+        "cout": "2 tests d'Exaltation",
+        "jet": "Vigueur + Oblivion",
+        "contre": "Vigueur + Sorcellerie du sang ou Force d'âme",
+        "description": "Rendre à une goule ou un revenant son âge véritable et les maux qu'il a évités.",
+        "prerequis": "Sorcellerie du sang 2"
+      },
+      {
+        "niveau": 5,
+        "nom": "Avatar ténébreux",
+        "vo": "Tenebrous Avatar",
+        "cout": "2 tests d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Devenir une ombre vivante : immunisé aux attaques physiques, mais vulnérable à la lumière."
+      },
+      {
+        "niveau": 5,
+        "nom": "Esprit flétri",
+        "vo": "Withering Spirit",
+        "cout": "Test d'Exaltation",
+        "jet": "Résolution + Oblivion",
+        "contre": "Résolution + Occultisme",
+        "description": "Ronger la volonté d'une cible jusqu'à la briser."
+      }
+    ]
+  },
+  "Occultation": {
+    "vo": "Obfuscate",
+    "type": "Mentale",
+    "description": "Disparaître des perceptions. Les caméras ne sont trompées qu'avec Fantôme dans la machine.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Manteau d'ombres",
+        "vo": "Cloak of Shadows",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "Astuce + Auspex ou Vigilance (pour vous repérer)",
+        "description": "Invisible tant qu'on reste immobile dans un endroit offrant un minimum de couvert."
+      },
+      {
+        "niveau": 1,
+        "nom": "Silence de mort",
+        "vo": "Silence of Death",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ne produire aucun son pendant une scène."
+      },
+      {
+        "niveau": 2,
+        "nom": "Passage invisible",
+        "vo": "Unseen Passage",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "Astuce + Auspex ou Vigilance (pour vous repérer)",
+        "description": "Rester invisible en se déplaçant. Une action violente rompt l'effet."
+      },
+      {
+        "niveau": 3,
+        "nom": "Fantôme dans la machine",
+        "vo": "Ghost in the Machine",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "L'Occultation s'étend aux caméras, enregistrements et appels."
+      },
+      {
+        "niveau": 3,
+        "nom": "Masque aux mille visages",
+        "vo": "Mask of a Thousand Faces",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Être perçu comme une personne banale et oubliable, qui a sa place ici."
+      },
+      {
+        "niveau": 4,
+        "nom": "Dissimuler",
+        "vo": "Conceal",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Occultation",
+        "contre": "—",
+        "description": "Cacher un objet ou un lieu (jusqu'à une maison) aux regards."
+      },
+      {
+        "niveau": 4,
+        "nom": "Disparaître",
+        "vo": "Vanish",
+        "cout": "Gratuit",
+        "jet": "Astuce + Occultation",
+        "contre": "Astuce + Vigilance",
+        "description": "Activer Manteau d'ombres ou Passage invisible sous les yeux de témoins, qui oublient ensuite les détails."
+      },
+      {
+        "niveau": 5,
+        "nom": "Manteau collectif",
+        "vo": "Cloak the Gathering",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Étendre son Occultation à un groupe de personnes."
+      },
+      {
+        "niveau": 5,
+        "nom": "Visage d'imposteur",
+        "vo": "Impostor's Guise",
+        "cout": "Test d'Exaltation",
+        "jet": "Astuce + Occultation (étudier la cible) · Manipulation + Représentation (tromper ses proches)",
+        "contre": "—",
+        "description": "Prendre l'apparence et la voix d'une personne précise."
+      }
+    ]
+  },
+  "Présence": {
+    "vo": "Presence",
+    "type": "Sociale",
+    "description": "Charme et terreur surnaturels.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Fascination",
+        "vo": "Awe",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Présence aux jets de Persuasion, Représentation et Charisme pour la scène."
+      },
+      {
+        "niveau": 1,
+        "nom": "Intimider",
+        "vo": "Daunt",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Présence aux jets d'Intimidation."
+      },
+      {
+        "niveau": 2,
+        "nom": "Baiser persistant",
+        "vo": "Lingering Kiss",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "La morsure crée une dépendance : le mortel cherche à être mordu à nouveau."
+      },
+      {
+        "niveau": 3,
+        "nom": "Regard terrifiant",
+        "vo": "Dread Gaze",
+        "cout": "Test d'Exaltation",
+        "jet": "Charisme + Présence",
+        "contre": "Sang-froid + Résolution",
+        "description": "Révéler la Bête : la cible fuit ou se recroqueville de terreur."
+      },
+      {
+        "niveau": 3,
+        "nom": "Envoûtement",
+        "vo": "Entrancement",
+        "cout": "Test d'Exaltation",
+        "jet": "Charisme + Présence",
+        "contre": "Sang-froid + Astuce",
+        "description": "La cible devient dévouée pour un temps et cherche à vous plaire."
+      },
+      {
+        "niveau": 4,
+        "nom": "Voix irrésistible",
+        "vo": "Irresistible Voice",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "La Domination n'exige plus de contact visuel : la voix suffit (même au téléphone)."
+      },
+      {
+        "niveau": 4,
+        "nom": "Convocation",
+        "vo": "Summon",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Présence",
+        "contre": "Sang-froid + Intelligence",
+        "description": "Faire venir à soi une personne déjà rencontrée, où qu'elle soit."
+      },
+      {
+        "niveau": 5,
+        "nom": "Majesté",
+        "vo": "Majesty",
+        "cout": "2 tests d'Exaltation",
+        "jet": "—",
+        "contre": "Sang-froid + Résolution (pour agir contre vous)",
+        "description": "Personne n'ose agir contre vous ni vous contredire pendant la scène."
+      },
+      {
+        "niveau": 5,
+        "nom": "Magnétisme stellaire",
+        "vo": "Star Magnetism",
+        "cout": "Test d'Exaltation (en plus du pouvoir)",
+        "jet": "—",
+        "contre": "—",
+        "description": "Les pouvoirs de Présence fonctionnent à travers les écrans et enregistrements en direct."
+      }
+    ]
+  },
+  "Protéisme": {
+    "vo": "Protean",
+    "type": "Physique",
+    "description": "Transformation du corps.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Yeux de la Bête",
+        "vo": "Eyes of the Beast",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Voir dans l'obscurité totale ; les yeux brillent d'une lueur rouge."
+      },
+      {
+        "niveau": 1,
+        "nom": "Poids de la plume",
+        "vo": "Weight of the Feather",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Devenir presque sans poids : ignorer les chutes et les projections."
+      },
+      {
+        "niveau": 2,
+        "nom": "Armes bestiales",
+        "vo": "Feral Weapons",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Griffes ou crocs : ajoutent des dégâts aux attaques à mains nues, aggravés contre les mortels."
+      },
+      {
+        "niveau": 3,
+        "nom": "Fusion avec la terre",
+        "vo": "Earth Meld",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Se fondre dans la terre nue pour y passer le jour à l'abri."
+      },
+      {
+        "niveau": 3,
+        "nom": "Changement de forme",
+        "vo": "Shapechange",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Prendre la forme d'un animal de taille comparable (loup, gros chien)."
+      },
+      {
+        "niveau": 4,
+        "nom": "Métamorphose",
+        "vo": "Metamorphosis",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Prendre la forme d'un animal plus grand ou plus petit (chauve-souris, rat, ours…).",
+        "prerequis": "Changement de forme"
+      },
+      {
+        "niveau": 5,
+        "nom": "Forme de brume",
+        "vo": "Mist Form",
+        "cout": "1 à 3 tests d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Devenir brume : immunité à la plupart des attaques physiques, passage par les interstices."
+      },
+      {
+        "niveau": 5,
+        "nom": "Cœur sans entraves",
+        "vo": "The Unfettered Heart",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Le cœur se déplace dans le corps : très difficile à pieuter."
+      }
+    ]
+  },
+  "Puissance": {
+    "vo": "Potence",
+    "type": "Physique",
+    "description": "Force surnaturelle.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Corps létal",
+        "vo": "Lethal Body",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Les coups à mains nues infligent des dégâts aggravés aux mortels."
+      },
+      {
+        "niveau": 1,
+        "nom": "Bond prodigieux",
+        "vo": "Soaring Leap",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Sauter à des distances surhumaines (Puissance × 3 mètres en hauteur, × 10 en longueur)."
+      },
+      {
+        "niveau": 2,
+        "nom": "Prouesse",
+        "vo": "Prowess",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Ajoute la Puissance aux dégâts à mains nues et en mêlée, et aux tests de Force, pour la scène."
+      },
+      {
+        "niveau": 3,
+        "nom": "Festin brutal",
+        "vo": "Brutal Feed",
+        "cout": "Gratuit",
+        "jet": "—",
+        "contre": "—",
+        "description": "Se nourrir en quelques secondes, au prix de la vie de la victime si elle est mortelle."
+      },
+      {
+        "niveau": 3,
+        "nom": "Étincelle de rage",
+        "vo": "Spark of Rage",
+        "cout": "Test d'Exaltation",
+        "jet": "Manipulation + Puissance",
+        "contre": "Sang-froid + Résolution",
+        "description": "Provoquer la colère et la violence chez les autres.",
+        "prerequis": "Présence 3"
+      },
+      {
+        "niveau": 3,
+        "nom": "Poigne surnaturelle",
+        "vo": "Uncanny Grip",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "S'agripper à n'importe quelle surface, même lisse, et y rester suspendu."
+      },
+      {
+        "niveau": 4,
+        "nom": "Breuvage de puissance",
+        "vo": "Draught of Might",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Partager sa Puissance : qui boit le sang gagne ses pouvoirs pour une nuit."
+      },
+      {
+        "niveau": 5,
+        "nom": "Séisme",
+        "vo": "Earthshock",
+        "cout": "2 tests d'Exaltation",
+        "jet": "—",
+        "contre": "Dextérité + Athlétisme (pour rester debout)",
+        "description": "Frapper le sol pour faire tomber tout le monde autour de soi."
+      },
+      {
+        "niveau": 5,
+        "nom": "Poing de Caïn",
+        "vo": "Fist of Caine",
+        "cout": "Test d'Exaltation",
+        "jet": "—",
+        "contre": "—",
+        "description": "Les coups à mains nues infligent des dégâts aggravés à tous, vampires compris."
+      }
+    ]
+  },
+  "Sorcellerie du sang": {
+    "vo": "Blood Sorcery",
+    "type": "Mentale",
+    "description": "Magie de la vitae (Tremere, Banu Haqim). Les rituels s'apprennent à part.",
+    "pouvoirs": [
+      {
+        "niveau": 1,
+        "nom": "Vitae corrosive",
+        "vo": "Corrosive Vitae",
+        "cout": "1 test d'Exaltation par objet",
+        "jet": "—",
+        "contre": "—",
+        "description": "Le sang ronge les objets inertes (serrure, bois, métal) ; sans effet sur la chair."
+      },
+      {
+        "niveau": 1,
+        "nom": "Goût du sang",
+        "vo": "A Taste for Blood",
+        "cout": "Gratuit",
+        "jet": "Résolution + Sorcellerie du sang",
+        "contre": "—",
+        "description": "En goûtant du sang : Soif, génération, Puissance du sang, diablerie récente…"
+      },
+      {
+        "niveau": 2,
+        "nom": "Extinction de vitae",
+        "vo": "Extinguish Vitae",
+        "cout": "Test d'Exaltation",
+        "jet": "Intelligence + Sorcellerie du sang",
+        "contre": "Vigueur + Sang-froid",
+        "description": "Augmenter la Soif d'un vampire visible."
+      },
+      {
+        "niveau": 3,
+        "nom": "Sang de puissance",
+        "vo": "Blood of Potency",
+        "cout": "Test d'Exaltation",
+        "jet": "Résolution + Sorcellerie du sang",
+        "contre": "—",
+        "description": "Augmenter temporairement sa Puissance du sang (selon la marge)."
+      },
+      {
+        "niveau": 3,
+        "nom": "Toucher du scorpion",
+        "vo": "Scorpion's Touch",
+        "cout": "1 test d'Exaltation ou plus",
+        "jet": "Force + Sorcellerie du sang",
+        "contre": "Vigueur + Occultisme ou Force d'âme",
+        "description": "Changer son sang en poison paralysant, à cracher ou à appliquer sur une arme."
+      },
+      {
+        "niveau": 4,
+        "nom": "Vol de vitae",
+        "vo": "Theft of Vitae",
+        "cout": "Test d'Exaltation",
+        "jet": "Astuce + Sorcellerie du sang",
+        "contre": "Astuce + Occultisme",
+        "description": "Aspirer à distance le sang d'une cible, qui jaillit vers vous."
+      },
+      {
+        "niveau": 5,
+        "nom": "Caresse de Baal",
+        "vo": "Baal's Caress",
+        "cout": "Test d'Exaltation",
+        "jet": "Force + Sorcellerie du sang",
+        "contre": "Vigueur + Occultisme ou Force d'âme",
+        "description": "Le sang enduit une arme et la rend mortelle : dégâts aggravés."
+      },
+      {
+        "niveau": 5,
+        "nom": "Chaudron de sang",
+        "vo": "Cauldron of Blood",
+        "cout": "Test d'Exaltation",
+        "jet": "Résolution + Sorcellerie du sang",
+        "contre": "Sang-froid + Occultisme ou Force d'âme",
+        "description": "Faire bouillir le sang d'une cible au toucher : dégâts aggravés, souvent mortel pour un humain."
+      }
+    ]
+  }
+}
