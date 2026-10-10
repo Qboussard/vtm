@@ -10,9 +10,15 @@ import {
 } from 'discord.js';
 import { config, disciplines, Fiche, fiches, Piste, rules, saveFiches } from './data';
 import { SUPER_MJ_ID } from './types';
-import { normalize, SILENT } from './util';
+import { LIMITS, normalize, SILENT, truncate } from './util';
 
 const SHEET_COLOR = 0x8B0000;
+
+/** Entrées du menu « Modifier » qui ne sont pas des valeurs à points */
+export const EXTRA_GROUPS = [
+    { key: 'pouvoirs', label: 'Pouvoirs connus', emoji: '✨' },
+    { key: 'merits', label: 'Avantages et handicaps', emoji: '🎭' },
+];
 
 export const ATTRIBUTS: Record<string, string[]> = {
     Physique: ['Force', 'Dextérité', 'Vigueur'],
@@ -96,6 +102,22 @@ export const newFiche = (nom: string, clan: string): Fiche => ({
     volonte: { superficiel: 0, aggrave: 0 },
 });
 
+/** Retrouve un pouvoir (et sa Discipline) par son nom. */
+export const findPower = (nom: string) => {
+    for (const [discipline, d] of Object.entries(disciplines)) {
+        const pouvoir = d.pouvoirs.find(p => normalize(p.nom) === normalize(nom));
+        if (pouvoir) return { discipline, pouvoir };
+    }
+    return undefined;
+};
+
+/** Pouvoirs connus, avec leur Discipline, dans l'ordre Discipline puis niveau. */
+export const knownPowers = (f: Fiche) =>
+    (f.pouvoirs ?? [])
+        .map(findPower)
+        .filter(p => p !== undefined)
+        .sort((a, b) => a.discipline.localeCompare(b.discipline) || a.pouvoir.niveau - b.pouvoir.niveau);
+
 // Santé = Vigueur + 3, plus la Force d'âme (Résilience) ; Volonté = Sang-froid + Résolution
 export const maxSante = (f: Fiche) => (f.attributs['Vigueur'] ?? 1) + 3 + (f.disciplines["Force d'âme"] ?? 0);
 export const maxVolonte = (f: Fiche) => (f.attributs['Sang-froid'] ?? 1) + (f.attributs['Résolution'] ?? 1);
@@ -149,20 +171,30 @@ const traitLines = (names: string[], value: (n: string) => number) =>
 
 export const buildSheetEmbed = (userId: string, f: Fiche) => {
     const hunger = '🩸'.repeat(f.soif) + '○'.repeat(5 - f.soif);
-    const disc = Object.entries(f.disciplines)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([n, v]) => `**${n}** ${dots(v)}`)
-        .join('\n');
+    // Chaque Discipline avec ses pouvoirs connus ; un pouvoir au-dessus du niveau de la Discipline est signalé
+    const powers = knownPowers(f);
+    const discNames = [...new Set([...Object.keys(f.disciplines), ...powers.map(p => p.discipline)])].sort((a, b) => a.localeCompare(b));
+    const disc = discNames.map(n => {
+        const level = f.disciplines[n] ?? 0;
+        const list = powers.filter(p => p.discipline === n)
+            .map(p => `${p.pouvoir.nom}${p.pouvoir.niveau > level ? ' ⚠️' : ''}`);
+        return `**${n}** ${dots(level)}${list.length ? `\n↳ ${list.join(' · ')}` : ''}`;
+    }).join('\n');
+    const merits = (r?: Record<string, number>) =>
+        Object.entries(r ?? {}).map(([n, v]) => `${n}${v > 0 ? ` ${'●'.repeat(v)}` : ''}`).join('\n');
+    const xp = f.xp ? `**XP** ${f.xp.total - f.xp.depense} disponibles (${f.xp.total} gagnés, ${f.xp.depense} dépensés)` : '';
     return new EmbedBuilder()
         .setTitle(`🧛 ${f.nom}`)
         .setColor(SHEET_COLOR)
         .setDescription([
             `**${f.clan}** · ${f.generation}e génération · Puissance du sang ${f.puissance} · <@${userId}>`,
+            ...(f.predation ? [`Prédation : **${f.predation}**`] : []),
             '',
             `**Soif** ${hunger}${f.soif >= 5 ? ' · la Bête réclame du sang' : ''}`,
             `**Humanité** ${'■'.repeat(f.humanite)}${'□'.repeat(10 - f.humanite)}${f.taches ? ` · ${f.taches} Tache${f.taches > 1 ? 's' : ''}` : ''}`,
             `**Santé** ${pisteLine(f, 'sante')}`,
             `**Volonté** ${pisteLine(f, 'volonte')}`,
+            ...(xp ? [xp] : []),
         ].join('\n'))
         .addFields(
             ...Object.entries(ATTRIBUTS).map(([cat, names]) => ({
@@ -175,7 +207,9 @@ export const buildSheetEmbed = (userId: string, f: Fiche) => {
                 value: traitLines(names, n => f.competences[n] ?? 0),
                 inline: true,
             })),
-            { name: 'Disciplines', value: disc || '*Aucune*' },
+            { name: 'Disciplines', value: truncate(disc || '*Aucune*', LIMITS.embedField) },
+            ...(merits(f.avantages) ? [{ name: 'Avantages', value: truncate(merits(f.avantages), LIMITS.embedField), inline: true }] : []),
+            ...(merits(f.handicaps) ? [{ name: 'Handicaps', value: truncate(merits(f.handicaps), LIMITS.embedField), inline: true }] : []),
         )
         .setFooter({ text: '🟥 aggravé · 🟧 superficiel · /jet pour lancer · tout se modifie avec le menu ci-dessous' });
 };
@@ -194,40 +228,56 @@ export const TRAIT_GROUPS: { key: string; label: string; emoji: string; traits: 
 ];
 
 /** Menus et boutons sous la fiche : tout se gère de là, par le joueur ou un MJ. */
-export const sheetComponents = (userId: string) => [
-    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-        new StringSelectMenuBuilder()
-            .setCustomId(`fiche:group:${userId}`)
-            .setPlaceholder('✏️ Modifier une valeur…')
-            .addOptions(TRAIT_GROUPS.map(g => ({ label: g.label, value: g.key, emoji: g.emoji }))),
-    ),
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-            .setCustomId(`exaltation:roll:${userId}`)
-            .setLabel("Test d'Exaltation")
-            .setEmoji('🩸')
-            .setStyle(ButtonStyle.Danger),
-        new ButtonBuilder()
-            .setCustomId(`fiche:tracks:${userId}`)
-            .setLabel('Dégâts et soins')
-            .setEmoji('💔')
-            .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-            .setCustomId(`fiche:identity:${userId}`)
-            .setLabel('Nom et clan')
-            .setEmoji('🪪')
-            .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-            .setCustomId(`fiche:owner:${userId}`)
-            .setLabel('Joueur (MJ)')
-            .setEmoji('🔗')
-            .setStyle(ButtonStyle.Secondary),
-    ),
-];
+export const sheetComponents = (userId: string, f: Fiche) => {
+    const rollable = knownPowers(f).filter(p => p.pouvoir.jet !== '—');
+    return [
+        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId(`fiche:group:${userId}`)
+                .setPlaceholder('✏️ Modifier…')
+                .addOptions([
+                    ...TRAIT_GROUPS.map(g => ({ label: g.label, value: g.key, emoji: g.emoji })),
+                    ...EXTRA_GROUPS.map(g => ({ label: g.label, value: g.key, emoji: g.emoji })),
+                ]),
+        ),
+        ...(rollable.length ? [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId(`fiche:roll:${userId}`)
+                .setPlaceholder('🎲 Lancer un pouvoir (dans le salon de jeu)…')
+                .addOptions(rollable.slice(0, LIMITS.choices).map(p => ({
+                    label: truncate(p.pouvoir.nom, 100),
+                    description: truncate(`${p.discipline} ${p.pouvoir.niveau} · ${p.pouvoir.jet}`, 100),
+                    value: p.pouvoir.nom,
+                }))),
+        )] : []),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+                .setCustomId(`exaltation:roll:${userId}`)
+                .setLabel("Test d'Exaltation")
+                .setEmoji('🩸')
+                .setStyle(ButtonStyle.Danger),
+            new ButtonBuilder()
+                .setCustomId(`fiche:tracks:${userId}`)
+                .setLabel('Dégâts et soins')
+                .setEmoji('💔')
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder()
+                .setCustomId(`fiche:identity:${userId}`)
+                .setLabel('Profil')
+                .setEmoji('🪪')
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder()
+                .setCustomId(`fiche:owner:${userId}`)
+                .setLabel('Joueur (MJ)')
+                .setEmoji('🔗')
+                .setStyle(ButtonStyle.Secondary),
+        ),
+    ];
+};
 
 export const sheetMessage = (userId: string, f: Fiche) => ({
     embeds: [buildSheetEmbed(userId, f)],
-    components: sheetComponents(userId),
+    components: sheetComponents(userId, f),
 });
 
 /** Les MJ ont accès à toutes les fiches. */

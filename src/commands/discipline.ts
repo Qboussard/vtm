@@ -6,8 +6,8 @@ import {
     SlashCommandBuilder,
     StringSelectMenuBuilder,
 } from 'discord.js';
-import { clans, disciplines, fiches, Pouvoir } from '../data';
-import { performRoll, poolFromFormula } from './jet';
+import { clans, disciplines, Pouvoir } from '../data';
+import { rollPower } from './jet';
 import { Command } from '../types';
 import { EPHEMERAL, LIMITS, normalize, shareButton, truncate } from '../util';
 
@@ -298,18 +298,8 @@ export const discipline: Command = {
         }
         if (action === 'roll') {
             const e = entries[Number(arg)];
-            const f = fiches[interaction.user.id];
             if (!e) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
-            if (!f) return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche nom: clan:`.', flags: EPHEMERAL });
-            const pool = poolFromFormula(f, e.jet);
-            if (!pool) return interaction.reply({ content: `❌ Jet non calculable automatiquement (« ${e.jet} ») : utilisez \`/jet\`.`, flags: EPHEMERAL });
-            return performRoll(interaction, {
-                pool: pool.pool,
-                hunger: f.soif,
-                difficulty: null,
-                detail: pool.detail,
-                reason: `${e.nom} (${e.discipline} ${e.niveau})${e.contre !== NONE ? ` · contre ${e.contre}` : ''}${/exaltation/i.test(e.cout) ? ` · coût : ${e.cout}, /exaltation` : ''}`,
-            });
+            return rollPower(interaction, e.discipline, e);
         }
         if (action === 'share') {
             const e = entries[Number(arg)];

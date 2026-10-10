@@ -24,12 +24,17 @@ Chaque fiche appartient à un compte Discord : `/jet`, `/exaltation` et le bouto
 
 1. Dans un salon textuel (de préférence le salon de jeu), `/fiche nom: clan:` crée la fiche et un fil privé où ne sont invités que le joueur et les MJ. Un MJ peut créer la fiche d'un joueur avec `joueur:`. Plus tard, `/fiche` seul renvoie vers le fil (et le recrée s'il a été supprimé).
 2. Sous la fiche, tout se gère sans commande, par le joueur ou un MJ :
-   - **✏️ Modifier une valeur** : attributs, compétences, Disciplines, Soif, Humanité, Taches, Puissance du sang, Génération (attributs à 1, compétences à 0 au départ) ;
+   - **✏️ Modifier…** : attributs, compétences, Disciplines, Soif, Humanité, Taches, Puissance du sang, Génération (attributs à 1, compétences à 0 au départ) ; **Pouvoirs connus** (par Discipline, jusqu'à son niveau ; ⚠️ si un pouvoir dépasse le niveau) ; **Avantages et handicaps** (une ligne par élément, « Ressources 2 ») ;
+   - **🎲 Lancer un pouvoir** (si un pouvoir connu a un jet) : réserve calculée depuis la fiche, jet envoyé dans le salon de jeu ;
    - **🩸 Test d'Exaltation** ;
    - **💔 Dégâts et soins** : une case par clic, Santé ou Volonté, superficiel ou aggravé ;
-   - **🪪 Nom et clan** ;
+   - **🪪 Profil** : nom, clan, type de prédation, expérience gagnée et dépensée ;
    - **🔗 Joueur (MJ)** : rattache la fiche à un autre compte Discord, dont les jets utiliseront alors cette fiche.
 3. La fiche épinglée dans le fil est **modifiée** à chaque changement (jet de Volonté, Exaltation, dégâts…), et chaque changement y est noté. Sur ordinateur, le fil s'ouvre à côté du salon : la fiche reste visible pendant la partie.
+
+Un jet lancé depuis le fil d'une fiche (`/jet` ou un pouvoir) est publié dans le salon parent, pour que la table le voie. Les messages d'historique du fil et les tests d'Exaltation sont silencieux (pas de notification).
+
+Les fiches reprises de Roll20 sont dans `src/data/pj.json` : `/fiche nom:` les propose en autocomplétion et crée la fiche déjà remplie.
 
 Santé = Vigueur + 3 (+ Force d'âme), Volonté = Sang-froid + Résolution. Une piste pleine affiche « Affaibli » ; un dégât sur une piste pleine transforme une case superficielle en aggravée.
 

@@ -8,17 +8,64 @@
     "taches": 0,
     "soif": 1,
     "attributs": {
-      "Force": 1, "Dextérité": 2, "Vigueur": 2,
-      "Charisme": 3, "Manipulation": 4, "Sang-froid": 2,
-      "Intelligence": 3, "Astuce": 3, "Résolution": 2
+      "Force": 1,
+      "Dextérité": 2,
+      "Vigueur": 2,
+      "Charisme": 3,
+      "Manipulation": 4,
+      "Sang-froid": 2,
+      "Intelligence": 3,
+      "Astuce": 3,
+      "Résolution": 2
     },
     "competences": {
-      "Athlétisme": 1, "Bagarre": 1, "Mêlée": 2, "Furtivité": 1, "Survie": 1,
-      "Étiquette": 2, "Perspicacité": 3, "Intimidation": 3, "Commandement": 2, "Représentation": 1, "Persuasion": 3, "Subterfuge": 2,
-      "Érudition": 2, "Vigilance": 1, "Investigation": 1, "Politique": 1
+      "Athlétisme": 1,
+      "Bagarre": 1,
+      "Mêlée": 2,
+      "Furtivité": 1,
+      "Survie": 1,
+      "Étiquette": 2,
+      "Perspicacité": 3,
+      "Intimidation": 3,
+      "Commandement": 2,
+      "Représentation": 1,
+      "Persuasion": 3,
+      "Subterfuge": 2,
+      "Érudition": 2,
+      "Vigilance": 1,
+      "Investigation": 1,
+      "Politique": 1
     },
-    "disciplines": { "Présence": 1 },
-    "sante": { "superficiel": 1, "aggrave": 0 },
-    "volonte": { "superficiel": 0, "aggrave": 0 }
+    "disciplines": {
+      "Présence": 1
+    },
+    "sante": {
+      "superficiel": 1,
+      "aggrave": 0
+    },
+    "volonte": {
+      "superficiel": 0,
+      "aggrave": 0
+    },
+    "predation": "Succube",
+    "avantages": {
+      "Splendide": 4,
+      "Luxueux": 1,
+      "Ressources": 2,
+      "Manducation": 2
+    },
+    "handicaps": {
+      "Ennemi": 1,
+      "Proie taboue": 1,
+      "Suspect": 1
+    },
+    "xp": {
+      "total": 20,
+      "depense": 0
+    },
+    "pouvoirs": [
+      "Grâce féline",
+      "Baiser persistant"
+    ]
   }
 }

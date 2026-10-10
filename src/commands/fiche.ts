@@ -13,13 +13,16 @@ import {
     TextInputStyle,
     UserSelectMenuBuilder,
 } from 'discord.js';
-import { clans, Fiche, fiches, pjTemplates, saveFiches } from '../data';
+import { clans, disciplines, Fiche, fiches, pjTemplates, saveFiches } from '../data';
+import { rollPower } from './jet';
 import {
     createSheetThread,
     damage,
     DamageType,
+    findPower,
     getTrait,
     heal,
+    knownPowers,
     logToSheet,
     maxSante,
     maxVolonte,
@@ -34,7 +37,7 @@ import {
     traitRange,
 } from '../sheet';
 import { Command, isMJ } from '../types';
-import { buttonRows, EPHEMERAL, LIMITS, normalize } from '../util';
+import { buttonRows, EPHEMERAL, LIMITS, normalize, truncate } from '../util';
 
 const PISTES: Record<PisteName, string> = { sante: 'Santé', volonte: 'Volonté' };
 const TYPES: Record<DamageType, string> = { superficiel: 'superficiel', aggrave: 'aggravé' };
@@ -138,19 +141,116 @@ const tracksPanel = (ownerId: string, notice = '') => {
     };
 };
 
+const textInput = (id: string, label: string, value: string, max: number, required = true) =>
+    new ActionRowBuilder<TextInputBuilder>().addComponents(
+        new TextInputBuilder().setCustomId(id).setLabel(label).setStyle(TextInputStyle.Short)
+            .setMaxLength(max).setRequired(required).setValue(value),
+    );
+
 const identityModal = (ownerId: string, f: Fiche) =>
     new ModalBuilder()
         .setCustomId(`fiche:identity:${ownerId}`)
-        .setTitle('Nom et clan')
+        .setTitle('Profil')
+        .addComponents(
+            textInput('nom', 'Nom du personnage', f.nom, 80),
+            textInput('clan', 'Clan', f.clan, 40),
+            textInput('predation', 'Type de prédation', f.predation ?? '', 60, false),
+            textInput('xp_total', 'Expérience gagnée (total)', String(f.xp?.total ?? 0), 5),
+            textInput('xp_depense', 'Expérience dépensée', String(f.xp?.depense ?? 0), 5),
+        );
+
+const meritText = (r?: Record<string, number>) =>
+    Object.entries(r ?? {}).map(([n, v]) => (v > 0 ? `${n} ${v}` : n)).join('\n');
+
+/** « Splendide 4 », « Ressources : 2 », « Ennemi ●● » ou « Proie taboue » : une ligne par élément. */
+const parseMerits = (text: string): Record<string, number> => {
+    const out: Record<string, number> = {};
+    for (const raw of text.split('\n')) {
+        const line = raw.trim();
+        if (!line) continue;
+        const m = line.match(/^(.*?)[\s:]*(\d+|●+)$/);
+        const name = (m ? m[1] : line).trim();
+        if (!name) continue;
+        out[name] = m ? (/^\d+$/.test(m[2]) ? Math.min(Number(m[2]), 5) : m[2].length) : 0;
+    }
+    return out;
+};
+
+const meritsModal = (ownerId: string, f: Fiche) =>
+    new ModalBuilder()
+        .setCustomId(`fiche:merits:${ownerId}`)
+        .setTitle('Avantages et handicaps')
         .addComponents(
             new ActionRowBuilder<TextInputBuilder>().addComponents(
-                new TextInputBuilder().setCustomId('nom').setLabel('Nom du personnage').setStyle(TextInputStyle.Short).setMaxLength(80).setValue(f.nom),
+                new TextInputBuilder().setCustomId('avantages').setLabel('Avantages : un par ligne, « Nom points »')
+                    .setStyle(TextInputStyle.Paragraph).setRequired(false).setMaxLength(1000)
+                    .setPlaceholder('Ressources 2\nSplendide 4').setValue(meritText(f.avantages)),
             ),
             new ActionRowBuilder<TextInputBuilder>().addComponents(
-                new TextInputBuilder().setCustomId('clan').setLabel(`Clan (${Object.keys(clans).slice(0, 6).join(', ')}…)`.slice(0, 45))
-                    .setStyle(TextInputStyle.Short).setMaxLength(40).setValue(f.clan),
+                new TextInputBuilder().setCustomId('handicaps').setLabel('Handicaps : un par ligne, « Nom points »')
+                    .setStyle(TextInputStyle.Paragraph).setRequired(false).setMaxLength(1000)
+                    .setPlaceholder('Ennemi 1\nProie taboue 1').setValue(meritText(f.handicaps)),
             ),
         );
+
+/** Disciplines où choisir des pouvoirs : celles de la fiche, et celles des pouvoirs déjà connus. */
+const powerDisciplines = (f: Fiche) =>
+    [...new Set([...Object.keys(f.disciplines), ...knownPowers(f).map(p => p.discipline)])].sort((a, b) => a.localeCompare(b));
+
+const powersPanel = (ownerId: string, notice = '') => {
+    const f = fiches[ownerId];
+    const list = powerDisciplines(f);
+    if (list.length === 0) {
+        return { content: `${notice ? `${notice}\n` : ''}✨ Aucune Discipline sur la fiche : ajoutez-en une avec « ✏️ Modifier… → Disciplines ».`, components: [] };
+    }
+    return {
+        content: `${notice ? `${notice}\n` : ''}✨ **Pouvoirs connus** · ${f.nom} : choisissez une Discipline.`,
+        components: [
+            new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                new StringSelectMenuBuilder()
+                    .setCustomId(`fiche:powdisc:${ownerId}`)
+                    .setPlaceholder('Choisir une Discipline…')
+                    .addOptions(list.slice(0, LIMITS.choices).map(n => ({
+                        label: `${n} ${f.disciplines[n] ?? 0}`,
+                        description: truncate(knownPowers(f).filter(p => p.discipline === n).map(p => p.pouvoir.nom).join(' · ') || 'Aucun pouvoir choisi', 100),
+                        value: n,
+                    }))),
+            ),
+        ],
+    };
+};
+
+/** Choix multiple des pouvoirs d'une Discipline, jusqu'au niveau de la fiche (les pouvoirs déjà connus restent proposés). */
+const powerPickPanel = (ownerId: string, discipline: string) => {
+    const f = fiches[ownerId];
+    const level = f.disciplines[discipline] ?? 0;
+    const known = new Set(f.pouvoirs ?? []);
+    const options = disciplines[discipline].pouvoirs.filter(p => p.niveau <= level || known.has(p.nom));
+    if (options.length === 0) {
+        return { content: `✨ ${discipline} ${level} : aucun pouvoir accessible à ce niveau.`, components: [] };
+    }
+    return {
+        content: `✨ **${discipline} ${level}** · cochez les pouvoirs connus de ${f.nom}.`,
+        components: [
+            new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+                new StringSelectMenuBuilder()
+                    .setCustomId(`fiche:powset:${ownerId}:${discipline}`)
+                    .setPlaceholder('Aucun pouvoir')
+                    .setMinValues(0)
+                    .setMaxValues(Math.min(options.length, LIMITS.choices))
+                    .addOptions(options.slice(0, LIMITS.choices).map(p => ({
+                        label: truncate(`${p.nom} (${p.niveau})`, 100),
+                        description: truncate(`${p.cout} · ${p.jet}`, 100),
+                        value: p.nom,
+                        default: known.has(p.nom),
+                    }))),
+            ),
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+                new ButtonBuilder().setCustomId(`fiche:pouvoirs:${ownerId}`).setLabel('Retour').setEmoji('↩️').setStyle(ButtonStyle.Secondary),
+            ),
+        ],
+    };
+};
 
 /** Création ou ouverture de la fiche, avec son fil privé dans le salon courant. */
 const openSheet = async (interaction: ChatInputCommandInteraction) => {
@@ -217,7 +317,42 @@ export const fiche: Command = {
         const by = byWhom(interaction.user.id, ownerId);
 
         if (action === 'group' && interaction.isStringSelectMenu()) {
-            return interaction.reply({ ...groupPanel(ownerId, interaction.values[0]), flags: EPHEMERAL });
+            const key = interaction.values[0];
+            if (key === 'merits') return interaction.showModal(meritsModal(ownerId, f));
+            if (key === 'pouvoirs') return interaction.reply({ ...powersPanel(ownerId), flags: EPHEMERAL });
+            return interaction.reply({ ...groupPanel(ownerId, key), flags: EPHEMERAL });
+        }
+        if (action === 'pouvoirs') {
+            return interaction.update(powersPanel(ownerId));
+        }
+        if (action === 'powdisc' && interaction.isStringSelectMenu()) {
+            return interaction.update(powerPickPanel(ownerId, interaction.values[0]));
+        }
+        if (action === 'powset' && interaction.isStringSelectMenu()) {
+            const discipline = rest.join(':');
+            const inDiscipline = new Set(disciplines[discipline]?.pouvoirs.map(p => p.nom) ?? []);
+            const before = (f.pouvoirs ?? []).filter(n => inDiscipline.has(n));
+            const chosen = interaction.values;
+            f.pouvoirs = [...(f.pouvoirs ?? []).filter(n => !inDiscipline.has(n)), ...chosen];
+            saveFiches();
+            const added = chosen.filter(n => !before.includes(n));
+            const removed = before.filter(n => !chosen.includes(n));
+            const text = [added.length ? `+ ${added.join(', ')}` : '', removed.length ? `− ${removed.join(', ')}` : ''].filter(Boolean).join(' · ');
+            await interaction.update(powersPanel(ownerId, text ? `✅ ${discipline} : ${text}` : '✅ Rien n\'a changé.'));
+            if (!text) return;
+            await refreshSheet(client, ownerId);
+            return logToSheet(client, ownerId, `✨ ${discipline} : ${text}${by}`);
+        }
+        if (action === 'roll' && interaction.isStringSelectMenu()) {
+            // Le jet utilise la fiche de celui qui clique : seul le joueur lance ses pouvoirs
+            if (interaction.user.id !== ownerId) {
+                return interaction.reply({ content: '❌ Seul le joueur de cette fiche lance ses pouvoirs.', flags: EPHEMERAL });
+            }
+            const found = findPower(interaction.values[0]);
+            if (!found) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
+            await rollPower(interaction, found.discipline, found.pouvoir);
+            // Remet le menu à zéro (sinon il reste sur le dernier pouvoir choisi)
+            return refreshSheet(client, ownerId);
         }
         if (action === 'back') {
             return interaction.update(groupPanel(ownerId, rest[0]));
@@ -288,31 +423,53 @@ export const fiche: Command = {
     },
 
     async modal(interaction, action, arg) {
-        if (action !== 'identity') return;
         const ownerId = arg;
         const f = fiches[ownerId];
         if (!f) return interaction.reply({ content: '❌ Cette fiche n\'existe plus.', flags: EPHEMERAL });
         if (!canEdit(interaction.user.id, ownerId)) {
             return interaction.reply({ content: '❌ C\'est la fiche d\'un autre joueur.', flags: EPHEMERAL });
         }
-        const nom = interaction.fields.getTextInputValue('nom').trim();
-        const clanInput = interaction.fields.getTextInputValue('clan').trim();
-        // Un clan connu reprend son orthographe officielle ; sinon on garde la saisie (clan maison, Sang-clair…)
-        const clan = findClan(clanInput) ?? clanInput;
+        const client = interaction.client;
+        const by = byWhom(interaction.user.id, ownerId);
+        const field = (id: string) => interaction.fields.getTextInputValue(id).trim();
+
+        if (action === 'merits') {
+            f.avantages = parseMerits(field('avantages'));
+            f.handicaps = parseMerits(field('handicaps'));
+            saveFiches();
+            await interaction.reply({ content: '✅ Avantages et handicaps enregistrés.', flags: EPHEMERAL });
+            await refreshSheet(client, ownerId);
+            return logToSheet(client, ownerId, `🎭 Avantages et handicaps mis à jour${by}`);
+        }
+
+        if (action !== 'identity') return;
+        const nom = field('nom');
+        // Un clan connu reprend son orthographe officielle ; sinon on garde la saisie (clan maison…)
+        const clan = findClan(field('clan')) ?? field('clan');
+        const predation = field('predation');
+        const total = Number(field('xp_total'));
+        const depense = Number(field('xp_depense'));
+        if (!Number.isInteger(total) || !Number.isInteger(depense) || total < 0 || depense < 0) {
+            return interaction.reply({ content: '❌ L\'expérience doit être un nombre entier positif.', flags: EPHEMERAL });
+        }
         const changes = [
             nom && nom !== f.nom ? `nom : ${f.nom} → ${nom}` : '',
             clan && clan !== f.clan ? `clan : ${f.clan} → ${clan}` : '',
+            predation !== (f.predation ?? '') ? `prédation : ${predation || '—'}` : '',
+            total !== (f.xp?.total ?? 0) || depense !== (f.xp?.depense ?? 0) ? `XP : ${total} gagnés, ${depense} dépensés` : '',
         ].filter(Boolean).join(', ');
         if (!changes) return interaction.reply({ content: 'Rien n\'a changé.', flags: EPHEMERAL });
         if (nom) f.nom = nom;
         if (clan) f.clan = clan;
+        f.predation = predation || undefined;
+        f.xp = { total, depense };
         saveFiches();
         await interaction.reply({ content: `✅ ${changes}`, flags: EPHEMERAL });
         if (nom && f.fil) {
-            const thread = await interaction.client.channels.fetch(f.fil.threadId).catch(() => null);
+            const thread = await client.channels.fetch(f.fil.threadId).catch(() => null);
             if (thread?.isThread()) await thread.setName(`📜 ${nom}`).catch(() => {});
         }
-        await refreshSheet(interaction.client, ownerId);
-        return logToSheet(interaction.client, ownerId, `✏️ ${changes}${byWhom(interaction.user.id, ownerId)}`);
+        await refreshSheet(client, ownerId);
+        return logToSheet(client, ownerId, `✏️ ${changes}${by}`);
     },
 };

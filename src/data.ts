@@ -108,6 +108,14 @@ export interface Fiche {
     disciplines: Record<string, number>;
     sante: Piste;
     volonte: Piste;
+    /** Type de prédateur : Succube, Chat de gouttière… */
+    predation?: string;
+    /** Avantages et handicaps : nom → points (0 si sans niveau) */
+    avantages?: Record<string, number>;
+    handicaps?: Record<string, number>;
+    xp?: { total: number; depense: number };
+    /** Pouvoirs de Discipline connus, par leur nom dans disciplines.json */
+    pouvoirs?: string[];
     fil?: FilFiche;
 }
 

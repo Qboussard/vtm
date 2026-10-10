@@ -8,7 +8,7 @@ import {
     MessageComponentInteraction,
     SlashCommandBuilder,
 } from 'discord.js';
-import { Fiche, fiches, saveFiches } from '../data';
+import { Fiche, fiches, Pouvoir, saveFiches } from '../data';
 import { decodeDice, encodeDice, evaluate, formatDice, d10, Roll, roll, rerollable, willpowerReroll } from '../dice';
 import { damage, findTrait, getTrait, logToSheet, refreshSheet, TRAITS } from '../sheet';
 import { Command } from '../types';
@@ -60,9 +60,31 @@ export const performRoll = async (interaction: Replyable, req: RollRequest) => {
     const userId = interaction.user.id;
     // Le customId est limité à 100 caractères : au-delà de ~40 dés, pas de bouton
     const canReroll = rerollable(r) && r.normal.length + r.hunger.length <= 40;
-    return interaction.reply({
+    const message = {
         embeds: [rollEmbed(userId, r, req.detail, req.reason, false)],
         components: canReroll ? [rerollButton(userId, r)] : [],
+    };
+    // Lancé depuis le fil privé de la fiche : le jet part dans le salon de jeu, pour toute la table
+    const channel = interaction.channel;
+    if (channel?.isThread() && channel.parent?.isTextBased()) {
+        const sent = await channel.parent.send(message);
+        return interaction.reply({ content: `🎲 Jet envoyé dans le salon : ${sent.url}`, flags: EPHEMERAL });
+    }
+    return interaction.reply(message);
+};
+
+/** Lance un pouvoir de Discipline avec la fiche du joueur : réserve tirée de son jet, Soif de la fiche. */
+export const rollPower = async (interaction: Replyable, discipline: string, p: Pouvoir) => {
+    const f = fiches[interaction.user.id];
+    if (!f) return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche nom: clan:`.', flags: EPHEMERAL });
+    const pool = poolFromFormula(f, p.jet);
+    if (!pool) return interaction.reply({ content: `❌ Jet non calculable automatiquement (« ${p.jet} ») : utilisez \`/jet\`.`, flags: EPHEMERAL });
+    return performRoll(interaction, {
+        pool: pool.pool,
+        hunger: f.soif,
+        difficulty: null,
+        detail: pool.detail,
+        reason: `${p.nom} (${discipline} ${p.niveau})${p.contre !== '—' ? ` · contre ${p.contre}` : ''}${/exaltation/i.test(p.cout) ? ` · coût : ${p.cout}, /exaltation` : ''}`,
     });
 };
 
