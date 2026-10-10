@@ -10,7 +10,7 @@ import {
 } from 'discord.js';
 import { config, disciplines, Fiche, fiches, Piste, rules, saveFiches } from './data';
 import { SUPER_MJ_ID } from './types';
-import { normalize } from './util';
+import { normalize, SILENT } from './util';
 
 const SHEET_COLOR = 0x8B0000;
 
@@ -275,7 +275,7 @@ export const refreshSheet = async (client: Client, userId: string) => {
 export const logToSheet = async (client: Client, userId: string, text: string) => {
     const f = fiches[userId];
     const thread = f && await threadOf(client, f);
-    await thread?.send({ content: text, allowedMentions: { parse: [] } }).catch(() => {});
+    await thread?.send({ content: text, allowedMentions: { parse: [] }, flags: SILENT }).catch(() => {});
 };
 
 export const sheetLink = (f: Fiche) => (f.fil ? `<#${f.fil.threadId}>` : '');

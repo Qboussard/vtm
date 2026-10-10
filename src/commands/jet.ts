@@ -12,7 +12,7 @@ import { Fiche, fiches, saveFiches } from '../data';
 import { decodeDice, encodeDice, evaluate, formatDice, d10, Roll, roll, rerollable, willpowerReroll } from '../dice';
 import { damage, findTrait, getTrait, logToSheet, refreshSheet, TRAITS } from '../sheet';
 import { Command } from '../types';
-import { EPHEMERAL, LIMITS, normalize, truncate } from '../util';
+import { EPHEMERAL, LIMITS, normalize, SILENT, truncate } from '../util';
 
 const ROLL_COLOR = 0x8B0000;
 
@@ -209,7 +209,8 @@ export const rouse = async (interaction: Replyable, userId: string, count: numbe
         .setColor(ROLL_COLOR)
         .setAuthor({ name: f.nom })
         .setDescription(truncate([reason ? `*${reason}*\n` : '', ...lines].join('\n'), LIMITS.embedDescription));
-    await interaction.reply({ embeds: [embed] });
+    // Souvent lancé depuis le fil de la fiche : pas de son pour ça
+    await interaction.reply({ embeds: [embed], flags: SILENT });
     await refreshSheet(interaction.client, userId);
 };
 

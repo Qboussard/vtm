@@ -1,6 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from 'discord.js';
 
 export const EPHEMERAL = MessageFlags.Ephemeral;
+/** Message sans son ni notification push (comme @silent) */
+export const SILENT = MessageFlags.SuppressNotifications;
 
 // Limites imposées par Discord
 export const LIMITS = {
