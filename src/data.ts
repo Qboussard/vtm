@@ -84,6 +84,33 @@ export interface Clan {
     note?: string;
 }
 
+export interface Piste {
+    superficiel: number;
+    aggrave: number;
+}
+
+/** Fil privé où vit la fiche : un seul message, modifié à chaque changement. */
+export interface FilFiche {
+    threadId: string;
+    messageId: string;
+}
+
+export interface Fiche {
+    nom: string;
+    clan: string;
+    generation: number;
+    puissance: number;
+    humanite: number;
+    taches: number;
+    soif: number;
+    attributs: Record<string, number>;
+    competences: Record<string, number>;
+    disciplines: Record<string, number>;
+    sante: Piste;
+    volonte: Piste;
+    fil?: FilFiche;
+}
+
 const readBundled = <T>(file: string): T =>
     JSON.parse(fs.readFileSync(path.join(BUNDLED_DIR, file), 'utf-8'));
 
@@ -112,10 +139,13 @@ export const clans = readBundled<Record<string, Clan>>('clans.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
 export const sessions = readMutable<Session[]>('sessions.json');
+/** Fiches PJ, par identifiant Discord du joueur */
+export const fiches = readMutable<Record<string, Fiche>>('fiches.json');
 export const config = readMutable<{ mj_ids: string[] }>('config.json');
 
 export const savePnjs = () => write('pnj.json', pnjs);
 export const saveSessions = () => write('sessions.json', sessions);
+export const saveFiches = () => write('fiches.json', fiches);
 export const saveConfig = () => write('config.json', config);
 
 /** Remplace les séances en gardant la même référence (importée par les commandes). */

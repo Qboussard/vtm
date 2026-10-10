@@ -6,7 +6,8 @@ import {
     SlashCommandBuilder,
     StringSelectMenuBuilder,
 } from 'discord.js';
-import { clans, disciplines, Pouvoir } from '../data';
+import { clans, disciplines, fiches, Pouvoir } from '../data';
+import { performRoll, poolFromFormula } from './jet';
 import { Command } from '../types';
 import { EPHEMERAL, LIMITS, normalize, shareButton, truncate } from '../util';
 
@@ -191,6 +192,11 @@ const pouvoirView = (e: PouvoirEntry) => ({
     embeds: [buildEmbed(e)],
     components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
+            ...(e.jet !== NONE ? [new ButtonBuilder()
+                .setCustomId(`discipline:roll:${e.id}`)
+                .setLabel('Lancer')
+                .setEmoji('🎲')
+                .setStyle(ButtonStyle.Primary)] : []),
             shareButton(`discipline:share:${e.id}`),
             new ButtonBuilder()
                 .setCustomId(`discipline:list:${e.discipline}`)
@@ -289,6 +295,21 @@ export const discipline: Command = {
             const e = entries[Number(interaction.values[0])];
             if (!e) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
             return interaction.update(pouvoirView(e));
+        }
+        if (action === 'roll') {
+            const e = entries[Number(arg)];
+            const f = fiches[interaction.user.id];
+            if (!e) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
+            if (!f) return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche creer`.', flags: EPHEMERAL });
+            const pool = poolFromFormula(f, e.jet);
+            if (!pool) return interaction.reply({ content: `❌ Jet non calculable automatiquement (« ${e.jet} ») : utilisez \`/jet\`.`, flags: EPHEMERAL });
+            return performRoll(interaction, {
+                pool: pool.pool,
+                hunger: f.soif,
+                difficulty: null,
+                detail: pool.detail,
+                reason: `${e.nom} (${e.discipline} ${e.niveau})${e.contre !== NONE ? ` · contre ${e.contre}` : ''}${/exaltation/i.test(e.cout) ? ` · coût : ${e.cout}, /exaltation` : ''}`,
+            });
         }
         if (action === 'share') {
             const e = entries[Number(arg)];

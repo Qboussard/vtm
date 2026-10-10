@@ -6,6 +6,10 @@ Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à port
 
 | Commande | Usage |
 |---|---|
+| `/jet [attribut] [competence] [reserve] [bonus] [difficulte] [soif] [raison]` | Lance les dés V5 depuis votre fiche : réserve calculée, dés de Soif selon votre Soif, réussites critiques, messianiques, échecs bestiaux. Bouton « Relancer 3 dés (Volonté) » qui coche la Volonté sur la fiche. |
+| `/exaltation [nombre] [raison]` | Test d'Exaltation : la Soif de votre fiche monte sur un 1 à 5. |
+| `/fiche creer` · `voir` · `modifier` · `identite` · `degats` · `soin` · `fil` | Fiche de personnage liée à votre compte Discord, affichée dans un **fil privé** (vous + les MJ) et mise à jour en direct. Les MJ agissent sur la fiche d'un joueur avec `joueur:`. |
+| `/fiche lier` (MJ) | Rattache une fiche à un autre compte Discord : ses jets utilisent alors cette fiche. |
 | `/regle [recherche] [public]` | Recherche une règle ou une Discipline (autocomplétion, insensible aux accents). Sans argument : sommaire navigable. Réponse privée avec bouton « Montrer à la table ». |
 | `/discipline [pouvoir] [discipline] [clan] [niveau] [public]` | Pouvoirs des Disciplines avec catégorie (Animalisme, Auspex, Oblivion…), coût, jet et jet contre. Sans argument : liste des Disciplines ; `discipline:` et `niveau:` filtrent la liste, `clan:` liste les trois Disciplines du clan (Ventru → Domination, Force d'âme, Présence), `pouvoir:` ouvre une fiche (autocomplétion). |
 | `/memo [fiche] [public]` | Fiches de synthèse : jets, combat, Soif & Frénésie, Volonté & social. |
@@ -14,6 +18,18 @@ Bot Discord pour une campagne de *Vampire : la Mascarade* (V5) : règles à port
 | `/pnj sync` (MJ) | Recharge immédiatement les PNJ et les séances depuis Notion. |
 | `/session derniere` · `voir` · `liste` | Résumés des séances (base Notion « Séances (Vampire) »). Les MJ reçoivent en plus les notes 🔒. |
 | `/mj` (Super MJ) | Donner ou retirer les droits MJ. |
+
+## Fiches et jets
+
+Chaque fiche appartient à un compte Discord : `/jet`, `/exaltation` et le bouton « Lancer » des pouvoirs (`/discipline`) lisent la fiche de celui qui les utilise.
+
+1. Dans un salon textuel, `/fiche creer nom: clan:` crée la fiche et un fil privé où ne sont invités que le joueur et les MJ. Un MJ peut créer la fiche d'un joueur avec `joueur:`.
+2. `/fiche modifier trait: valeur:` remplit la fiche (attributs à 1, compétences à 0 au départ) : attributs, compétences, Disciplines, Soif, Humanité, Taches, Puissance du sang, Génération.
+3. La fiche épinglée dans le fil est **modifiée** à chaque changement (jet de Volonté, Exaltation, dégâts…), et chaque changement y est noté. Sur ordinateur, le fil s'ouvre à côté du salon : la fiche reste visible pendant la partie.
+
+Santé = Vigueur + 3 (+ Force d'âme), Volonté = Sang-froid + Résolution. Une piste pleine affiche « Affaibli » ; un dégât sur une piste pleine transforme une case superficielle en aggravée.
+
+Permissions du bot dans le salon des fiches : *Créer des fils privés*, *Envoyer des messages dans les fils*, *Gérer les fils* (renommer, désarchiver) et *Gérer les messages* (épingler la fiche).
 
 ## PNJ depuis Notion
 
@@ -47,6 +63,7 @@ Le haut de la page est le résumé lu par les joueurs ; la section `## 🔒 MJ` 
 - `src/data/rules.json`, `memo.json`, `clans.json` (Disciplines de clan), `disciplines.json` (pouvoirs : niveau, nom, VO, coût, jet, jet contre, description, amalgame) : contenu de référence, versionné. Modifier puis redémarrer le bot.
 - `pnj.json` : copie locale des PNJ Notion (réécrite à chaque synchronisation), portraits dans `portraits/`.
 - `sessions.json` : copie locale des séances Notion.
+- `fiches.json` : fiches des PJ, par identifiant Discord du joueur.
 - `config.json` : données de campagne, modifiées par le bot.
   Elles sont lues et écrites dans `DATA_DIR` (par défaut `src/data`). Au premier lancement, si un fichier manque dans `DATA_DIR`, il est copié depuis `src/data`.
 
