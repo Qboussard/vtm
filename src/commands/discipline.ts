@@ -300,7 +300,7 @@ export const discipline: Command = {
             const e = entries[Number(arg)];
             const f = fiches[interaction.user.id];
             if (!e) return interaction.reply({ content: '❌ Pouvoir introuvable.', flags: EPHEMERAL });
-            if (!f) return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche creer`.', flags: EPHEMERAL });
+            if (!f) return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche nom: clan:`.', flags: EPHEMERAL });
             const pool = poolFromFormula(f, e.jet);
             if (!pool) return interaction.reply({ content: `❌ Jet non calculable automatiquement (« ${e.jet} ») : utilisez \`/jet\`.`, flags: EPHEMERAL });
             return performRoll(interaction, {

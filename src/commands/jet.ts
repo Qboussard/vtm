@@ -129,7 +129,7 @@ export const jet: Command = {
             return interaction.reply({ content: '❌ Indiquez un attribut (et une compétence), ou une `reserve` de dés.', flags: EPHEMERAL });
         }
         if ((attrName || skillName) && !f) {
-            return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche creer`, ou lancez avec `reserve:`.', flags: EPHEMERAL });
+            return interaction.reply({ content: '❌ Aucune fiche liée à votre compte : `/fiche nom: clan:`, ou lancez avec `reserve:`.', flags: EPHEMERAL });
         }
 
         let pool = reserve ?? 0;
@@ -187,7 +187,7 @@ export const jet: Command = {
 export const rouse = async (interaction: Replyable, userId: string, count: number, reason?: string) => {
     const f = fiches[userId];
     if (!f) {
-        return interaction.reply({ content: '❌ Aucune fiche liée à ce compte : `/fiche creer`.', flags: EPHEMERAL });
+        return interaction.reply({ content: '❌ Aucune fiche liée à ce compte : `/fiche nom: clan:`.', flags: EPHEMERAL });
     }
     const lines: string[] = [];
     const start = f.soif;

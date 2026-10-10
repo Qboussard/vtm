@@ -58,6 +58,11 @@ client.on(Events.InteractionCreate, async interaction => {
             // customId = commande:action:arg (l'argument peut lui-même contenir des « : »)
             const [name, action = '', ...rest] = interaction.customId.split(':');
             await commands.get(name)?.component?.(interaction, action, rest.join(':'));
+            return;
+        }
+        if (interaction.isModalSubmit()) {
+            const [name, action = '', ...rest] = interaction.customId.split(':');
+            await commands.get(name)?.modal?.(interaction, action, rest.join(':'));
         }
     } catch (error) {
         if (interaction.isAutocomplete()) {

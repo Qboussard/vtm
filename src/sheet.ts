@@ -5,6 +5,7 @@ import {
     ChannelType,
     Client,
     EmbedBuilder,
+    StringSelectMenuBuilder,
     TextChannel,
 } from 'discord.js';
 import { config, disciplines, Fiche, fiches, Piste, rules, saveFiches } from './data';
@@ -176,21 +177,57 @@ export const buildSheetEmbed = (userId: string, f: Fiche) => {
             })),
             { name: 'Disciplines', value: disc || '*Aucune*' },
         )
-        .setFooter({ text: '🟥 aggravé · 🟧 superficiel · /jet pour lancer · /fiche modifier pour changer une valeur' });
+        .setFooter({ text: '🟥 aggravé · 🟧 superficiel · /jet pour lancer · tout se modifie avec le menu ci-dessous' });
 };
 
-export const sheetButtons = (userId: string) =>
+/** Groupes du menu « Modifier » : chacun tient dans un menu Discord (25 choix au plus). */
+export const TRAIT_GROUPS: { key: string; label: string; emoji: string; traits: Trait[] }[] = [
+    { key: 'attr', label: 'Attributs', emoji: '💪', traits: TRAITS.filter(t => t.kind === 'attribut') },
+    ...Object.entries(COMPETENCES).map(([cat, names], i) => ({
+        key: `comp${i}`,
+        label: `Compétences ${cat.toLowerCase()}`,
+        emoji: ['🏃', '🗣️', '🧠'][i],
+        traits: TRAITS.filter(t => names.includes(t.name)),
+    })),
+    { key: 'disc', label: 'Disciplines', emoji: '🧛', traits: TRAITS.filter(t => t.kind === 'discipline') },
+    { key: 'etat', label: 'Soif, Humanité, Taches, Puissance du sang, Génération', emoji: '🩸', traits: TRAITS.filter(t => t.kind === 'scalaire') },
+];
+
+/** Menus et boutons sous la fiche : tout se gère de là, par le joueur ou un MJ. */
+export const sheetComponents = (userId: string) => [
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+        new StringSelectMenuBuilder()
+            .setCustomId(`fiche:group:${userId}`)
+            .setPlaceholder('✏️ Modifier une valeur…')
+            .addOptions(TRAIT_GROUPS.map(g => ({ label: g.label, value: g.key, emoji: g.emoji }))),
+    ),
     new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
             .setCustomId(`exaltation:roll:${userId}`)
             .setLabel("Test d'Exaltation")
             .setEmoji('🩸')
             .setStyle(ButtonStyle.Danger),
-    );
+        new ButtonBuilder()
+            .setCustomId(`fiche:tracks:${userId}`)
+            .setLabel('Dégâts et soins')
+            .setEmoji('💔')
+            .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+            .setCustomId(`fiche:identity:${userId}`)
+            .setLabel('Nom et clan')
+            .setEmoji('🪪')
+            .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+            .setCustomId(`fiche:owner:${userId}`)
+            .setLabel('Joueur (MJ)')
+            .setEmoji('🔗')
+            .setStyle(ButtonStyle.Secondary),
+    ),
+];
 
 export const sheetMessage = (userId: string, f: Fiche) => ({
     embeds: [buildSheetEmbed(userId, f)],
-    components: [sheetButtons(userId)],
+    components: sheetComponents(userId),
 });
 
 /** Les MJ ont accès à toutes les fiches. */

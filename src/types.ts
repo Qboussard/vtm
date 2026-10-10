@@ -1,4 +1,4 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, MessageComponentInteraction } from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from 'discord.js';
 import { config } from './data';
 
 export interface Command {
@@ -7,6 +7,8 @@ export interface Command {
     autocomplete?(interaction: AutocompleteInteraction): Promise<unknown>;
     /** Boutons et menus dont le customId commence par `${data.name}:`, au format `commande:action:arg`. */
     component?(interaction: MessageComponentInteraction, action: string, arg: string): Promise<unknown>;
+    /** Formulaires (modales), même format de customId que les composants. */
+    modal?(interaction: ModalSubmitInteraction, action: string, arg: string): Promise<unknown>;
 }
 
 export const SUPER_MJ_ID = process.env.SUPER_MJ_ID as string;
