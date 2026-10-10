@@ -13,7 +13,7 @@ import {
     TextInputStyle,
     UserSelectMenuBuilder,
 } from 'discord.js';
-import { clans, Fiche, fiches, saveFiches } from '../data';
+import { clans, Fiche, fiches, pjTemplates, saveFiches } from '../data';
 import {
     createSheetThread,
     damage,
@@ -44,6 +44,13 @@ const canEdit = (clickerId: string, ownerId: string) => clickerId === ownerId ||
 
 /** « (par @MJ) » quand quelqu'un d'autre que le joueur touche à la fiche. */
 const byWhom = (clickerId: string, ownerId: string) => (clickerId === ownerId ? '' : ` (par <@${clickerId}>)`);
+
+/** Modèle prérempli dont le nom correspond, s'il n'a pas déjà servi. */
+const findTemplate = (nom: string) => {
+    const key = Object.keys(pjTemplates).find(n => normalize(n) === normalize(nom));
+    if (!key || Object.values(fiches).some(f => normalize(f.nom) === normalize(key))) return undefined;
+    return pjTemplates[key];
+};
 
 const findClan = (name: string) => Object.keys(clans).find(c => normalize(c) === normalize(name));
 
@@ -165,10 +172,12 @@ const openSheet = async (interaction: ChatInputCommandInteraction) => {
     if (!f) {
         const nom = interaction.options.getString('nom');
         const clan = interaction.options.getString('clan');
-        if (!nom || !clan) {
+        const template = nom ? findTemplate(nom) : undefined;
+        if (!template && (!nom || !clan)) {
             return interaction.reply({ content: '📜 Pas encore de fiche : `/fiche nom: clan:` pour la créer.', flags: EPHEMERAL });
         }
-        fiches[ownerId] = newFiche(nom, clan);
+        // Copie profonde : le modèle reste intact
+        fiches[ownerId] = template ? JSON.parse(JSON.stringify(template)) : newFiche(nom!, clan!);
         saveFiches();
     }
     // Fiche neuve, ou fil supprimé : on (re)crée le fil ici
@@ -176,18 +185,24 @@ const openSheet = async (interaction: ChatInputCommandInteraction) => {
     const thread = await createSheetThread(interaction.channel as TextChannel, ownerId, fiches[ownerId]);
     return interaction.editReply(f
         ? `✅ Nouveau fil pour la fiche : ${thread}.`
-        : `✅ Fiche créée : ${thread}. Remplissez-la avec le menu « ✏️ Modifier une valeur » sous la fiche.`);
+        : `✅ Fiche créée : ${thread}. Vérifiez-la, et corrigez avec le menu « ✏️ Modifier une valeur » sous la fiche.`);
 };
 
 export const fiche: Command = {
     data: new SlashCommandBuilder()
         .setName('fiche')
         .setDescription('Votre fiche de personnage : la crée (nom, clan) ou l\'ouvre')
-        .addStringOption(o => o.setName('nom').setDescription('Création : nom du personnage').setMaxLength(80))
+        .addStringOption(o => o.setName('nom').setDescription('Création : nom du personnage (les fiches reprises de Roll20 sont proposées)').setMaxLength(80).setAutocomplete(true))
         .addStringOption(o =>
             o.setName('clan').setDescription('Création : clan')
                 .addChoices(...Object.keys(clans).slice(0, LIMITS.choices).map(c => ({ name: c, value: c }))))
         .addUserOption(o => o.setName('joueur').setDescription('MJ : fiche d\'un joueur (la créer pour lui, ou l\'ouvrir)')),
+
+    async autocomplete(interaction) {
+        const q = normalize(interaction.options.getFocused());
+        const free = Object.keys(pjTemplates).filter(n => findTemplate(n) && normalize(n).includes(q));
+        await interaction.respond(free.slice(0, LIMITS.choices).map(n => ({ name: `📜 ${n} (fiche préremplie)`, value: n })));
+    },
 
     execute: openSheet,
 

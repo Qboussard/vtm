@@ -136,6 +136,8 @@ export const rules = readBundled<Rules>('rules.json');
 export const memos = readBundled<Memo[]>('memo.json');
 export const disciplines = readBundled<Record<string, Discipline>>('disciplines.json');
 export const clans = readBundled<Record<string, Clan>>('clans.json');
+/** Fiches préremplies (reprises de Roll20), utilisées à la création par `/fiche nom:` */
+export const pjTemplates = readBundled<Record<string, Fiche>>('pj.json');
 
 export const pnjs = readMutable<Record<string, Pnj>>('pnj.json');
 export const sessions = readMutable<Session[]>('sessions.json');
